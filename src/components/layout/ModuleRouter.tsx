@@ -10,6 +10,9 @@ import ListsManagement from "../modules/ListsManagement";
 import ServerSettings from "../modules/ServerSettings";
 import RoleManagement from "../modules/RoleManagement";
 import ProfileSettings from "../modules/ProfileSettings";
+import FluxParClients from "../modules/FluxParClients";
+import DownloadHistory from "../modules/DownloadHistory";
+import ModificationHistory from "../modules/ModificationHistory";
 
 interface ModuleRouterProps {
   activeModule: string;
@@ -42,38 +45,11 @@ export default function ModuleRouter({ activeModule }: ModuleRouterProps) {
     case 'security':
       return <ProfileSettings />;
     case 'client-flows':
-      return (
-        <div className="p-6">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-            Flux par Clients
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300">
-            Module en cours de développement - Regroupement des commandes par officine
-          </p>
-        </div>
-      );
+      return <FluxParClients />;
     case 'downloads':
-      return (
-        <div className="p-6">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-            Téléchargements
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300">
-            Module en cours de développement - Historique des fichiers exportés
-          </p>
-        </div>
-      );
+      return <DownloadHistory />;
     case 'modifications':
-      return (
-        <div className="p-6">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-            Liste des Modifications
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300">
-            Module en cours de développement - Historique des modifications système
-          </p>
-        </div>
-      );
+      return <ModificationHistory />;
     case 'catalogs':
       return (
         <div className="p-6">
