@@ -9,6 +9,7 @@ import DocumentManagement from "../modules/DocumentManagement";
 import ListsManagement from "../modules/ListsManagement";
 import ServerSettings from "../modules/ServerSettings";
 import RoleManagement from "../modules/RoleManagement";
+import ProfileSettings from "../modules/ProfileSettings";
 
 interface ModuleRouterProps {
   activeModule: string;
@@ -36,6 +37,10 @@ export default function ModuleRouter({ activeModule }: ModuleRouterProps) {
       return <ListsManagement />;
     case 'settings':
       return <ServerSettings />;
+    case 'profile':
+    case 'preferences':
+    case 'security':
+      return <ProfileSettings />;
     case 'client-flows':
       return (
         <div className="p-6">

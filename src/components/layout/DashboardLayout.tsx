@@ -20,6 +20,7 @@ import { motion } from "framer-motion";
 import { cn } from "../../lib/utils";
 import { useStore } from "../../store/useStore";
 import ModuleRouter from "./ModuleRouter";
+import ProfileMenu from "./ProfileMenu";
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
@@ -29,7 +30,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [open, setOpen] = useState(false);
   const { activeModule, setActiveModule } = useStore();
 
-  // Ordre original exact du menu selon votre documentation
+  // Ordre original exact du menu selon votre documentation (sans Paramètres Serveur)
   const links = [
     {
       label: "Tableau de Bord",
@@ -115,12 +116,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: <IconBell className="h-5 w-5 shrink-0 text-teal-100" />,
       onClick: () => setActiveModule('notifications')
     },
-    {
-      label: "Paramètres Serveur",
-      href: "#",
-      icon: <IconSettings className="h-5 w-5 shrink-0 text-teal-100" />,
-      onClick: () => setActiveModule('settings')
-    },
   ];
 
   return (
@@ -143,19 +138,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               </div>
             </div>
             
-            {/* Profil utilisateur en bas */}
+            {/* Profil utilisateur en bas avec menu déroulant */}
             <div className="border-t border-teal-400/30 pt-4">
-              <SidebarLink
-                link={{
-                  label: "POISOT Paul",
-                  href: "#",
-                  icon: (
-                    <div className="h-6 w-6 shrink-0 rounded-full bg-teal-400 flex items-center justify-center">
-                      <IconUser className="h-3 w-3 text-teal-900" />
-                    </div>
-                  ),
-                }}
-              />
+              <ProfileMenu />
             </div>
           </SidebarBody>
         </Sidebar>
