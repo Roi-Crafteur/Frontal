@@ -20,9 +20,12 @@ import {
   BarChart3,
   AlertTriangle,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  TrendingUp,
+  Users
 } from "lucide-react";
 import { BackgroundGradient } from "../ui/aceternity/background-gradient";
+import { HoverEffect } from "../ui/aceternity/card-hover-effect";
 import type { Order } from "../../types";
 
 export default function OrderManagement() {
@@ -59,15 +62,53 @@ export default function OrderManagement() {
   const [itemsPerPage, setItemsPerPage] = useState(25);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Statistiques basées sur l'image
-  const stats = {
-    commandesLivrables: { count: 0, total: 0 },
-    montantFacturable: { current: 0.00, total: 0.00 },
-    lignesLivrables: { count: 0, total: 0 },
-    unitesLivrables: { count: 0, undefined: 'undefined', demande: 0 },
-    produitsManquants: { lignes: 0, unites: 0, ca: 0 },
-    produitsInconnus: { lignes: 0, unites: 0 }
-  };
+  // Statistiques basées sur l'image avec visualisation améliorée
+  const statsItems = [
+    {
+      title: "Commandes Livrables",
+      description: "État des livraisons",
+      link: "#",
+      icon: <ShoppingCart className="w-6 h-6 text-teal-600" />,
+      stats: [
+        { value: "0 / 0", label: "commandes" },
+        { value: "0,00 €", label: "montant" },
+        { value: "0 / 0", label: "lignes" }
+      ]
+    },
+    {
+      title: "Unités & Produits",
+      description: "Détail des articles",
+      link: "#",
+      icon: <Package className="w-6 h-6 text-blue-600" />,
+      stats: [
+        { value: "0 / undefined", label: "unités livrables" },
+        { value: "0", label: "demande" },
+        { value: "0", label: "lignes manquantes" }
+      ]
+    },
+    {
+      title: "Produits Manquants",
+      description: "Articles indisponibles",
+      link: "#",
+      icon: <AlertTriangle className="w-6 h-6 text-orange-600" />,
+      stats: [
+        { value: "0", label: "lignes" },
+        { value: "0", label: "unités" },
+        { value: "0 €", label: "CA impact" }
+      ]
+    },
+    {
+      title: "Produits Inconnus",
+      description: "Articles non référencés",
+      link: "#",
+      icon: <XCircle className="w-6 h-6 text-red-600" />,
+      stats: [
+        { value: "0", label: "lignes" },
+        { value: "0", label: "unités" },
+        { value: "N/A", label: "statut" }
+      ]
+    }
+  ];
 
   const montantTotalLivrable = 0.00;
 
@@ -118,45 +159,66 @@ export default function OrderManagement() {
           <h1 className="text-2xl lg:text-3xl font-bold text-gray-800 dark:text-white">
             Liste des commandes
           </h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
+            Gestion complète des commandes pharmaceutiques
+          </p>
         </div>
       </div>
 
-      {/* Statistiques principales */}
-      <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span className="text-gray-600 dark:text-gray-300">Nombre de commandes Livrables :</span>
-              <span className="font-medium">{stats.commandesLivrables.count} / {stats.commandesLivrables.total}</span>
+      {/* Statistiques principales avec visualisation améliorée */}
+      <div className="mb-8">
+        <h2 className="text-xl lg:text-2xl font-bold text-gray-800 dark:text-white mb-6">
+          État des commandes
+        </h2>
+        <HoverEffect 
+          items={statsItems} 
+          className="grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 py-4 sm:py-6 lg:py-10" 
+        />
+      </div>
+
+      {/* Statistiques complémentaires */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          { 
+            title: "Montant Facturable", 
+            value: "0,00 € / 0,00 €", 
+            color: "text-green-600", 
+            bg: "bg-green-100",
+            icon: Euro,
+            description: "Total facturable sur sélection"
+          },
+          { 
+            title: "Taux de Livraison", 
+            value: "0%", 
+            color: "text-blue-600", 
+            bg: "bg-blue-100",
+            icon: TrendingUp,
+            description: "Pourcentage de commandes livrées"
+          },
+          { 
+            title: "Clients Actifs", 
+            value: "0", 
+            color: "text-purple-600", 
+            bg: "bg-purple-100",
+            icon: Users,
+            description: "Officines avec commandes en cours"
+          }
+        ].map((stat, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all"
+          >
+            <div className={`w-12 h-12 ${stat.bg} rounded-xl flex items-center justify-center mb-4`}>
+              <stat.icon className={`w-6 h-6 ${stat.color}`} />
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600 dark:text-gray-300">Montant Facturable :</span>
-              <span className="font-medium">{stats.montantFacturable.current.toFixed(2)} € / {stats.montantFacturable.total.toFixed(2)} €</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600 dark:text-gray-300">Lignes Livrables :</span>
-              <span className="font-medium">{stats.lignesLivrables.count} / {stats.lignesLivrables.total}</span>
-            </div>
-          </div>
-          
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span className="text-gray-600 dark:text-gray-300">Unités Livrables :</span>
-              <span className="font-medium">{stats.unitesLivrables.count} / {stats.unitesLivrables.undefined} (Demande : {stats.unitesLivrables.demande})</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600 dark:text-gray-300">Produits manquants :</span>
-              <span className="font-medium">{stats.produitsManquants.lignes} lignes représentant {stats.produitsManquants.unites} unités (CA {stats.produitsManquants.ca}€)</span>
-            </div>
-          </div>
-          
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span className="text-gray-600 dark:text-gray-300">Produits inconnus :</span>
-              <span className="font-medium">{stats.produitsInconnus.lignes} lignes représentant {stats.produitsInconnus.unites} unités</span>
-            </div>
-          </div>
-        </div>
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-1">{stat.value}</h3>
+            <p className="text-gray-600 dark:text-gray-300 text-sm font-medium mb-1">{stat.title}</p>
+            <p className="text-gray-500 text-xs">{stat.description}</p>
+          </motion.div>
+        ))}
       </div>
 
       {/* Actions et filtres */}
