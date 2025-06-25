@@ -8,6 +8,20 @@ import { useStore } from './store/useStore';
 import { motion } from 'framer-motion';
 
 function App() {
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Bonjour';
+    if (hour < 18) return 'Bon après-midi';
+    return 'Bonsoir';
+  };
+
+  const getGreetingEmoji = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return '🌅';
+    if (hour < 18) return '☀️';
+    return '🌙';
+  };
+
   const { fetchOrders, fetchProducts, fetchOfficines } = useStore();
 
   useEffect(() => {
@@ -51,9 +65,12 @@ function App() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400"
           >
-            <span>PharmaML</span>
-            <span>/</span>
-            <span className="text-teal-600 dark:text-teal-400 font-medium">Tableau de Bord</span>
+            <span>{getGreeting()}</span>
+            <span> (utilisateur) </span>
+            <span>sur votre</span>
+            <span className="text-teal-600 dark:text-teal-400 font-medium">frontal</span>
+            <span>de commandes</span>
+            <span>{getGreetingEmoji()}</span>
           </motion.div>
         </div>
 
