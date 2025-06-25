@@ -33,7 +33,7 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="space-y-8 p-6"
+        className="space-y-8"
       >
         {/* Header */}
         <div className="mb-8">

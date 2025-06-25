@@ -37,12 +37,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       onClick: () => setActiveModule('dashboard')
     },
     {
-      label: "Utilisateurs",
-      href: "#",
-      icon: <IconUser className="h-5 w-5 shrink-0 text-teal-100" />,
-      onClick: () => setActiveModule('users')
-    },
-    {
       label: "Officines",
       href: "#",
       icon: <IconBuilding className="h-5 w-5 shrink-0 text-teal-100" />,
@@ -55,22 +49,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       onClick: () => setActiveModule('products')
     },
     {
-      label: "Commandes",
-      href: "#",
-      icon: <IconShoppingCart className="h-5 w-5 shrink-0 text-teal-100" />,
-      onClick: () => setActiveModule('orders')
-    },
-    {
-      label: "Notifications",
-      href: "#",
-      icon: <IconBell className="h-5 w-5 shrink-0 text-teal-100" />,
-      onClick: () => setActiveModule('notifications')
-    },
-    {
       label: "Listes CEPS",
       href: "#",
       icon: <IconList className="h-5 w-5 shrink-0 text-teal-100" />,
       onClick: () => setActiveModule('ceps')
+    },
+    {
+      label: "Commandes",
+      href: "#",
+      icon: <IconShoppingCart className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('orders')
     },
     {
       label: "Flux par Clients",
@@ -103,6 +91,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       onClick: () => setActiveModule('modifications')
     },
     {
+      label: "Utilisateurs",
+      href: "#",
+      icon: <IconUser className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('users')
+    },
+    {
       label: "Rôles utilisateurs",
       href: "#",
       icon: <IconUserCheck className="h-5 w-5 shrink-0 text-teal-100" />,
@@ -113,6 +107,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       href: "#",
       icon: <IconFolder className="h-5 w-5 shrink-0 text-teal-100" />,
       onClick: () => setActiveModule('catalogs')
+    },
+    {
+      label: "Notifications",
+      href: "#",
+      icon: <IconBell className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('notifications')
     },
   ];
 
@@ -183,9 +183,11 @@ export const Logo = () => {
 
 const Dashboard = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-1">
-      <div className="flex h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white p-2 md:p-6 dark:border-neutral-700 dark:bg-neutral-900">
-        {children}
+    <div className="flex flex-1 overflow-hidden">
+      <div className="flex h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900 overflow-y-auto">
+        <div className="p-2 md:p-6">
+          {children}
+        </div>
       </div>
     </div>
   );
