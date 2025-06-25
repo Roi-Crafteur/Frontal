@@ -70,7 +70,7 @@ function App() {
             <span className="text-teal-600 dark:text-teal-400 font-medium">frontal</span>
             <span>de commandes</span>
             <span>{getGreetingEmoji()}</span>
-          </div>
+          </motion.div>
         </div>
 
         {/* Stats Cards */}
