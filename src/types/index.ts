@@ -66,6 +66,11 @@ export interface Officine {
   clientCategory?: number; // 0-9 catégories tarifaires
   showRestrictedProducts?: boolean;
   lgo?: string; // Logiciel Gérant l'Officine (LGPI, Winpharma, etc.)
+  // Options supplémentaires
+  showStocks?: boolean; // Afficher les stocks sur accès pharmacien
+  hidePrices?: boolean; // Masquer les prix sur accès pharmacien
+  ignoreFranco?: boolean; // Ignorer le franco
+  groupProductsInExport?: boolean; // Ne pas regrouper les produits commandés dans l'export
 }
 
 export interface Product {

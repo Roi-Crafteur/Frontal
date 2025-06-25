@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { 
   Building2, 
@@ -19,7 +19,13 @@ import {
   User, 
   FileText,
   Smartphone,
-  Printer
+  Printer,
+  Eye,
+  EyeOff,
+  Check,
+  X,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import { BackgroundGradient } from "../ui/aceternity/background-gradient";
 import type { Officine } from "../../types";
@@ -57,7 +63,12 @@ export default function OfficeManagement() {
       infoProductResponse: 0,
       clientCategory: 0,
       showRestrictedProducts: true,
-      lgo: 'LGPI'
+      lgo: 'LGPI',
+      // Options supplémentaires
+      showStocks: true,
+      hidePrices: false,
+      ignoreFranco: false,
+      groupProductsInExport: false
     },
     {
       id: '2',
@@ -90,7 +101,12 @@ export default function OfficeManagement() {
       infoProductResponse: 0,
       clientCategory: 1,
       showRestrictedProducts: true,
-      lgo: 'Winpharma'
+      lgo: 'Winpharma',
+      // Options supplémentaires
+      showStocks: true,
+      hidePrices: false,
+      ignoreFranco: true,
+      groupProductsInExport: true
     },
     {
       id: '3',
@@ -123,7 +139,12 @@ export default function OfficeManagement() {
       infoProductResponse: 1,
       clientCategory: 2,
       showRestrictedProducts: false,
-      lgo: 'Isipharm'
+      lgo: 'Isipharm',
+      // Options supplémentaires
+      showStocks: false,
+      hidePrices: true,
+      ignoreFranco: false,
+      groupProductsInExport: false
     }
   ]);
 
@@ -132,6 +153,13 @@ export default function OfficeManagement() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [activeTab, setActiveTab] = useState<'address' | 'web' | 'pharmaml' | 'profile'>('address');
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [hoveredOfficineId, setHoveredOfficineId] = useState<string | null>(null);
+
+  // Référence pour le mot de passe
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const filteredOfficines = officines.filter(officine => {
     const matchesSearch = officine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -165,6 +193,21 @@ export default function OfficeManagement() {
       case 1: return 'Refuser les informations produit';
       case 2: return 'Ne pas donner de stock si partiel';
       default: return 'Inconnu';
+    }
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    if (passwordRef.current) {
+      setPasswordsMatch(newPassword === passwordConfirm);
+    }
+  };
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const confirmValue = e.target.value;
+    setPasswordConfirm(confirmValue);
+    if (passwordRef.current) {
+      setPasswordsMatch(passwordRef.current.value === confirmValue);
     }
   };
 
@@ -207,6 +250,9 @@ export default function OfficeManagement() {
               setSelectedOfficine(null);
               setActiveTab('address');
               setIsModalOpen(true);
+              setShowPassword(false);
+              setPasswordConfirm('');
+              setPasswordsMatch(true);
             }}
             className="flex items-center space-x-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all"
           >
@@ -300,6 +346,8 @@ export default function OfficeManagement() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
+            onMouseEnter={() => setHoveredOfficineId(officine.id)}
+            onMouseLeave={() => setHoveredOfficineId(null)}
           >
             <BackgroundGradient className="rounded-2xl p-1">
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 space-y-4">
@@ -322,6 +370,9 @@ export default function OfficeManagement() {
                         setSelectedOfficine(officine);
                         setActiveTab('address');
                         setIsModalOpen(true);
+                        setShowPassword(false);
+                        setPasswordConfirm('');
+                        setPasswordsMatch(true);
                       }}
                       className="p-2 text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
                     >
@@ -337,22 +388,39 @@ export default function OfficeManagement() {
                   </div>
                 </div>
 
-                <div className="space-y-3">
+                {/* Informations de base (toujours visibles) */}
+                <div className="space-y-2">
                   <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
-                    <MapPin className="w-4 h-4" />
-                    <span>{officine.address}, {officine.postalCode} {officine.city}</span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
-                    <Phone className="w-4 h-4" />
-                    <span>{officine.phone}</span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
-                    <Mail className="w-4 h-4" />
-                    <span>{officine.email}</span>
+                    <MapPin className="w-4 h-4 flex-shrink-0" />
+                    <span className="truncate">{officine.address}</span>
                   </div>
                 </div>
+
+                {/* Informations supplémentaires (visibles au survol) */}
+                {hoveredOfficineId === officine.id && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="space-y-2"
+                  >
+                    <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
+                      <MapPin className="w-4 h-4 flex-shrink-0" />
+                      <span>{officine.postalCode} {officine.city}</span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
+                      <Phone className="w-4 h-4 flex-shrink-0" />
+                      <span>{officine.phone}</span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
+                      <Mail className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">{officine.email}</span>
+                    </div>
+                  </motion.div>
+                )}
 
                 <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(officine.status)}`}>
@@ -602,16 +670,57 @@ export default function OfficeManagement() {
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Mot de passe <span className="text-red-500">*</span>
                     </label>
-                    <input
-                      type="password"
-                      defaultValue={selectedOfficine?.webPassword}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                      placeholder="Mot de passe"
-                      required
-                    />
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        defaultValue={selectedOfficine?.webPassword}
+                        ref={passwordRef}
+                        onChange={handlePasswordChange}
+                        className="w-full px-4 py-3 pr-10 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="Mot de passe"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                    </div>
                     <p className="text-xs text-gray-500 mt-1">
                       Mot de passe pour l'accès au portail web
                     </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Confirmer le mot de passe <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={passwordConfirm}
+                        onChange={handleConfirmPasswordChange}
+                        className={`w-full px-4 py-3 pr-10 border ${
+                          passwordsMatch ? 'border-gray-200' : 'border-red-500'
+                        } rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white`}
+                        placeholder="Confirmer le mot de passe"
+                        required
+                      />
+                      {!passwordsMatch && (
+                        <div className="text-red-500 text-xs mt-1">
+                          Les mots de passe ne correspondent pas
+                        </div>
+                      )}
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                        {passwordConfirm && (
+                          passwordsMatch ? 
+                            <Check className="w-5 h-5 text-green-500" /> : 
+                            <X className="w-5 h-5 text-red-500" />
+                        )}
+                      </div>
+                    </div>
                   </div>
 
                   <div>
@@ -710,28 +819,153 @@ export default function OfficeManagement() {
                     </p>
                   </div>
 
-                  <div className="flex items-start space-x-3">
-                    <input
-                      type="checkbox"
-                      id="refuseContingent"
-                      checked={selectedOfficine?.refuseContingent || false}
-                      onChange={() => {
-                        if (selectedOfficine) {
-                          setSelectedOfficine({
-                            ...selectedOfficine,
-                            refuseContingent: !selectedOfficine.refuseContingent
-                          });
-                        }
-                      }}
-                      className="mt-1 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
-                    />
-                    <div>
-                      <label htmlFor="refuseContingent" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Refus des produits contingentés
-                      </label>
-                      <p className="text-xs text-gray-500">
-                        Si activé, l'officine ne pourra pas commander les produits contingentés
-                      </p>
+                  {/* Section Stock produits */}
+                  <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-800 dark:text-white mb-4">Stock produits</h3>
+                    
+                    <div className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        id="showStocks"
+                        checked={selectedOfficine?.showStocks || false}
+                        onChange={() => {
+                          if (selectedOfficine) {
+                            setSelectedOfficine({
+                              ...selectedOfficine,
+                              showStocks: !selectedOfficine.showStocks
+                            });
+                          }
+                        }}
+                        className="mt-1 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                      />
+                      <div>
+                        <label htmlFor="showStocks" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          Afficher les stocks sur accès pharmacien
+                        </label>
+                        <p className="text-xs text-gray-500">
+                          Si activé, l'officine pourra voir les niveaux de stock des produits
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section Prix produits */}
+                  <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-800 dark:text-white mb-4">Prix produits</h3>
+                    
+                    <div className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        id="hidePrices"
+                        checked={selectedOfficine?.hidePrices || false}
+                        onChange={() => {
+                          if (selectedOfficine) {
+                            setSelectedOfficine({
+                              ...selectedOfficine,
+                              hidePrices: !selectedOfficine.hidePrices
+                            });
+                          }
+                        }}
+                        className="mt-1 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                      />
+                      <div>
+                        <label htmlFor="hidePrices" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          Masquer les prix sur accès pharmacien
+                        </label>
+                        <p className="text-xs text-gray-500">
+                          Si activé, les prix ne seront pas visibles pour cette officine
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section Option Franco */}
+                  <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-800 dark:text-white mb-4">Option Franco</h3>
+                    
+                    <div className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        id="ignoreFranco"
+                        checked={selectedOfficine?.ignoreFranco || false}
+                        onChange={() => {
+                          if (selectedOfficine) {
+                            setSelectedOfficine({
+                              ...selectedOfficine,
+                              ignoreFranco: !selectedOfficine.ignoreFranco
+                            });
+                          }
+                        }}
+                        className="mt-1 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                      />
+                      <div>
+                        <label htmlFor="ignoreFranco" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          Ignorer le franco
+                        </label>
+                        <p className="text-xs text-gray-500">
+                          Si activé, le montant minimum de commande (franco) ne sera pas appliqué
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section Droits d'accès */}
+                  <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-800 dark:text-white mb-4">Droits d'accès</h3>
+                    
+                    <div className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        id="showRestrictedProducts"
+                        checked={selectedOfficine?.showRestrictedProducts || false}
+                        onChange={() => {
+                          if (selectedOfficine) {
+                            setSelectedOfficine({
+                              ...selectedOfficine,
+                              showRestrictedProducts: !selectedOfficine.showRestrictedProducts
+                            });
+                          }
+                        }}
+                        className="mt-1 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                      />
+                      <div>
+                        <label htmlFor="showRestrictedProducts" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          Autoriser la consultation des produits restreints
+                        </label>
+                        <p className="text-xs text-gray-500">
+                          Si activé, l'officine pourra voir les articles marqués "accès limité"
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section Regroupement des commandes */}
+                  <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-800 dark:text-white mb-4">Regroupement des commandes</h3>
+                    
+                    <div className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        id="groupProductsInExport"
+                        checked={selectedOfficine?.groupProductsInExport || false}
+                        onChange={() => {
+                          if (selectedOfficine) {
+                            setSelectedOfficine({
+                              ...selectedOfficine,
+                              groupProductsInExport: !selectedOfficine.groupProductsInExport
+                            });
+                          }
+                        }}
+                        className="mt-1 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                      />
+                      <div>
+                        <label htmlFor="groupProductsInExport" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          Ne pas regrouper les produits commandés dans l'export
+                        </label>
+                        <p className="text-xs text-gray-500">
+                          Si activé, chaque ligne de commande sera exportée séparément, même pour des produits identiques
+                        </p>
+                      </div>
                     </div>
                   </div>
 
@@ -786,31 +1020,6 @@ export default function OfficeManagement() {
                     <p className="text-xs text-gray-500 mt-1">
                       Catégorie tarifaire qui s'appliquera aux prix remisés pour ce client
                     </p>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <input
-                      type="checkbox"
-                      id="showRestrictedProducts"
-                      checked={selectedOfficine?.showRestrictedProducts || false}
-                      onChange={() => {
-                        if (selectedOfficine) {
-                          setSelectedOfficine({
-                            ...selectedOfficine,
-                            showRestrictedProducts: !selectedOfficine.showRestrictedProducts
-                          });
-                        }
-                      }}
-                      className="mt-1 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
-                    />
-                    <div>
-                      <label htmlFor="showRestrictedProducts" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Voir les produits restreints
-                      </label>
-                      <p className="text-xs text-gray-500">
-                        Si activé, l'officine pourra voir les articles marqués "accès limité"
-                      </p>
-                    </div>
                   </div>
 
                   <div>
