@@ -13,6 +13,7 @@ import ProfileSettings from "../modules/ProfileSettings";
 import FluxParClients from "../modules/FluxParClients";
 import DownloadHistory from "../modules/DownloadHistory";
 import ModificationHistory from "../modules/ModificationHistory";
+import Catalog from "../modules/Catalog";
 
 interface ModuleRouterProps {
   activeModule: string;
@@ -51,16 +52,7 @@ export default function ModuleRouter({ activeModule }: ModuleRouterProps) {
     case 'modifications':
       return <ModificationHistory />;
     case 'catalogs':
-      return (
-        <div className="p-6">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-            Catalogues
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300">
-            Module en cours de développement - Gestion des catalogues produits
-          </p>
-        </div>
-      );
+      return <Catalog />;
     default:
       return (
         <div className="p-6">
