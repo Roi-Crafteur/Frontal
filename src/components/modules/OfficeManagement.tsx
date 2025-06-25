@@ -1,6 +1,26 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Building2, Plus, Edit, Trash2, Phone, Mail, MapPin, Search, Filter, Download, Upload } from "lucide-react";
+import { 
+  Building2, 
+  Plus, 
+  Edit, 
+  Trash2, 
+  Phone, 
+  Mail, 
+  MapPin, 
+  Search, 
+  Filter, 
+  Download, 
+  Upload, 
+  CreditCard, 
+  Globe, 
+  Settings, 
+  Lock, 
+  User, 
+  FileText,
+  Smartphone,
+  Printer
+} from "lucide-react";
 import { BackgroundGradient } from "../ui/aceternity/background-gradient";
 import type { Officine } from "../../types";
 
@@ -13,6 +33,8 @@ export default function OfficeManagement() {
       city: 'Paris',
       postalCode: '75001',
       phone: '+33 1 23 45 67 89',
+      mobile: '+33 6 12 34 56 78',
+      fax: '+33 1 23 45 67 90',
       email: 'contact@pharmacie-central.fr',
       siret: '12345678901234',
       status: 'active',
@@ -21,7 +43,21 @@ export default function OfficeManagement() {
       totalOrders: 247,
       totalAmount: 125430.50,
       createdAt: new Date('2023-01-15'),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      // Identification Web
+      webLogin: 'pharma_central',
+      webPassword: '••••••••',
+      finess: '123456789',
+      // Identification PharmaML
+      ediId: '1234567890123',
+      ediKey: 'ABCD',
+      disablePharmaML: false,
+      // Profil de commande
+      refuseContingent: false,
+      infoProductResponse: 0,
+      clientCategory: 0,
+      showRestrictedProducts: true,
+      lgo: 'LGPI'
     },
     {
       id: '2',
@@ -30,6 +66,8 @@ export default function OfficeManagement() {
       city: 'Lyon',
       postalCode: '69001',
       phone: '+33 4 56 78 90 12',
+      mobile: '+33 6 23 45 67 89',
+      fax: '+33 4 56 78 90 13',
       email: 'info@pharmacie-marche.fr',
       siret: '98765432109876',
       status: 'active',
@@ -38,7 +76,21 @@ export default function OfficeManagement() {
       totalOrders: 189,
       totalAmount: 89250.75,
       createdAt: new Date('2023-03-20'),
-      updatedAt: new Date(Date.now() - 172800000)
+      updatedAt: new Date(Date.now() - 172800000),
+      // Identification Web
+      webLogin: 'pharma_marche',
+      webPassword: '••••••••',
+      finess: '987654321',
+      // Identification PharmaML
+      ediId: '9876543210987',
+      ediKey: 'WXYZ',
+      disablePharmaML: false,
+      // Profil de commande
+      refuseContingent: false,
+      infoProductResponse: 0,
+      clientCategory: 1,
+      showRestrictedProducts: true,
+      lgo: 'Winpharma'
     },
     {
       id: '3',
@@ -47,6 +99,8 @@ export default function OfficeManagement() {
       city: 'Marseille',
       postalCode: '13001',
       phone: '+33 4 91 23 45 67',
+      mobile: '+33 6 34 56 78 90',
+      fax: '+33 4 91 23 45 68',
       email: 'contact@pharmacie-gare.fr',
       siret: '11223344556677',
       status: 'suspended',
@@ -55,7 +109,21 @@ export default function OfficeManagement() {
       totalOrders: 156,
       totalAmount: 67890.25,
       createdAt: new Date('2023-05-10'),
-      updatedAt: new Date(Date.now() - 2592000000)
+      updatedAt: new Date(Date.now() - 2592000000),
+      // Identification Web
+      webLogin: 'pharma_gare',
+      webPassword: '••••••••',
+      finess: '456789123',
+      // Identification PharmaML
+      ediId: '4567891234567',
+      ediKey: 'EFGH',
+      disablePharmaML: true,
+      // Profil de commande
+      refuseContingent: true,
+      infoProductResponse: 1,
+      clientCategory: 2,
+      showRestrictedProducts: false,
+      lgo: 'Isipharm'
     }
   ]);
 
@@ -63,6 +131,7 @@ export default function OfficeManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [activeTab, setActiveTab] = useState<'address' | 'web' | 'pharmaml' | 'profile'>('address');
 
   const filteredOfficines = officines.filter(officine => {
     const matchesSearch = officine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -87,6 +156,15 @@ export default function OfficeManagement() {
       case 'inactive': return 'Inactif';
       case 'suspended': return 'Suspendu';
       default: return status;
+    }
+  };
+
+  const getInfoProductResponseLabel = (value: number) => {
+    switch (value) {
+      case 0: return 'Selon le paramétrage global';
+      case 1: return 'Refuser les informations produit';
+      case 2: return 'Ne pas donner de stock si partiel';
+      default: return 'Inconnu';
     }
   };
 
@@ -125,7 +203,11 @@ export default function OfficeManagement() {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setSelectedOfficine(null);
+              setActiveTab('address');
+              setIsModalOpen(true);
+            }}
             className="flex items-center space-x-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all"
           >
             <Plus className="w-5 h-5" />
@@ -238,6 +320,7 @@ export default function OfficeManagement() {
                       whileTap={{ scale: 0.9 }}
                       onClick={() => {
                         setSelectedOfficine(officine);
+                        setActiveTab('address');
                         setIsModalOpen(true);
                       }}
                       className="p-2 text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
@@ -318,118 +401,434 @@ export default function OfficeManagement() {
               </button>
             </div>
 
+            {/* Onglets */}
+            <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6 overflow-x-auto">
+              <button
+                onClick={() => setActiveTab('address')}
+                className={`flex items-center space-x-2 px-4 py-3 ${
+                  activeTab === 'address' 
+                    ? 'border-b-2 border-teal-500 text-teal-600' 
+                    : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                <Building2 className="w-5 h-5" />
+                <span>Adresse de facturation</span>
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('web')}
+                className={`flex items-center space-x-2 px-4 py-3 ${
+                  activeTab === 'web' 
+                    ? 'border-b-2 border-teal-500 text-teal-600' 
+                    : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                <Globe className="w-5 h-5" />
+                <span>Identification Web</span>
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('pharmaml')}
+                className={`flex items-center space-x-2 px-4 py-3 ${
+                  activeTab === 'pharmaml' 
+                    ? 'border-b-2 border-teal-500 text-teal-600' 
+                    : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                <FileText className="w-5 h-5" />
+                <span>Identification PharmaML</span>
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('profile')}
+                className={`flex items-center space-x-2 px-4 py-3 ${
+                  activeTab === 'profile' 
+                    ? 'border-b-2 border-teal-500 text-teal-600' 
+                    : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                <Settings className="w-5 h-5" />
+                <span>Profil de commande</span>
+              </button>
+            </div>
+
             <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Nom de l'officine
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue={selectedOfficine?.name}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    placeholder="Nom de l'officine"
-                  />
-                </div>
+              {/* Onglet Adresse de facturation */}
+              {activeTab === 'address' && (
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Raison sociale <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={selectedOfficine?.name}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="Nom de l'officine"
+                      required
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Personne de contact
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue={selectedOfficine?.contactPerson}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    placeholder="Dr. Nom Prénom"
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Contact <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={selectedOfficine?.contactPerson}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="Dr. Nom Prénom"
+                      required
+                    />
+                  </div>
 
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Adresse
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue={selectedOfficine?.address}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    placeholder="123 Rue de la Paix"
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Adresse <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={selectedOfficine?.address}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="123 Rue de la Paix"
+                      required
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Code postal
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue={selectedOfficine?.postalCode}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    placeholder="75001"
-                  />
-                </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Code postal <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue={selectedOfficine?.postalCode}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="75001"
+                        required
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Ville
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue={selectedOfficine?.city}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    placeholder="Paris"
-                  />
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Ville <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue={selectedOfficine?.city}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="Paris"
+                        required
+                      />
+                    </div>
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Téléphone
-                  </label>
-                  <input
-                    type="tel"
-                    defaultValue={selectedOfficine?.phone}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    placeholder="+33 1 23 45 67 89"
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Courriel
+                    </label>
+                    <input
+                      type="email"
+                      defaultValue={selectedOfficine?.email}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="contact@officine.fr"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    defaultValue={selectedOfficine?.email}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    placeholder="contact@officine.fr"
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Téléphone Fixe
+                    </label>
+                    <input
+                      type="tel"
+                      defaultValue={selectedOfficine?.phone}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="+33 1 23 45 67 89"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    SIRET
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue={selectedOfficine?.siret}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    placeholder="12345678901234"
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Téléphone Mobile
+                    </label>
+                    <input
+                      type="tel"
+                      defaultValue={selectedOfficine?.mobile}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="+33 6 12 34 56 78"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Statut
-                  </label>
-                  <select
-                    defaultValue={selectedOfficine?.status}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  >
-                    <option value="active">Actif</option>
-                    <option value="inactive">Inactif</option>
-                    <option value="suspended">Suspendu</option>
-                  </select>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Fax
+                    </label>
+                    <input
+                      type="tel"
+                      defaultValue={selectedOfficine?.fax}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="+33 1 23 45 67 90"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* Onglet Identification Web */}
+              {activeTab === 'web' && (
+                <div className="space-y-6">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6">
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                      Ces informations permettent à l'officine de se connecter au portail web pour consulter ses commandes et documents.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Login Web <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={selectedOfficine?.webLogin}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="Identifiant de connexion"
+                      required
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Identifiant que l'officine utilisera pour se connecter au portail web
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Mot de passe <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="password"
+                      defaultValue={selectedOfficine?.webPassword}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="Mot de passe"
+                      required
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Mot de passe pour l'accès au portail web
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Numéro FINESS
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={selectedOfficine?.finess}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="123456789"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Nécessaire si l'officine souhaite utiliser sa carte CPS pour se connecter
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Onglet Identification PharmaML */}
+              {activeTab === 'pharmaml' && (
+                <div className="space-y-6">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6">
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                      Ces paramètres sont indispensables pour l'échange EDI avec le Logiciel de Gestion d'Officine (LGO) de la pharmacie.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Identifiant EDI <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={selectedOfficine?.ediId}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="1234567890123"
+                      maxLength={13}
+                      required
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Généralement le CIP de l'officine (13 caractères maximum)
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Clé EDI <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={selectedOfficine?.ediKey}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      placeholder="ABCD"
+                      maxLength={4}
+                      required
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Code de 4 caractères à configurer dans le LGO de la pharmacie
+                    </p>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      id="disablePharmaML"
+                      checked={selectedOfficine?.disablePharmaML || false}
+                      onChange={() => {
+                        if (selectedOfficine) {
+                          setSelectedOfficine({
+                            ...selectedOfficine,
+                            disablePharmaML: !selectedOfficine.disablePharmaML
+                          });
+                        }
+                      }}
+                      className="mt-1 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                    />
+                    <div>
+                      <label htmlFor="disablePharmaML" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Interdire les communications PharmaML
+                      </label>
+                      <p className="text-xs text-gray-500">
+                        Cochez cette case si l'officine ne dispose pas d'un logiciel compatible PharmaML
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Onglet Profil de commande */}
+              {activeTab === 'profile' && (
+                <div className="space-y-6">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6">
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                      Ces paramètres permettent de personnaliser le traitement des commandes de cette officine.
+                    </p>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      id="refuseContingent"
+                      checked={selectedOfficine?.refuseContingent || false}
+                      onChange={() => {
+                        if (selectedOfficine) {
+                          setSelectedOfficine({
+                            ...selectedOfficine,
+                            refuseContingent: !selectedOfficine.refuseContingent
+                          });
+                        }
+                      }}
+                      className="mt-1 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                    />
+                    <div>
+                      <label htmlFor="refuseContingent" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Refus des produits contingentés
+                      </label>
+                      <p className="text-xs text-gray-500">
+                        Si activé, l'officine ne pourra pas commander les produits contingentés
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Réponse aux infos produits
+                    </label>
+                    <select
+                      value={selectedOfficine?.infoProductResponse || 0}
+                      onChange={(e) => {
+                        if (selectedOfficine) {
+                          setSelectedOfficine({
+                            ...selectedOfficine,
+                            infoProductResponse: parseInt(e.target.value)
+                          });
+                        }
+                      }}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    >
+                      <option value={0}>Selon le paramétrage global</option>
+                      <option value={1}>Refuser les informations produit</option>
+                      <option value={2}>Ne pas donner de stock si partiel</option>
+                    </select>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Définit comment répondre aux demandes d'information de stock depuis l'officine
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Catégorie du client
+                    </label>
+                    <select
+                      value={selectedOfficine?.clientCategory || 0}
+                      onChange={(e) => {
+                        if (selectedOfficine) {
+                          setSelectedOfficine({
+                            ...selectedOfficine,
+                            clientCategory: parseInt(e.target.value)
+                          });
+                        }
+                      }}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    >
+                      <option value={0}>Catégorie 0 (par défaut)</option>
+                      <option value={1}>Catégorie 1</option>
+                      <option value={2}>Catégorie 2</option>
+                      <option value={3}>Catégorie 3</option>
+                      <option value={4}>Catégorie 4</option>
+                      <option value={5}>Catégorie 5</option>
+                    </select>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Catégorie tarifaire qui s'appliquera aux prix remisés pour ce client
+                    </p>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      id="showRestrictedProducts"
+                      checked={selectedOfficine?.showRestrictedProducts || false}
+                      onChange={() => {
+                        if (selectedOfficine) {
+                          setSelectedOfficine({
+                            ...selectedOfficine,
+                            showRestrictedProducts: !selectedOfficine.showRestrictedProducts
+                          });
+                        }
+                      }}
+                      className="mt-1 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                    />
+                    <div>
+                      <label htmlFor="showRestrictedProducts" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Voir les produits restreints
+                      </label>
+                      <p className="text-xs text-gray-500">
+                        Si activé, l'officine pourra voir les articles marqués "accès limité"
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Logiciel Gérant l'Officine (LGO)
+                    </label>
+                    <input
+                      type="text"
+                      value={selectedOfficine?.lgo || ''}
+                      readOnly
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 cursor-not-allowed"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Information non modifiable, détectée automatiquement lors des échanges
+                    </p>
+                  </div>
+                </div>
+              )}
 
               <div className="flex justify-end space-x-4 pt-6">
                 <button
@@ -448,7 +847,7 @@ export default function OfficeManagement() {
                   type="submit"
                   className="px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all font-medium"
                 >
-                  {selectedOfficine ? 'Modifier' : 'Créer'}
+                  {selectedOfficine ? 'Enregistrer' : 'Créer'}
                 </motion.button>
               </div>
             </form>

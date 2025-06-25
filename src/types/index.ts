@@ -41,6 +41,8 @@ export interface Officine {
   city: string;
   postalCode: string;
   phone: string;
+  mobile?: string;
+  fax?: string;
   email: string;
   siret: string;
   status: 'active' | 'inactive' | 'suspended';
@@ -50,6 +52,20 @@ export interface Officine {
   totalAmount: number;
   createdAt: Date;
   updatedAt: Date;
+  // Identification Web
+  webLogin?: string;
+  webPassword?: string;
+  finess?: string;
+  // Identification PharmaML
+  ediId?: string;
+  ediKey?: string;
+  disablePharmaML?: boolean;
+  // Profil de commande
+  refuseContingent?: boolean;
+  infoProductResponse?: number; // 0=global, 1=refuser, 2=pas de stock si partiel
+  clientCategory?: number; // 0-9 catégories tarifaires
+  showRestrictedProducts?: boolean;
+  lgo?: string; // Logiciel Gérant l'Officine (LGPI, Winpharma, etc.)
 }
 
 export interface Product {
