@@ -17,14 +17,12 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { cn } from "../../lib/utils";
-import { useStore } from "../../store/useStore";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { theme } = useStore();
   const [open, setOpen] = useState(false);
 
   const links = [
@@ -122,10 +120,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   ];
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'dark' : ''}`}>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div
         className={cn(
-          "mx-auto flex w-full flex-1 flex-col overflow-hidden bg-gray-50 dark:bg-gray-900 md:flex-row",
+          "mx-auto flex w-full flex-1 flex-col overflow-hidden md:flex-row",
           "h-screen"
         )}
       >

@@ -12,9 +12,19 @@ function App() {
 
   useEffect(() => {
     // Initialize data on app load
-    fetchOrders();
-    fetchProducts();
-    fetchOfficines();
+    const initializeData = async () => {
+      try {
+        await Promise.all([
+          fetchOrders(),
+          fetchProducts(),
+          fetchOfficines()
+        ]);
+      } catch (error) {
+        console.error('Error initializing data:', error);
+      }
+    };
+
+    initializeData();
   }, [fetchOrders, fetchProducts, fetchOfficines]);
 
   return (
@@ -23,7 +33,7 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="space-y-8"
+        className="space-y-8 p-6"
       >
         {/* Header */}
         <div className="mb-8">
