@@ -105,6 +105,16 @@ export interface Product {
   replacementCip?: string;
   quotaPeriod?: string;
   quotaQuantity?: number;
+  // Prix remisés par catégorie
+  discountedPrice1?: number;
+  discountedPrice2?: number;
+  discountedPrice3?: number;
+  discountedPrice4?: number;
+  discountedPrice5?: number;
+  discountedPrice6?: number;
+  discountedPrice7?: number;
+  discountedPrice8?: number;
+  discountedPrice9?: number;
 }
 
 export interface Order {

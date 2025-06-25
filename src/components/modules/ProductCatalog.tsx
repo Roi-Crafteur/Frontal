@@ -728,132 +728,333 @@ export default function ProductCatalog() {
 
               {/* Onglet Tarification */}
               {activeTab === 'pricing' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Prix tarif (€)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      defaultValue={selectedProduct?.price}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                      placeholder="0.00"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Prix remisé (€)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      defaultValue={selectedProduct?.discountedPrice}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                      placeholder="0.00"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Prix fournisseur (€)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      defaultValue={selectedProduct?.supplierPrice}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                      placeholder="0.00"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Statut
-                    </label>
-                    <select
-                      defaultValue={selectedProduct?.status}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    >
-                      <option value="active">Actif</option>
-                      <option value="inactive">Inactif</option>
-                      <option value="discontinued">Arrêté</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Période de quota
-                    </label>
-                    <select
-                      defaultValue={selectedProduct?.quotaPeriod || ''}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    >
-                      <option value="">Aucune</option>
-                      <option value="Journalier">Journalier</option>
-                      <option value="Hebdomadaire">Hebdomadaire</option>
-                      <option value="Mensuel">Mensuel</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Quantité quota
-                    </label>
-                    <input
-                      type="number"
-                      defaultValue={selectedProduct?.quotaQuantity}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                      placeholder="0"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      CIP de remplacement
-                    </label>
-                    <input
-                      type="text"
-                      defaultValue={selectedProduct?.replacementCip}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                      placeholder="CIP du produit remplaçant"
-                    />
-                  </div>
-
-                  <div className="md:col-span-2 space-y-3">
-                    <label className="flex items-center space-x-2">
+                <div className="space-y-4">
+                  {/* Prix remisé */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                        Prix remisé
+                      </label>
+                    </div>
+                    <div className="col-span-9">
                       <input
-                        type="checkbox"
-                        defaultChecked={selectedProduct?.isControlled}
-                        className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                        type="number"
+                        step="0.01"
+                        defaultValue={selectedProduct?.discountedPrice}
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="0"
                       />
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Produit contrôlé (nécessite une prescription)
-                      </span>
-                    </label>
+                    </div>
+                  </div>
 
-                    <label className="flex items-center space-x-2">
+                  {/* Prix remisé catégorie 1 */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                        Prix remisé catégorie 1
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue="0"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Prix remisé catégorie 2 */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                        Prix remisé catégorie 2
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue="0"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Prix remisé catégorie 3 */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                        Prix remisé catégorie 3
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue="0"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Prix remisé catégorie 4 */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                        Prix remisé catégorie 4
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue="0"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Prix remisé catégorie 5 */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                        Prix remisé catégorie 5
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue="0"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Prix remisé catégorie 6 */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                        Prix remisé catégorie 6
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue="0"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Prix remisé catégorie 7 */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                        Prix remisé catégorie 7
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue="0"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Prix remisé catégorie 8 */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                        Prix remisé catégorie 8
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue="0"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Prix remisé catégorie 9 */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                        Prix remisé catégorie 9
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue="0"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Prix tarif */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                        Prix tarif
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue={selectedProduct?.price}
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Prix fournisseur */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                        Prix fournisseur
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue={selectedProduct?.supplierPrice}
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Disponibilité */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Disponibilité:
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <select
+                        defaultValue="Disponible"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      >
+                        <option value="Disponible">Disponible</option>
+                        <option value="Indisponible">Indisponible</option>
+                        <option value="Rupture">Rupture</option>
+                        <option value="Arrêt de commercialisation">Arrêt de commercialisation</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Contingentement */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Contingentement:
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <div className="flex items-center space-x-2">
+                        <select
+                          defaultValue="Pas de contingentement"
+                          className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        >
+                          <option value="Pas de contingentement">Pas de contingentement</option>
+                          <option value="Journalier">Journalier</option>
+                          <option value="Hebdomadaire">Hebdomadaire</option>
+                          <option value="Mensuel">Mensuel</option>
+                        </select>
+                        <div className="flex items-center">
+                          <span className="text-sm text-gray-700 dark:text-gray-300 mr-2">Quantité</span>
+                          <input
+                            type="number"
+                            defaultValue="0"
+                            className="w-24 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Remplacé par */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Remplacé par:
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="text"
+                          defaultValue="pas de remplacement"
+                          className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                          placeholder="CIP du produit remplaçant"
+                        />
+                        <button
+                          type="button"
+                          className="p-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors"
+                        >
+                          <Search className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Remplaçant prioritaire */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Remplaçant prioritaire?
+                      </label>
+                    </div>
+                    <div className="col-span-9">
                       <input
                         type="checkbox"
                         defaultChecked={selectedProduct?.isPriorityReplacement}
                         className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                       />
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Remplaçant prioritaire
-                      </span>
-                    </label>
+                    </div>
+                  </div>
 
-                    <label className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        defaultChecked={selectedProduct?.isRestricted}
-                        className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
-                      />
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Accès limité
-                      </span>
-                    </label>
+                  {/* Limitations d'accès */}
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-3 text-right pr-4">
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Limitations d'accès:
+                      </label>
+                    </div>
+                    <div className="col-span-9">
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          defaultChecked={selectedProduct?.isRestricted}
+                          className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                        />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                          Restreindre l'accès au produit
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
