@@ -81,11 +81,11 @@ export const DesktopSidebar = ({
     <>
       <motion.div
         className={cn(
-          "h-full px-4 py-4 hidden md:flex md:flex-col bg-gradient-to-b from-teal-500 to-teal-600 text-white flex-shrink-0 shadow-2xl",
+          "h-full px-3 py-4 hidden md:flex md:flex-col bg-gradient-to-b from-teal-500 to-teal-600 text-white flex-shrink-0 shadow-2xl",
           className
         )}
         animate={{
-          width: animate ? (open ? "300px" : "80px") : "300px",
+          width: animate ? (open ? "280px" : "72px") : "280px",
         }}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
@@ -202,12 +202,12 @@ export const SidebarLink = ({
       href={link.href}
       onClick={handleClick}
       className={cn(
-        "flex items-center justify-start gap-3 group/sidebar py-3 px-3 rounded-lg hover:bg-teal-600 transition-colors cursor-pointer",
+        "flex items-center gap-3 group/sidebar py-2.5 px-3 rounded-lg hover:bg-teal-600 transition-colors cursor-pointer",
         className
       )}
       {...props}
     >
-      <div className="flex items-center justify-center w-6 h-6">
+      <div className="flex items-center justify-center w-6 h-6 flex-shrink-0">
         {link.icon}
       </div>
 
@@ -216,7 +216,7 @@ export const SidebarLink = ({
           display: animate ? (open ? "inline-block" : "none") : "inline-block",
           opacity: animate ? (open ? 1 : 0) : 1,
         }}
-        className="text-white text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+        className="text-white text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0 truncate"
       >
         {link.label}
       </motion.span>
