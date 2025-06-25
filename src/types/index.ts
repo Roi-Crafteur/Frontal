@@ -81,6 +81,7 @@ export interface Product {
   category: string;
   manufacturer: string;
   price: number;
+  discountedPrice: number;
   stock: number;
   minStock: number;
   maxStock: number;
@@ -91,6 +92,19 @@ export interface Product {
   batchNumber?: string;
   createdAt: Date;
   updatedAt: Date;
+  // Champs supplémentaires
+  reference?: string;
+  ref7?: string;
+  gtin?: string;
+  packaging?: number; // Colisage
+  comment?: string;
+  alertOnOrder?: boolean;
+  supplierPrice?: number;
+  isPriorityReplacement?: boolean;
+  isRestricted?: boolean;
+  replacementCip?: string;
+  quotaPeriod?: string;
+  quotaQuantity?: number;
 }
 
 export interface Order {
