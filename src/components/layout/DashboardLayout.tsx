@@ -14,108 +14,105 @@ import {
   IconUserCheck,
   IconFolder,
   IconUser,
+  IconBell,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { cn } from "../../lib/utils";
+import { useStore } from "../../store/useStore";
+import ModuleRouter from "./ModuleRouter";
 
 interface DashboardLayoutProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [open, setOpen] = useState(false);
+  const { activeModule, setActiveModule } = useStore();
 
   const links = [
     {
       label: "Tableau de Bord",
       href: "#",
-      icon: (
-        <IconBrandTabler className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
-    },
-    {
-      label: "Officines",
-      href: "#",
-      icon: (
-        <IconBuilding className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
-    },
-    {
-      label: "Articles",
-      href: "#",
-      icon: (
-        <IconPackage className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
-    },
-    {
-      label: "Listes CEPS",
-      href: "#",
-      icon: (
-        <IconList className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
-    },
-    {
-      label: "Commandes",
-      href: "#",
-      icon: (
-        <IconShoppingCart className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
-    },
-    {
-      label: "Flux par Clients",
-      href: "#",
-      icon: (
-        <IconUsers className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
-    },
-    {
-      label: "Téléchargements",
-      href: "#",
-      icon: (
-        <IconDownload className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
-    },
-    {
-      label: "Documents",
-      href: "#",
-      icon: (
-        <IconFileText className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
-    },
-    {
-      label: "Listes",
-      href: "#",
-      icon: (
-        <IconList className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
-    },
-    {
-      label: "Liste modifications",
-      href: "#",
-      icon: (
-        <IconSettings className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
+      icon: <IconBrandTabler className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('dashboard')
     },
     {
       label: "Utilisateurs",
       href: "#",
-      icon: (
-        <IconUser className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
+      icon: <IconUser className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('users')
+    },
+    {
+      label: "Officines",
+      href: "#",
+      icon: <IconBuilding className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('officines')
+    },
+    {
+      label: "Articles",
+      href: "#",
+      icon: <IconPackage className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('products')
+    },
+    {
+      label: "Commandes",
+      href: "#",
+      icon: <IconShoppingCart className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('orders')
+    },
+    {
+      label: "Notifications",
+      href: "#",
+      icon: <IconBell className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('notifications')
+    },
+    {
+      label: "Listes CEPS",
+      href: "#",
+      icon: <IconList className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('ceps')
+    },
+    {
+      label: "Flux par Clients",
+      href: "#",
+      icon: <IconUsers className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('client-flows')
+    },
+    {
+      label: "Téléchargements",
+      href: "#",
+      icon: <IconDownload className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('downloads')
+    },
+    {
+      label: "Documents",
+      href: "#",
+      icon: <IconFileText className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('documents')
+    },
+    {
+      label: "Listes",
+      href: "#",
+      icon: <IconList className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('lists')
+    },
+    {
+      label: "Liste modifications",
+      href: "#",
+      icon: <IconSettings className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('modifications')
     },
     {
       label: "Rôles utilisateurs",
       href: "#",
-      icon: (
-        <IconUserCheck className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
+      icon: <IconUserCheck className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('user-roles')
     },
     {
       label: "Catalogues",
       href: "#",
-      icon: (
-        <IconFolder className="h-5 w-5 shrink-0 text-teal-100" />
-      ),
+      icon: <IconFolder className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('catalogs')
     },
   ];
 
@@ -133,7 +130,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <Logo />
               <div className="mt-8 flex flex-col gap-2">
                 {links.map((link, idx) => (
-                  <SidebarLink key={idx} link={link} />
+                  <SidebarLink 
+                    key={idx} 
+                    link={link}
+                    onClick={link.onClick}
+                  />
                 ))}
               </div>
             </div>
@@ -152,7 +153,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
           </SidebarBody>
         </Sidebar>
-        <Dashboard>{children}</Dashboard>
+        <Dashboard>
+          {activeModule === 'dashboard' ? children : <ModuleRouter activeModule={activeModule} />}
+        </Dashboard>
       </div>
     </div>
   );
@@ -178,7 +181,6 @@ export const Logo = () => {
   );
 };
 
-// Dashboard component with content
 const Dashboard = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex flex-1">

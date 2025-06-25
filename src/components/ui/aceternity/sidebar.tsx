@@ -163,7 +163,7 @@ export const MobileSidebar = ({
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-              </div>
+                </div>
               {children}
             </motion.div>
           )}
@@ -176,6 +176,7 @@ export const MobileSidebar = ({
 export const SidebarLink = ({
   link,
   className,
+  onClick,
   ...props
 }: {
   link: {
@@ -184,14 +185,24 @@ export const SidebarLink = ({
     icon: React.JSX.Element | React.ReactNode;
   };
   className?: string;
+  onClick?: () => void;
   props?: React.LinkHTMLAttributes<HTMLAnchorElement>;
 }) => {
   const { open, animate } = useSidebar();
+  
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onClick) {
+      onClick();
+    }
+  };
+  
   return (
     <a
       href={link.href}
+      onClick={handleClick}
       className={cn(
-        "flex items-center justify-start gap-2 group/sidebar py-2 px-3 rounded-lg hover:bg-teal-600 transition-colors",
+        "flex items-center justify-start gap-2 group/sidebar py-2 px-3 rounded-lg hover:bg-teal-600 transition-colors cursor-pointer",
         className
       )}
       {...props}
