@@ -1,0 +1,90 @@
+import React from "react";
+import { motion } from "framer-motion";
+import { Clock, Package, ShoppingCart, User, AlertCircle } from "lucide-react";
+
+export default function RecentActivity() {
+  const activities = [
+    {
+      id: 1,
+      type: "order",
+      icon: ShoppingCart,
+      title: "Nouvelle commande reçue",
+      description: "Pharmacie Central - 15 articles",
+      time: "Il y a 5 minutes",
+      color: "text-teal-600 bg-teal-100"
+    },
+    {
+      id: 2,
+      type: "product",
+      icon: Package,
+      title: "Stock mis à jour",
+      description: "Doliprane 1000mg - 150 unités",
+      time: "Il y a 12 minutes",
+      color: "text-blue-600 bg-blue-100"
+    },
+    {
+      id: 3,
+      type: "user",
+      icon: User,
+      title: "Nouvel utilisateur",
+      description: "Marie Dubois - Gestionnaire",
+      time: "Il y a 1 heure",
+      color: "text-purple-600 bg-purple-100"
+    },
+    {
+      id: 4,
+      type: "alert",
+      icon: AlertCircle,
+      title: "Alerte stock faible",
+      description: "Amoxicilline 500mg - 5 unités restantes",
+      time: "Il y a 2 heures",
+      color: "text-red-600 bg-red-100"
+    }
+  ];
+
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+          Activité Récente
+        </h3>
+        <Clock className="w-5 h-5 text-gray-500" />
+      </div>
+      
+      <div className="space-y-4">
+        {activities.map((activity, index) => (
+          <motion.div
+            key={activity.id}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+            className="flex items-start space-x-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+          >
+            <div className={`p-2 rounded-lg ${activity.color}`}>
+              <activity.icon className="w-4 h-4" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-800 dark:text-white">
+                {activity.title}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                {activity.description}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                {activity.time}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+      
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="w-full mt-4 py-2 text-sm text-teal-600 hover:text-teal-700 font-medium transition-colors"
+      >
+        Voir toute l'activité
+      </motion.button>
+    </div>
+  );
+}
