@@ -10,9 +10,9 @@ export default function StatsCards() {
       link: "#",
       icon: <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />,
       stats: [
-        { value: 23, label: "commandes" },
-        { value: 20, label: "lignes" },
-        { value: 94, label: "unités" }
+        { value: "23", label: "commandes" },
+        { value: "20", label: "lignes" },
+        { value: "94", label: "unités" }
       ]
     },
     {
@@ -21,9 +21,9 @@ export default function StatsCards() {
       link: "#",
       icon: <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />,
       stats: [
-        { value: 137, label: "commandes" },
-        { value: 127, label: "lignes" },
-        { value: 89, label: "unités" }
+        { value: "137", label: "commandes" },
+        { value: "127", label: "lignes" },
+        { value: "89", label: "unités" }
       ]
     },
     {
@@ -46,7 +46,7 @@ export default function StatsCards() {
       </h2>
       <HoverEffect 
         items={statsItems} 
-        className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 py-4 sm:py-6 lg:py-10" 
+        className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 py-2 sm:py-4 lg:py-6" 
       />
     </div>
   );

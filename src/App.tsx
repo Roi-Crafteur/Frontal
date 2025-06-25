@@ -33,7 +33,7 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="space-y-4 sm:space-y-6 lg:space-y-8 w-full"
+        className="space-y-4 sm:space-y-6 lg:space-y-8 w-full max-w-full overflow-hidden"
       >
         {/* Header */}
         <div className="mb-4 sm:mb-6 lg:mb-8">
@@ -77,7 +77,7 @@ function App() {
         </div>
 
         {/* Additional Stats Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {[
             { title: "Commandes Totales", value: "1,247", change: "+12%", color: "text-teal-600" },
             { title: "Chiffre d'Affaires", value: "€89,432", change: "+8%", color: "text-green-600" },
@@ -89,16 +89,16 @@ function App() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-shadow"
+              className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 shadow-lg hover:shadow-xl transition-shadow"
             >
-              <h4 className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+              <h4 className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 leading-tight">
                 {stat.title}
               </h4>
               <div className="flex items-end justify-between">
-                <span className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white">
+                <span className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold text-gray-800 dark:text-white leading-tight">
                   {stat.value}
                 </span>
-                <span className={`text-xs sm:text-sm font-medium ${stat.color}`}>
+                <span className={`text-xs sm:text-sm font-medium ${stat.color} leading-tight`}>
                   {stat.change}
                 </span>
               </div>

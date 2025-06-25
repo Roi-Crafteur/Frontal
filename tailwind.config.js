@@ -53,6 +53,16 @@ export default {
       screens: {
         'xs': '475px',
       },
+      lineHeight: {
+        'tight': '1.1',
+        'snug': '1.2',
+      },
+      spacing: {
+        '0.5': '0.125rem',
+        '1.5': '0.375rem',
+        '2.5': '0.625rem',
+        '3.5': '0.875rem',
+      }
     },
   },
   plugins: [],

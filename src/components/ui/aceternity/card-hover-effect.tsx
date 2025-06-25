@@ -52,31 +52,36 @@ export const HoverEffect = ({
             )}
           </AnimatePresence>
           <Card>
-            <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 mb-3 sm:mb-4">
-              {item.icon && (
-                <div className="p-2 bg-teal-100 rounded-lg flex-shrink-0 w-fit">
-                  {item.icon}
+            <div className="flex flex-col space-y-3 sm:space-y-4">
+              {/* Header avec icône et titre */}
+              <div className="flex items-start space-x-3">
+                {item.icon && (
+                  <div className="p-2 bg-teal-100 rounded-lg flex-shrink-0">
+                    {item.icon}
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <CardTitle className="text-sm sm:text-base leading-tight">{item.title}</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm mt-1">{item.description}</CardDescription>
+                </div>
+              </div>
+              
+              {/* Statistiques */}
+              {item.stats && (
+                <div className="grid grid-cols-3 gap-1 sm:gap-2 lg:gap-3">
+                  {item.stats.map((stat, statIdx) => (
+                    <div key={statIdx} className="text-center min-w-0">
+                      <div className="text-sm sm:text-lg lg:text-xl xl:text-2xl font-bold text-teal-600 leading-tight break-words">
+                        {stat.value}
+                      </div>
+                      <div className="text-xs text-gray-500 leading-tight mt-0.5 break-words">
+                        {stat.label}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
-              <div className="flex-1 min-w-0">
-                <CardTitle className="text-sm sm:text-base">{item.title}</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">{item.description}</CardDescription>
-              </div>
             </div>
-            {item.stats && (
-              <div className="grid grid-cols-3 gap-2 sm:gap-4 mt-3 sm:mt-4">
-                {item.stats.map((stat, statIdx) => (
-                  <div key={statIdx} className="text-center">
-                    <div className="text-lg sm:text-xl lg:text-2xl font-bold text-teal-600">
-                      {stat.value}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
           </Card>
         </div>
       ))}
@@ -94,12 +99,12 @@ export const Card = ({
   return (
     <div
       className={cn(
-        "rounded-xl sm:rounded-2xl h-full w-full p-3 sm:p-4 lg:p-6 overflow-hidden bg-white border border-gray-200 dark:border-white/[0.2] group-hover:border-slate-700 relative z-20 shadow-sm hover:shadow-lg transition-all duration-300",
+        "rounded-xl sm:rounded-2xl h-full w-full p-3 sm:p-4 lg:p-5 xl:p-6 overflow-hidden bg-white border border-gray-200 dark:border-white/[0.2] group-hover:border-slate-700 relative z-20 shadow-sm hover:shadow-lg transition-all duration-300",
         className
       )}
     >
-      <div className="relative z-50">
-        <div className="p-2 sm:p-4">{children}</div>
+      <div className="relative z-50 h-full">
+        {children}
       </div>
     </div>
   );
@@ -113,7 +118,7 @@ export const CardTitle = ({
   children: React.ReactNode;
 }) => {
   return (
-    <h4 className={cn("text-zinc-800 font-bold tracking-wide", className)}>
+    <h4 className={cn("text-zinc-800 font-bold tracking-wide leading-tight", className)}>
       {children}
     </h4>
   );
@@ -129,7 +134,7 @@ export const CardDescription = ({
   return (
     <p
       className={cn(
-        "mt-1 sm:mt-2 text-zinc-600 tracking-wide leading-relaxed",
+        "text-zinc-600 tracking-wide leading-relaxed",
         className
       )}
     >

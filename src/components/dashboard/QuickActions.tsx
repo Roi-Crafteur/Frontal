@@ -26,10 +26,10 @@ export default function QuickActions() {
             transition={{ duration: 0.3, delay: index * 0.1 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`${action.color} text-white p-3 sm:p-4 rounded-lg sm:rounded-xl shadow-lg transition-all duration-200 flex flex-col items-center space-y-1 sm:space-y-2 group min-h-[80px] sm:min-h-[100px]`}
+            className={`${action.color} text-white p-2 sm:p-3 lg:p-4 rounded-lg sm:rounded-xl shadow-lg transition-all duration-200 flex flex-col items-center justify-center space-y-1 sm:space-y-2 group min-h-[70px] sm:min-h-[90px] lg:min-h-[100px]`}
           >
-            <action.icon className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform" />
-            <span className="text-xs sm:text-sm font-medium text-center leading-tight">
+            <action.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 group-hover:scale-110 transition-transform flex-shrink-0" />
+            <span className="text-xs sm:text-sm font-medium text-center leading-tight px-1">
               {action.label}
             </span>
           </motion.button>
