@@ -29,19 +29,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [open, setOpen] = useState(false);
   const { activeModule, setActiveModule } = useStore();
 
-  // Groupement logique des liens de navigation
-  const mainLinks = [
+  // Ordre exact du cahier des charges
+  const links = [
     {
       label: "Tableau de Bord",
       href: "#",
       icon: <IconBrandTabler className="h-5 w-5 shrink-0 text-teal-100" />,
       onClick: () => setActiveModule('dashboard')
-    },
-    {
-      label: "Commandes",
-      href: "#",
-      icon: <IconShoppingCart className="h-5 w-5 shrink-0 text-teal-100" />,
-      onClick: () => setActiveModule('orders')
     },
     {
       label: "Officines",
@@ -55,14 +49,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: <IconPackage className="h-5 w-5 shrink-0 text-teal-100" />,
       onClick: () => setActiveModule('products')
     },
-  ];
-
-  const managementLinks = [
     {
       label: "Listes CEPS",
       href: "#",
       icon: <IconList className="h-5 w-5 shrink-0 text-teal-100" />,
       onClick: () => setActiveModule('ceps')
+    },
+    {
+      label: "Commandes",
+      href: "#",
+      icon: <IconShoppingCart className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('orders')
     },
     {
       label: "Flux par Clients",
@@ -71,20 +68,29 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       onClick: () => setActiveModule('client-flows')
     },
     {
+      label: "Téléchargements",
+      href: "#",
+      icon: <IconDownload className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('downloads')
+    },
+    {
       label: "Documents",
       href: "#",
       icon: <IconFileText className="h-5 w-5 shrink-0 text-teal-100" />,
       onClick: () => setActiveModule('documents')
     },
     {
-      label: "Téléchargements",
+      label: "Listes",
       href: "#",
-      icon: <IconDownload className="h-5 w-5 shrink-0 text-teal-100" />,
-      onClick: () => setActiveModule('downloads')
+      icon: <IconList className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('lists')
     },
-  ];
-
-  const adminLinks = [
+    {
+      label: "Liste modifications",
+      href: "#",
+      icon: <IconSettings className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('modifications')
+    },
     {
       label: "Utilisateurs",
       href: "#",
@@ -119,46 +125,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <div className="flex flex-1 flex-col">
               <Logo />
               
-              {/* Navigation principale - sans scroll */}
+              {/* Navigation principale - ordre exact du cahier des charges */}
               <div className="mt-6 flex flex-col space-y-1">
-                {/* Section principale */}
-                <div className="space-y-1">
-                  {mainLinks.map((link, idx) => (
-                    <SidebarLink 
-                      key={idx} 
-                      link={link}
-                      onClick={link.onClick}
-                    />
-                  ))}
-                </div>
-
-                {/* Séparateur visuel */}
-                <div className="my-3 border-t border-teal-400/30"></div>
-
-                {/* Section gestion */}
-                <div className="space-y-1">
-                  {managementLinks.map((link, idx) => (
-                    <SidebarLink 
-                      key={idx} 
-                      link={link}
-                      onClick={link.onClick}
-                    />
-                  ))}
-                </div>
-
-                {/* Séparateur visuel */}
-                <div className="my-3 border-t border-teal-400/30"></div>
-
-                {/* Section administration */}
-                <div className="space-y-1">
-                  {adminLinks.map((link, idx) => (
-                    <SidebarLink 
-                      key={idx} 
-                      link={link}
-                      onClick={link.onClick}
-                    />
-                  ))}
-                </div>
+                {links.map((link, idx) => (
+                  <SidebarLink 
+                    key={idx} 
+                    link={link}
+                    onClick={link.onClick}
+                  />
+                ))}
               </div>
             </div>
             
