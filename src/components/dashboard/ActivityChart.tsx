@@ -55,10 +55,10 @@ export default function ActivityChart() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="w-full"
+      className="w-full h-full"
     >
-      <BackgroundGradient className="rounded-2xl sm:rounded-3xl p-1">
-        <div className="bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl">
+      <BackgroundGradient className="rounded-2xl sm:rounded-3xl p-1 h-full">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl h-full flex flex-col">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 lg:mb-8 space-y-3 sm:space-y-0">
             <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white">
               Activité sur 24 mois
@@ -79,7 +79,7 @@ export default function ActivityChart() {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative flex-1">
             {/* Y-axis labels */}
             <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400 pr-2 sm:pr-4 font-medium">
               <span>3000</span>
@@ -91,7 +91,7 @@ export default function ActivityChart() {
             </div>
 
             {/* Chart */}
-            <div className="ml-8 sm:ml-12">
+            <div className="ml-8 sm:ml-12 h-full">
               <motion.svg 
                 viewBox="0 0 800 200" 
                 className="w-full h-32 sm:h-40 lg:h-48"
