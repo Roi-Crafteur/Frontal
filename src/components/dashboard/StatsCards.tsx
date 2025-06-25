@@ -1,6 +1,6 @@
 import React from "react";
 import { HoverEffect } from "../ui/aceternity/card-hover-effect";
-import { BarChart3, ShoppingCart, Package, TrendingUp } from "lucide-react";
+import { BarChart3, ShoppingCart, Package, TrendingUp, Euro } from "lucide-react";
 
 export default function StatsCards() {
   const statsItems = [
@@ -36,6 +36,16 @@ export default function StatsCards() {
         { value: "354", label: "officines" },
         { value: "98%", label: "disponibilité" }
       ]
+    },
+    {
+      title: "Performance Globale",
+      description: "Indicateurs clés",
+      link: "#",
+      icon: <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />,
+      stats: [
+        { value: "1,247", label: "Commandes Totales", change: "+12%" },
+        { value: "€89,432", label: "Chiffre d'Affaires", change: "+8%" }
+      ]
     }
   ];
 
@@ -46,7 +56,7 @@ export default function StatsCards() {
       </h2>
       <HoverEffect 
         items={statsItems} 
-        className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 py-2 sm:py-4 lg:py-6" 
+        className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 py-2 sm:py-4 lg:py-6" 
       />
     </div>
   );

@@ -14,6 +14,7 @@ export const HoverEffect = ({
     stats?: {
       value: string | number;
       label: string;
+      change?: string;
     }[];
   }[];
   className?: string;
@@ -68,11 +69,24 @@ export const HoverEffect = ({
               
               {/* Statistiques */}
               {item.stats && (
-                <div className="grid grid-cols-3 gap-1 sm:gap-2 lg:gap-3">
+                <div className={cn(
+                  "grid gap-1 sm:gap-2 lg:gap-3",
+                  item.stats.length === 2 ? "grid-cols-1" : "grid-cols-3"
+                )}>
                   {item.stats.map((stat, statIdx) => (
-                    <div key={statIdx} className="text-center min-w-0">
-                      <div className="text-sm sm:text-lg lg:text-xl xl:text-2xl font-bold text-teal-600 leading-tight break-words">
-                        {stat.value}
+                    <div key={statIdx} className={cn(
+                      "text-center min-w-0",
+                      item.stats!.length === 2 ? "border-b border-gray-200 pb-2 last:border-b-0 last:pb-0" : ""
+                    )}>
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className="text-sm sm:text-lg lg:text-xl xl:text-2xl font-bold text-teal-600 leading-tight break-words">
+                          {stat.value}
+                        </div>
+                        {stat.change && (
+                          <div className="text-xs sm:text-sm font-medium text-green-600 leading-tight">
+                            {stat.change}
+                          </div>
+                        )}
                       </div>
                       <div className="text-xs text-gray-500 leading-tight mt-0.5 break-words">
                         {stat.label}
