@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [open, setOpen] = useState(false);
   const { activeModule, setActiveModule } = useStore();
 
-  // Ordre original exact du menu
+  // Ordre original exact du menu selon votre documentation
   const links = [
     {
       label: "Tableau de Bord",
@@ -114,6 +114,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       href: "#",
       icon: <IconBell className="h-5 w-5 shrink-0 text-teal-100" />,
       onClick: () => setActiveModule('notifications')
+    },
+    {
+      label: "Paramètres Serveur",
+      href: "#",
+      icon: <IconSettings className="h-5 w-5 shrink-0 text-teal-100" />,
+      onClick: () => setActiveModule('settings')
     },
   ];
 

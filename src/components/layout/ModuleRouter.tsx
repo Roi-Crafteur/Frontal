@@ -7,6 +7,8 @@ import NotificationCenter from "../modules/NotificationCenter";
 import CepsManagement from "../modules/CepsManagement";
 import DocumentManagement from "../modules/DocumentManagement";
 import ListsManagement from "../modules/ListsManagement";
+import ServerSettings from "../modules/ServerSettings";
+import RoleManagement from "../modules/RoleManagement";
 
 interface ModuleRouterProps {
   activeModule: string;
@@ -16,6 +18,8 @@ export default function ModuleRouter({ activeModule }: ModuleRouterProps) {
   switch (activeModule) {
     case 'users':
       return <UserManagement />;
+    case 'user-roles':
+      return <RoleManagement />;
     case 'officines':
       return <OfficeManagement />;
     case 'products':
@@ -30,6 +34,8 @@ export default function ModuleRouter({ activeModule }: ModuleRouterProps) {
       return <DocumentManagement />;
     case 'lists':
       return <ListsManagement />;
+    case 'settings':
+      return <ServerSettings />;
     case 'client-flows':
       return (
         <div className="p-6">
@@ -60,17 +66,6 @@ export default function ModuleRouter({ activeModule }: ModuleRouterProps) {
           </h1>
           <p className="text-gray-600 dark:text-gray-300">
             Module en cours de développement - Historique des modifications système
-          </p>
-        </div>
-      );
-    case 'user-roles':
-      return (
-        <div className="p-6">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-            Rôles Utilisateurs
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300">
-            Module en cours de développement - Gestion des rôles et permissions
           </p>
         </div>
       );
