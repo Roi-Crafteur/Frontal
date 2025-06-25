@@ -117,13 +117,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div
-        className={cn(
-          "mx-auto flex w-full flex-1 flex-col overflow-hidden md:flex-row",
-          "h-screen"
-        )}
-      >
+    <div className="h-screen w-full bg-gray-50 dark:bg-gray-900 overflow-hidden">
+      <div className="flex h-full w-full">
         <Sidebar open={open} setOpen={setOpen}>
           <SidebarBody className="justify-between gap-10">
             <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
@@ -183,9 +178,9 @@ export const Logo = () => {
 
 const Dashboard = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-1 overflow-hidden">
-      <div className="flex h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900 overflow-y-auto">
-        <div className="p-2 md:p-6">
+    <div className="flex-1 flex flex-col h-full overflow-hidden">
+      <div className="flex-1 rounded-tl-2xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900 overflow-y-auto">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8">
           {children}
         </div>
       </div>

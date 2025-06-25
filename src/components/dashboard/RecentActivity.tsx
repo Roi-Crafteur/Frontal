@@ -43,31 +43,31 @@ export default function RecentActivity() {
   ];
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+    <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg h-fit">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white">
           Activité Récente
         </h3>
-        <Clock className="w-5 h-5 text-gray-500" />
+        <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
       </div>
       
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {activities.map((activity, index) => (
           <motion.div
             key={activity.id}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
-            className="flex items-start space-x-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+            className="flex items-start space-x-3 sm:space-x-4 p-2 sm:p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
           >
-            <div className={`p-2 rounded-lg ${activity.color}`}>
-              <activity.icon className="w-4 h-4" />
+            <div className={`p-1.5 sm:p-2 rounded-lg ${activity.color} flex-shrink-0`}>
+              <activity.icon className="w-3 h-3 sm:w-4 sm:h-4" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-800 dark:text-white">
+              <p className="text-sm font-medium text-gray-800 dark:text-white line-clamp-1">
                 {activity.title}
               </p>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 line-clamp-1">
                 {activity.description}
               </p>
               <p className="text-xs text-gray-500 mt-1">
@@ -81,7 +81,7 @@ export default function RecentActivity() {
       <motion.button
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="w-full mt-4 py-2 text-sm text-teal-600 hover:text-teal-700 font-medium transition-colors"
+        className="w-full mt-3 sm:mt-4 py-2 text-xs sm:text-sm text-teal-600 hover:text-teal-700 font-medium transition-colors"
       >
         Voir toute l'activité
       </motion.button>

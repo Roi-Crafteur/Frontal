@@ -13,11 +13,11 @@ export default function QuickActions() {
   ];
 
   return (
-    <div className="mb-8">
-      <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
+    <div className="mb-4 sm:mb-6 lg:mb-8">
+      <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4">
         Actions Rapides
       </h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 lg:gap-4">
         {actions.map((action, index) => (
           <motion.button
             key={index}
@@ -26,10 +26,12 @@ export default function QuickActions() {
             transition={{ duration: 0.3, delay: index * 0.1 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`${action.color} text-white p-4 rounded-xl shadow-lg transition-all duration-200 flex flex-col items-center space-y-2 group`}
+            className={`${action.color} text-white p-3 sm:p-4 rounded-lg sm:rounded-xl shadow-lg transition-all duration-200 flex flex-col items-center space-y-1 sm:space-y-2 group min-h-[80px] sm:min-h-[100px]`}
           >
-            <action.icon className="w-6 h-6 group-hover:scale-110 transition-transform" />
-            <span className="text-sm font-medium text-center">{action.label}</span>
+            <action.icon className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform" />
+            <span className="text-xs sm:text-sm font-medium text-center leading-tight">
+              {action.label}
+            </span>
           </motion.button>
         ))}
       </div>

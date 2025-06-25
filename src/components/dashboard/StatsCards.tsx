@@ -8,7 +8,7 @@ export default function StatsCards() {
       title: "Aujourd'hui : 25/06/2025",
       description: "Jusqu'à 13:55:32",
       link: "#",
-      icon: <BarChart3 className="w-6 h-6 text-teal-600" />,
+      icon: <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />,
       stats: [
         { value: 23, label: "commandes" },
         { value: 20, label: "lignes" },
@@ -19,7 +19,7 @@ export default function StatsCards() {
       title: "Hier : 24/06/2025",
       description: "Toute la journée",
       link: "#",
-      icon: <ShoppingCart className="w-6 h-6 text-teal-600" />,
+      icon: <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />,
       stats: [
         { value: 137, label: "commandes" },
         { value: 127, label: "lignes" },
@@ -30,7 +30,7 @@ export default function StatsCards() {
       title: "Produits Actifs",
       description: "Catalogue complet",
       link: "#",
-      icon: <Package className="w-6 h-6 text-teal-600" />,
+      icon: <Package className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />,
       stats: [
         { value: "52 231", label: "articles" },
         { value: "354", label: "officines" },
@@ -40,11 +40,14 @@ export default function StatsCards() {
   ];
 
   return (
-    <div className="mb-8">
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+    <div className="mb-4 sm:mb-6 lg:mb-8">
+      <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-6">
         Commandes à la journée
       </h2>
-      <HoverEffect items={statsItems} className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3" />
+      <HoverEffect 
+        items={statsItems} 
+        className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 py-4 sm:py-6 lg:py-10" 
+      />
     </div>
   );
 }

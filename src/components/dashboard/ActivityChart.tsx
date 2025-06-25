@@ -55,23 +55,24 @@ export default function ActivityChart() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
+      className="w-full"
     >
-      <BackgroundGradient className="rounded-3xl p-1">
-        <div className="bg-white dark:bg-gray-900 rounded-3xl p-8 shadow-xl">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-2xl font-bold text-gray-800 dark:text-white">
+      <BackgroundGradient className="rounded-2xl sm:rounded-3xl p-1">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 lg:mb-8 space-y-3 sm:space-y-0">
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white">
               Activité sur 24 mois
             </h3>
-            <div className="flex items-center space-x-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-6">
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-gradient-to-r from-pink-400 to-pink-500 rounded-full shadow-sm"></div>
-                <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">
+                <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-r from-pink-400 to-pink-500 rounded-full shadow-sm"></div>
+                <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium">
                   Commandes traitées
                 </span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-gradient-to-r from-red-400 to-red-500 rounded-full shadow-sm"></div>
-                <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">
+                <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-r from-red-400 to-red-500 rounded-full shadow-sm"></div>
+                <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium">
                   Requêtes traitées
                 </span>
               </div>
@@ -80,7 +81,7 @@ export default function ActivityChart() {
 
           <div className="relative">
             {/* Y-axis labels */}
-            <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400 pr-4 font-medium">
+            <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400 pr-2 sm:pr-4 font-medium">
               <span>3000</span>
               <span>2500</span>
               <span>2000</span>
@@ -90,10 +91,10 @@ export default function ActivityChart() {
             </div>
 
             {/* Chart */}
-            <div className="ml-12">
+            <div className="ml-8 sm:ml-12">
               <motion.svg 
                 viewBox="0 0 800 200" 
-                className="w-full h-48"
+                className="w-full h-32 sm:h-40 lg:h-48"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 0.5 }}
@@ -136,10 +137,17 @@ export default function ActivityChart() {
               </motion.svg>
 
               {/* X-axis labels */}
-              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-4 font-medium">
+              <div className="hidden sm:flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 sm:mt-4 font-medium">
                 {months.filter((_, i) => i % 4 === 0).map((month, i) => (
-                  <span key={i}>{month}</span>
+                  <span key={i} className="text-xs">{month}</span>
                 ))}
+              </div>
+              
+              {/* Mobile X-axis labels (fewer labels) */}
+              <div className="flex sm:hidden justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 font-medium">
+                <span>2023</span>
+                <span>2024</span>
+                <span>2025</span>
               </div>
             </div>
           </div>
