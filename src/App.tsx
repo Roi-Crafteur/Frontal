@@ -46,7 +46,7 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="space-y-4 sm:space-y-6 lg:space-y-8 w-full max-w-full overflow-hidden pb-8"
+        className="space-y-4 sm:space-y-6 lg:space-y-8 w-full max-w-full overflow-hidden"
       >
         {/* Header */}
         <div className="mb-4 sm:mb-6 lg:mb-8">
@@ -76,25 +76,15 @@ function App() {
         {/* Stats Cards */}
         <StatsCards />
 
-        {/* Header pour la section graphique et activité */}
-        <div className="mb-4 sm:mb-6">
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white">
-            Analyse et Activité
-          </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-            Suivi des performances et activités récentes
-          </p>
-        </div>
-
-        {/* Main Content Grid - Même taille pour les deux colonnes */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-8">
-          {/* Activity Chart */}
-          <div className="w-full">
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          {/* Activity Chart - Takes 2 columns on XL screens */}
+          <div className="xl:col-span-2">
             <ActivityChart />
           </div>
           
-          {/* Recent Activity */}
-          <div className="w-full">
+          {/* Recent Activity - Takes 1 column */}
+          <div className="xl:col-span-1">
             <RecentActivity />
           </div>
         </div>
