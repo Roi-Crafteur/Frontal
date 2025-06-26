@@ -48,31 +48,6 @@ function App() {
         transition={{ duration: 0.5 }}
         className="space-y-2 sm:space-y-3 w-full max-w-full overflow-hidden h-full flex flex-col"
       >
-        {/* Header - Compact */}
-        <div className="mb-2 sm:mb-3">
-          <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-white mb-1"
-          >
-            Visualisation de votre activité
-          </motion.h1>
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400"
-          >
-            <span>{getGreeting()}</span>
-            <span> (utilisateur) </span>
-            <span>sur votre</span>
-            <span className="text-teal-600 dark:text-teal-400 font-medium">frontal</span>
-            <span>de commandes</span>
-            <span>{getGreetingEmoji()}</span>
-          </motion.div>
-        </div>
-
         {/* Stats Cards - Compact */}
         <div className="mb-2 sm:mb-3">
           <StatsCards />

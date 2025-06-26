@@ -51,8 +51,8 @@ export default function StatsCards() {
 
   return (
     <div>
-      <h2 className="text-sm sm:text-base lg:text-lg font-bold text-gray-800 dark:text-white mb-2 sm:mb-3">
-        Commandes à la journée
+      <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white mb-2 sm:mb-3 text-center">
+        Visualisation de votre activité :
       </h2>
       <HoverEffect 
         items={statsItems} 
