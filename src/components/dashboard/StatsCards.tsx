@@ -2,6 +2,8 @@ import React from "react";
 import { HoverEffect } from "../ui/aceternity/card-hover-effect";
 import { BarChart3, ShoppingCart, Package, TrendingUp, Euro } from "lucide-react";
 
+//current date and time mise a jour automatiquement
+
 const currentDate = new Date().toLocaleDateString('fr-FR', {
   weekday: 'long',
   year: 'numeric',
