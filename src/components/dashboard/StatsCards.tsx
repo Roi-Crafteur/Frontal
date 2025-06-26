@@ -2,11 +2,24 @@ import React from "react";
 import { HoverEffect } from "../ui/aceternity/card-hover-effect";
 import { BarChart3, ShoppingCart, Package, TrendingUp, Euro } from "lucide-react";
 
+const currentDate = new Date().toLocaleDateString('fr-FR', {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+const currentTime = new Date().toLocaleTimeString('fr-FR', { 
+  hour: '2-digit', 
+  minute: '2-digit',
+  second: '2-digit'
+});
+
 export default function StatsCards() {
   const statsItems = [
     {
-      title: "Aujourd'hui : 25/06/2025",
-      description: "Jusqu'à 13:55:32",
+      title: "Aujourd'hui : " + currentDate,
+      description: "Jusqu'à " + currentTime,
       link: "#",
       icon: <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" />,
       stats: [

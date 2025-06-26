@@ -95,7 +95,7 @@ export default function SiteHeader() {
                   INFOSOFT
                 </h1>
                 <p className="text-xs text-teal-100">
-                  Plateforme Pharmaceutique
+                  Optimisez·Simplifiez·Performez
                 </p>
               </div>
             </div>
