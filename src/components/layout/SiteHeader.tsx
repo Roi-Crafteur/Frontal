@@ -15,7 +15,7 @@ import {
 import { useStore } from "../../store/useStore";
 
 export default function SiteHeader() {
-  const { currentUser } = useStore();
+  const { currentUser, setActiveModule } = useStore();
   const [showUserMenu, setShowUserMenu] = useState(false);
   
   const currentTime = new Date().toLocaleTimeString('fr-FR', { 
@@ -31,11 +31,48 @@ export default function SiteHeader() {
   });
 
   const userMenuItems = [
-    { label: 'Mon Compte', icon: User, action: () => console.log('Mon Compte') },
-    { label: 'Paramètres Serveur', icon: Settings, action: () => console.log('Paramètres') },
-    { label: 'Préférences', icon: Palette, action: () => console.log('Préférences') },
-    { label: 'Sécurité', icon: Shield, action: () => console.log('Sécurité') },
-    { label: 'Déconnexion', icon: LogOut, action: () => console.log('Déconnexion...'), danger: true },
+    { 
+      label: 'Mon Compte', 
+      icon: User, 
+      action: () => {
+        setActiveModule('profile');
+        setShowUserMenu(false);
+      }
+    },
+    { 
+      label: 'Paramètres Serveur', 
+      icon: Settings, 
+      action: () => {
+        setActiveModule('settings');
+        setShowUserMenu(false);
+      }
+    },
+    { 
+      label: 'Préférences', 
+      icon: Palette, 
+      action: () => {
+        setActiveModule('preferences');
+        setShowUserMenu(false);
+      }
+    },
+    { 
+      label: 'Sécurité', 
+      icon: Shield, 
+      action: () => {
+        setActiveModule('security');
+        setShowUserMenu(false);
+      }
+    },
+    { 
+      label: 'Déconnexion', 
+      icon: LogOut, 
+      action: () => {
+        // Logique de déconnexion
+        console.log('Déconnexion...');
+        setShowUserMenu(false);
+      }, 
+      danger: true 
+    },
   ];
 
   return (
@@ -82,6 +119,9 @@ export default function SiteHeader() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setActiveModule('notifications');
+                }}
                 className="relative p-2 text-teal-100 hover:text-white hover:bg-white/10 rounded-lg transition-colors backdrop-blur-sm"
                 title="Notifications"
               >
@@ -164,10 +204,7 @@ export default function SiteHeader() {
                       {userMenuItems.map((item, index) => (
                         <motion.button
                           key={index}
-                          onClick={() => {
-                            item.action();
-                            setShowUserMenu(false);
-                          }}
+                          onClick={item.action}
                           className={`w-full flex items-center space-x-3 px-4 py-3 text-sm transition-colors ${
                             item.danger 
                               ? 'text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20' 
