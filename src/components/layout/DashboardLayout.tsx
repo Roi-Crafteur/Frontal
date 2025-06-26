@@ -152,7 +152,7 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden min-h-0">
       <div className="flex-1 bg-white dark:bg-neutral-900 overflow-y-auto min-h-0">
-        <div className="p-2 sm:p-3 md:p-4 lg:p-6 h-full">
+        <div className="p-2 sm:p-3 md:p-4 lg:p-6 h-full pb-8 sm:pb-12 lg:pb-16">
           {children}
         </div>
       </div>
