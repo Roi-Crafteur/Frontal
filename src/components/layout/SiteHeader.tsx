@@ -7,16 +7,6 @@ import {
   User, 
   Globe, 
   Clock, 
-  Home, 
-  Building, 
-  Package, 
-  ShoppingCart, 
-  FileText, 
-  Users,
-  List,
-  Download,
-  Folder,
-  UserCheck,
   ChevronDown,
   LogOut,
   Shield,
@@ -25,7 +15,7 @@ import {
 import { useStore } from "../../store/useStore";
 
 export default function SiteHeader() {
-  const { activeModule, setActiveModule, currentUser } = useStore();
+  const { currentUser } = useStore();
   const [showUserMenu, setShowUserMenu] = useState(false);
   
   const currentTime = new Date().toLocaleTimeString('fr-FR', { 
@@ -40,23 +30,11 @@ export default function SiteHeader() {
     day: 'numeric'
   });
 
-  const navigationItems = [
-    { key: 'dashboard', label: 'Tableau de Bord', icon: Home },
-    { key: 'officines', label: 'Officines', icon: Building },
-    { key: 'products', label: 'Articles', icon: Package },
-    { key: 'orders', label: 'Commandes', icon: ShoppingCart },
-    { key: 'lists', label: 'Listes', icon: FileText },
-    { key: 'users', label: 'Utilisateurs', icon: Users },
-    { key: 'user-roles', label: 'Rôles', icon: UserCheck },
-    { key: 'downloads', label: 'Téléchargements', icon: Download },
-    { key: 'catalogs', label: 'Catalogues', icon: Folder },
-  ];
-
   const userMenuItems = [
-    { label: 'Mon Compte', icon: User, action: () => setActiveModule('profile') },
-    { label: 'Paramètres Serveur', icon: Settings, action: () => setActiveModule('settings') },
-    { label: 'Préférences', icon: Palette, action: () => setActiveModule('preferences') },
-    { label: 'Sécurité', icon: Shield, action: () => setActiveModule('security') },
+    { label: 'Mon Compte', icon: User, action: () => console.log('Mon Compte') },
+    { label: 'Paramètres Serveur', icon: Settings, action: () => console.log('Paramètres') },
+    { label: 'Préférences', icon: Palette, action: () => console.log('Préférences') },
+    { label: 'Sécurité', icon: Shield, action: () => console.log('Sécurité') },
     { label: 'Déconnexion', icon: LogOut, action: () => console.log('Déconnexion...'), danger: true },
   ];
 
@@ -86,25 +64,8 @@ export default function SiteHeader() {
             </div>
           </div>
 
-          {/* Center - Navigation (hidden on mobile) */}
-          <div className="hidden lg:flex items-center space-x-1">
-            {navigationItems.slice(0, 6).map((item) => (
-              <motion.button
-                key={item.key}
-                onClick={() => setActiveModule(item.key)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                  activeModule === item.key
-                    ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm'
-                    : 'text-teal-100 hover:text-white hover:bg-white/10'
-                }`}
-              >
-                <item.icon className="w-4 h-4" />
-                <span>{item.label}</span>
-              </motion.button>
-            ))}
-          </div>
+          {/* Center - Empty space */}
+          <div className="flex-1"></div>
 
           {/* Right side - Actions and user menu */}
           <div className="flex items-center space-x-4">
@@ -224,30 +185,6 @@ export default function SiteHeader() {
                 )}
               </AnimatePresence>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Navigation Menu (when needed) */}
-      <div className="lg:hidden border-t border-teal-400/30">
-        <div className="px-4 py-2">
-          <div className="flex space-x-1 overflow-x-auto">
-            {navigationItems.slice(0, 6).map((item) => (
-              <motion.button
-                key={item.key}
-                onClick={() => setActiveModule(item.key)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
-                  activeModule === item.key
-                    ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm'
-                    : 'text-teal-100 hover:text-white hover:bg-white/10'
-                }`}
-              >
-                <item.icon className="w-4 h-4" />
-                <span className="hidden sm:inline">{item.label}</span>
-              </motion.button>
-            ))}
           </div>
         </div>
       </div>
