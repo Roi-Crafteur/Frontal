@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Bell, 
@@ -10,20 +10,32 @@ import {
   ChevronDown,
   LogOut,
   Shield,
-  Palette
+  Palette,
+  RefreshCw
 } from "lucide-react";
 import { useStore } from "../../store/useStore";
 
 export default function SiteHeader() {
   const { currentUser, setActiveModule } = useStore();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
   
-  const currentTime = new Date().toLocaleTimeString('fr-FR', { 
+  // 🕒 Mise à jour de l'heure en temps réel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentTimeString = currentTime.toLocaleTimeString('fr-FR', { 
     hour: '2-digit', 
-    minute: '2-digit' 
+    minute: '2-digit',
+    second: '2-digit'
   });
   
-  const currentDate = new Date().toLocaleDateString('fr-FR', {
+  const currentDate = currentTime.toLocaleDateString('fr-FR', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -87,9 +99,16 @@ export default function SiteHeader() {
           {/* Left side - Logo and title */}
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
-              <div className="h-10 w-10 bg-white/20 rounded-xl flex items-center justify-center shadow-lg backdrop-blur-sm">
+              <motion.div 
+                className="h-10 w-10 bg-white/20 rounded-xl flex items-center justify-center shadow-lg backdrop-blur-sm"
+                whileHover={{ 
+                  scale: 1.05,
+                  rotate: 5,
+                  transition: { duration: 0.2 }
+                }}
+              >
                 <span className="text-white font-bold text-lg">i</span>
-              </div>
+              </motion.div>
               <div>
                 <h1 className="text-xl font-bold text-white">
                   INFOSOFT
@@ -106,12 +125,36 @@ export default function SiteHeader() {
 
           {/* Right side - Actions and user menu */}
           <div className="flex items-center space-x-4">
-            {/* Date and time (hidden on small screens) */}
+            {/* Date and time avec animation */}
             <div className="hidden xl:flex items-center space-x-4 text-sm text-teal-100">
-              <div className="flex items-center space-x-2">
-                <Clock className="w-4 h-4" />
-                <span>{currentTime}</span>
-              </div>
+              <motion.div 
+                className="flex items-center space-x-2"
+                key={currentTimeString} // Force re-render pour animation
+                initial={{ opacity: 0.8, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div
+                  animate={{ 
+                    rotate: [0, 360],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ 
+                    rotate: { duration: 60, ease: "linear", repeat: Infinity },
+                    scale: { duration: 2, ease: "easeInOut", repeat: Infinity }
+                  }}
+                >
+                  <Clock className="w-4 h-4" />
+                </motion.div>
+                <motion.span
+                  key={currentTimeString}
+                  initial={{ opacity: 0, y: -2 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {currentTimeString}
+                </motion.span>
+              </motion.div>
             </div>
 
             {/* Action buttons */}
@@ -126,9 +169,20 @@ export default function SiteHeader() {
                 title="Notifications"
               >
                 <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
+                <motion.span 
+                  className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs text-white flex items-center justify-center"
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    opacity: [1, 0.8, 1]
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    ease: "easeInOut",
+                    repeat: Infinity
+                  }}
+                >
                   3
-                </span>
+                </motion.span>
               </motion.button>
 
               {/* Mobile search button */}
@@ -151,9 +205,16 @@ export default function SiteHeader() {
                 className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/10 transition-colors backdrop-blur-sm"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="h-8 w-8 bg-white/20 rounded-full flex items-center justify-center">
+                  <motion.div 
+                    className="h-8 w-8 bg-white/20 rounded-full flex items-center justify-center"
+                    whileHover={{ 
+                      scale: 1.1,
+                      rotate: 10,
+                      transition: { duration: 0.2 }
+                    }}
+                  >
                     <User className="h-4 w-4 text-white" />
-                  </div>
+                  </motion.div>
                   <div className="hidden sm:block text-left">
                     <div className="text-sm font-medium text-white">
                       {currentUser?.name || 'POISOT Paul'}
