@@ -17,6 +17,13 @@ const currentTime = new Date().toLocaleTimeString('fr-FR', {
   second: '2-digit'
 });
 
+const yesterdayDate = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString('fr-FR', {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
 export default function StatsCards() {
   const statsItems = [
     {
@@ -31,7 +38,7 @@ export default function StatsCards() {
       ]
     },
     {
-      title: "Hier : 24/06/2025",
+      title: "Hier : " + yesterdayDate,
       description: "Toute la journée",
       link: "#",
       icon: <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" />,
