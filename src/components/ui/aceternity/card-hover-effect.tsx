@@ -31,14 +31,14 @@ export const HoverEffect = ({
       {items.map((item, idx) => (
         <div
           key={item?.link}
-          className="relative group block p-1 sm:p-2 h-full w-full"
+          className="relative group block p-1 h-full w-full"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
-                className="absolute inset-0 h-full w-full bg-gradient-to-r from-teal-500/[0.8] to-teal-600/[0.8] block rounded-2xl sm:rounded-3xl"
+                className="absolute inset-0 h-full w-full bg-gradient-to-r from-teal-500/[0.8] to-teal-600/[0.8] block rounded-xl sm:rounded-2xl"
                 layoutId="hoverBackground"
                 initial={{ opacity: 0 }}
                 animate={{
@@ -53,37 +53,37 @@ export const HoverEffect = ({
             )}
           </AnimatePresence>
           <Card>
-            <div className="flex flex-col space-y-3 sm:space-y-4">
+            <div className="flex flex-col space-y-2 sm:space-y-3">
               {/* Header avec icône et titre */}
-              <div className="flex items-start space-x-3">
+              <div className="flex items-start space-x-2 sm:space-x-3">
                 {item.icon && (
-                  <div className="p-2 bg-teal-100 rounded-lg flex-shrink-0">
+                  <div className="p-1.5 sm:p-2 bg-teal-100 rounded-lg flex-shrink-0">
                     {item.icon}
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <CardTitle className="text-sm sm:text-base leading-tight">{item.title}</CardTitle>
-                  <CardDescription className="text-xs sm:text-sm mt-1">{item.description}</CardDescription>
+                  <CardTitle className="text-xs sm:text-sm leading-tight">{item.title}</CardTitle>
+                  <CardDescription className="text-xs mt-1">{item.description}</CardDescription>
                 </div>
               </div>
               
               {/* Statistiques */}
               {item.stats && (
                 <div className={cn(
-                  "grid gap-1 sm:gap-2 lg:gap-3",
+                  "grid gap-1 sm:gap-2",
                   item.stats.length === 2 ? "grid-cols-1" : "grid-cols-3"
                 )}>
                   {item.stats.map((stat, statIdx) => (
                     <div key={statIdx} className={cn(
                       "text-center min-w-0",
-                      item.stats!.length === 2 ? "border-b border-gray-200 pb-2 last:border-b-0 last:pb-0" : ""
+                      item.stats!.length === 2 ? "border-b border-gray-200 pb-1 last:border-b-0 last:pb-0" : ""
                     )}>
-                      <div className="flex items-center justify-center space-x-2">
-                        <div className="text-sm sm:text-lg lg:text-xl xl:text-2xl font-bold text-teal-600 leading-tight break-words">
+                      <div className="flex items-center justify-center space-x-1">
+                        <div className="text-xs sm:text-sm lg:text-base font-bold text-teal-600 leading-tight break-words">
                           {stat.value}
                         </div>
                         {stat.change && (
-                          <div className="text-xs sm:text-sm font-medium text-green-600 leading-tight">
+                          <div className="text-xs font-medium text-green-600 leading-tight">
                             {stat.change}
                           </div>
                         )}
@@ -113,7 +113,7 @@ export const Card = ({
   return (
     <div
       className={cn(
-        "rounded-xl sm:rounded-2xl h-full w-full p-3 sm:p-4 lg:p-5 xl:p-6 overflow-hidden bg-white border border-gray-200 dark:border-white/[0.2] group-hover:border-slate-700 relative z-20 shadow-sm hover:shadow-lg transition-all duration-300",
+        "rounded-lg sm:rounded-xl h-full w-full p-2 sm:p-3 lg:p-4 overflow-hidden bg-white border border-gray-200 dark:border-white/[0.2] group-hover:border-slate-700 relative z-20 shadow-sm hover:shadow-lg transition-all duration-300",
         className
       )}
     >

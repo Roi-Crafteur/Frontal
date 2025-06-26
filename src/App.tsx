@@ -46,15 +46,15 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="space-y-3 sm:space-y-4 w-full max-w-full overflow-hidden h-full"
+        className="space-y-2 sm:space-y-3 w-full max-w-full overflow-hidden h-full flex flex-col"
       >
-        {/* Header */}
-        <div className="mb-3 sm:mb-4">
+        {/* Header - Compact */}
+        <div className="mb-2 sm:mb-3">
           <motion.h1 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white mb-1"
+            className="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-white mb-1"
           >
             Visualisation de votre activité
           </motion.h1>
@@ -62,7 +62,7 @@ function App() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400"
+            className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400"
           >
             <span>{getGreeting()}</span>
             <span> (utilisateur) </span>
@@ -73,18 +73,20 @@ function App() {
           </motion.div>
         </div>
 
-        {/* Stats Cards */}
-        <StatsCards />
+        {/* Stats Cards - Compact */}
+        <div className="mb-2 sm:mb-3">
+          <StatsCards />
+        </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-3 sm:gap-4 flex-1 min-h-0">
+        {/* Main Content Grid - Flexible height */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-2 sm:gap-3 flex-1 min-h-0">
           {/* Activity Chart - Takes 2 columns on XL screens */}
-          <div className="xl:col-span-2 min-h-0">
+          <div className="xl:col-span-2 min-h-0 h-full">
             <ActivityChart />
           </div>
           
           {/* Recent Activity - Takes 1 column */}
-          <div className="xl:col-span-1 min-h-0">
+          <div className="xl:col-span-1 min-h-0 h-full">
             <RecentActivity />
           </div>
         </div>

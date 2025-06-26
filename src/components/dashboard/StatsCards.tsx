@@ -8,7 +8,7 @@ export default function StatsCards() {
       title: "Aujourd'hui : 25/06/2025",
       description: "Jusqu'à 13:55:32",
       link: "#",
-      icon: <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />,
+      icon: <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" />,
       stats: [
         { value: "23", label: "commandes" },
         { value: "20", label: "lignes" },
@@ -19,7 +19,7 @@ export default function StatsCards() {
       title: "Hier : 24/06/2025",
       description: "Toute la journée",
       link: "#",
-      icon: <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />,
+      icon: <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" />,
       stats: [
         { value: "137", label: "commandes" },
         { value: "127", label: "lignes" },
@@ -30,7 +30,7 @@ export default function StatsCards() {
       title: "Produits Actifs",
       description: "Catalogue complet",
       link: "#",
-      icon: <Package className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />,
+      icon: <Package className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" />,
       stats: [
         { value: "52 231", label: "articles" },
         { value: "354", label: "officines" },
@@ -38,25 +38,25 @@ export default function StatsCards() {
       ]
     },
     {
-      title: "Performance Globale",
+      title: "Performance",
       description: "Indicateurs clés",
       link: "#",
-      icon: <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />,
+      icon: <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" />,
       stats: [
-        { value: "1,247", label: "Commandes Totales", change: "+12%" },
-        { value: "€89,432", label: "Chiffre d'Affaires", change: "+8%" }
+        { value: "1,247", label: "Commandes", change: "+12%" },
+        { value: "€89,432", label: "CA", change: "+8%" }
       ]
     }
   ];
 
   return (
-    <div className="mb-4 sm:mb-6 lg:mb-8">
-      <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-6">
+    <div>
+      <h2 className="text-sm sm:text-base lg:text-lg font-bold text-gray-800 dark:text-white mb-2 sm:mb-3">
         Commandes à la journée
       </h2>
       <HoverEffect 
         items={statsItems} 
-        className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 py-2 sm:py-4 lg:py-6" 
+        className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 py-1 sm:py-2" 
       />
     </div>
   );

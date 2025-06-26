@@ -121,10 +121,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="h-screen w-full bg-gray-50 dark:bg-gray-900 overflow-hidden flex flex-col">
-      {/* Site Header */}
+      {/* Site Header - seamlessly integrated */}
       <SiteHeader />
       
-      {/* Main Content */}
+      {/* Main Content - no gap between header and sidebar */}
       <div className="flex h-full w-full flex-1 min-h-0">
         <Sidebar open={open} setOpen={setOpen}>
           <SidebarBody className="justify-between">
@@ -163,8 +163,8 @@ export const Logo = () => {
       href="#"
       className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-white"
     >
-      <div className="h-8 w-8 shrink-0 rounded-xl bg-white flex items-center justify-center shadow-lg">
-        <div className="text-teal-500 font-bold text-lg">i</div>
+      <div className="h-8 w-8 shrink-0 rounded-xl bg-white/20 flex items-center justify-center shadow-lg backdrop-blur-sm">
+        <div className="text-white font-bold text-lg">i</div>
       </div>
       <motion.span
         initial={{ opacity: 0 }}
@@ -180,8 +180,8 @@ export const Logo = () => {
 const Dashboard = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden min-h-0">
-      <div className="flex-1 rounded-tl-2xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900 overflow-y-auto min-h-0">
-        <div className="p-3 sm:p-4 md:p-6 h-full">
+      <div className="flex-1 bg-white dark:bg-neutral-900 overflow-y-auto min-h-0">
+        <div className="p-2 sm:p-3 md:p-4 lg:p-6 h-full">
           {children}
         </div>
       </div>
