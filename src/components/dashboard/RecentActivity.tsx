@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, Package, ShoppingCart, User, AlertCircle, RefreshCw } from "lucide-react";
+import { Clock, Package, ShoppingCart, User, AlertCircle } from "lucide-react";
 
 interface Activity {
   id: string;
@@ -15,7 +15,6 @@ interface Activity {
 
 export default function RecentActivity() {
   const [activities, setActivities] = useState<Activity[]>([]);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(new Date());
 
   // 🔄 Génération d'activités simulées
@@ -115,7 +114,7 @@ export default function RecentActivity() {
     };
   };
 
-  // 🔄 Initialisation et actualisation automatique
+  // 🔄 Initialisation et actualisation automatique INVISIBLE
   useEffect(() => {
     // Initialiser avec quelques activités
     const initialActivities = Array.from({ length: 4 }, () => generateRandomActivity())
@@ -124,18 +123,14 @@ export default function RecentActivity() {
     setActivities(initialActivities);
 
     const refreshActivities = () => {
-      setIsRefreshing(true);
       setLastUpdate(new Date());
       
-      setTimeout(() => {
-        // Ajouter une nouvelle activité et garder les 6 plus récentes
-        const newActivity = generateRandomActivity();
-        setActivities(prev => [newActivity, ...prev].slice(0, 6));
-        setIsRefreshing(false);
-      }, 1000);
+      // Ajouter une nouvelle activité et garder les 6 plus récentes (SILENCIEUX)
+      const newActivity = generateRandomActivity();
+      setActivities(prev => [newActivity, ...prev].slice(0, 6));
     };
 
-    // Actualisation toutes les 30 secondes
+    // Actualisation toutes les 30 secondes (INVISIBLE)
     const interval = setInterval(refreshActivities, 30000);
 
     return () => clearInterval(interval);
@@ -160,12 +155,6 @@ export default function RecentActivity() {
     return () => clearInterval(timeInterval);
   }, []);
 
-  const lastUpdateString = lastUpdate.toLocaleTimeString('fr-FR', { 
-    hour: '2-digit', 
-    minute: '2-digit',
-    second: '2-digit'
-  });
-
   return (
     <motion.div 
       className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 shadow-lg h-full flex flex-col"
@@ -176,33 +165,8 @@ export default function RecentActivity() {
         <h3 className="text-base sm:text-lg font-bold text-gray-800 dark:text-white">
           Activité Récente
         </h3>
-        <div className="flex items-center space-x-2">
-          <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
-          <motion.div
-            animate={{ 
-              rotate: isRefreshing ? 360 : 0,
-              scale: isRefreshing ? [1, 1.2, 1] : 1
-            }}
-            transition={{ 
-              rotate: { duration: 1, ease: "linear", repeat: isRefreshing ? Infinity : 0 },
-              scale: { duration: 0.6, repeat: isRefreshing ? Infinity : 0 }
-            }}
-            className={`${isRefreshing ? "text-teal-600" : "text-gray-400"}`}
-          >
-            <RefreshCw className="w-3 h-3 sm:w-4 sm:h-4" />
-          </motion.div>
-        </div>
+        <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
       </div>
-      
-      {/* Indicateur de dernière mise à jour */}
-      <motion.div 
-        className="text-xs text-gray-500 mb-3 text-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-      >
-        {isRefreshing ? "Actualisation en cours..." : `Dernière MAJ: ${lastUpdateString}`}
-      </motion.div>
       
       <div className="space-y-2 sm:space-y-3 flex-1 overflow-y-auto">
         <AnimatePresence mode="popLayout">
@@ -214,8 +178,8 @@ export default function RecentActivity() {
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 20, scale: 0.95 }}
               transition={{ 
-                duration: 0.4,
-                delay: index * 0.1,
+                duration: 0.3,
+                delay: index * 0.05,
                 type: "spring",
                 stiffness: 300,
                 damping: 30
@@ -237,21 +201,14 @@ export default function RecentActivity() {
                 <activity.icon className="w-3 h-3 sm:w-4 sm:h-4" />
               </motion.div>
               <div className="flex-1 min-w-0">
-                <motion.p 
-                  className="text-xs sm:text-sm font-medium text-gray-800 dark:text-white line-clamp-1"
-                  layout
-                >
+                <p className="text-xs sm:text-sm font-medium text-gray-800 dark:text-white line-clamp-1">
                   {activity.title}
-                </motion.p>
-                <motion.p 
-                  className="text-xs text-gray-600 dark:text-gray-300 line-clamp-1"
-                  layout
-                >
+                </p>
+                <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-1">
                   {activity.description}
-                </motion.p>
+                </p>
                 <motion.p 
                   className="text-xs text-gray-500 mt-1"
-                  layout
                   key={activity.time} // Force re-render quand le temps change
                   initial={{ opacity: 0.7 }}
                   animate={{ opacity: 1 }}
@@ -273,25 +230,6 @@ export default function RecentActivity() {
       >
         Voir toute l'activité
       </motion.button>
-
-      {/* Barre de progression pour le prochain refresh */}
-      <motion.div 
-        className="mt-2 h-0.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.3 }}
-        transition={{ delay: 1 }}
-      >
-        <motion.div
-          className="h-full bg-gradient-to-r from-teal-400 to-teal-600 rounded-full"
-          initial={{ width: "0%" }}
-          animate={{ width: "100%" }}
-          transition={{ 
-            duration: 30, // 30 secondes
-            ease: "linear",
-            repeat: Infinity
-          }}
-        />
-      </motion.div>
     </motion.div>
   );
 }

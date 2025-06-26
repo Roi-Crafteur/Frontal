@@ -1,46 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Bell, 
   Search, 
   Settings, 
   User, 
-  Globe, 
-  Clock, 
   ChevronDown,
   LogOut,
   Shield,
-  Palette,
-  RefreshCw
+  Palette
 } from "lucide-react";
 import { useStore } from "../../store/useStore";
 
 export default function SiteHeader() {
   const { currentUser, setActiveModule } = useStore();
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date());
-  
-  // 🕒 Mise à jour de l'heure en temps réel
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const currentTimeString = currentTime.toLocaleTimeString('fr-FR', { 
-    hour: '2-digit', 
-    minute: '2-digit',
-    second: '2-digit'
-  });
-  
-  const currentDate = currentTime.toLocaleDateString('fr-FR', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
 
   const userMenuItems = [
     { 
@@ -79,7 +53,6 @@ export default function SiteHeader() {
       label: 'Déconnexion', 
       icon: LogOut, 
       action: () => {
-        // Logique de déconnexion
         console.log('Déconnexion...');
         setShowUserMenu(false);
       }, 
@@ -125,38 +98,6 @@ export default function SiteHeader() {
 
           {/* Right side - Actions and user menu */}
           <div className="flex items-center space-x-4">
-            {/* Date and time avec animation */}
-            <div className="hidden xl:flex items-center space-x-4 text-sm text-teal-100">
-              <motion.div 
-                className="flex items-center space-x-2"
-                key={currentTimeString} // Force re-render pour animation
-                initial={{ opacity: 0.8, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <motion.div
-                  animate={{ 
-                    rotate: [0, 360],
-                    scale: [1, 1.1, 1]
-                  }}
-                  transition={{ 
-                    rotate: { duration: 60, ease: "linear", repeat: Infinity },
-                    scale: { duration: 2, ease: "easeInOut", repeat: Infinity }
-                  }}
-                >
-                  <Clock className="w-4 h-4" />
-                </motion.div>
-                <motion.span
-                  key={currentTimeString}
-                  initial={{ opacity: 0, y: -2 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {currentTimeString}
-                </motion.span>
-              </motion.div>
-            </div>
-
             {/* Action buttons */}
             <div className="flex items-center space-x-2">
               <motion.button
