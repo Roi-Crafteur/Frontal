@@ -502,7 +502,7 @@ export default function ActivityChart() {
 
         {/* Graphique avec morphing avancé */}
         <div className="relative flex-1 min-h-0">
-          {/* Y-axis labels - PARFAITEMENT ALIGNÉ */}
+          {/* Y-axis labels - CORRECTION MAJEURE DE L'ALIGNEMENT */}
           <motion.div 
             className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400 pr-3 sm:pr-4 font-medium z-10"
             animate={{ 
@@ -510,10 +510,9 @@ export default function ActivityChart() {
               x: (showCommandes || showRequetes) ? 0 : -10
             }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            style={{ paddingTop: '2px', paddingBottom: '2px' }}
           >
             {yAxisLabels.map((value, i) => (
-              <motion.span 
+              <motion.div 
                 key={`${value}-${i}`}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -522,17 +521,18 @@ export default function ActivityChart() {
                   delay: i * 0.1,
                   ease: [0.34, 1.56, 0.64, 1]
                 }}
-                className="text-right leading-none flex items-center justify-end h-0"
+                className="text-right leading-none flex items-center justify-end"
                 style={{ 
-                  transform: `translateY(-50%)` // Centrer parfaitement sur les lignes de grille
+                  height: '0px',
+                  transform: 'translateY(-50%)'
                 }}
               >
                 {value.toLocaleString()}
-              </motion.span>
+              </motion.div>
             ))}
           </motion.div>
 
-          {/* Chart container - PARFAITEMENT ALIGNÉ */}
+          {/* Chart container - CORRECTION MAJEURE DE L'ALIGNEMENT */}
           <div className="ml-12 sm:ml-14 h-full flex flex-col">
             <motion.svg 
               viewBox="0 0 800 200" 
@@ -544,7 +544,7 @@ export default function ActivityChart() {
               onMouseLeave={handleMouseLeave}
               style={{ perspective: "1000px" }}
             >
-              {/* Grid lines avec morphing - PARFAITEMENT ALIGNÉ */}
+              {/* Grid lines avec morphing - CORRECTION MAJEURE */}
               {yAxisLabels.map((_, i) => (
                 <motion.line
                   key={`grid-${i}`}
@@ -565,7 +565,7 @@ export default function ActivityChart() {
                 />
               ))}
               
-              {/* Vertical grid lines - PARFAITEMENT ALIGNÉ */}
+              {/* Vertical grid lines - CORRECTION MAJEURE */}
               {rawData.map((_, i) => {
                 if (i % 4 === 0) {
                   const x = (i / (rawData.length - 1)) * 800;
@@ -904,9 +904,9 @@ export default function ActivityChart() {
               )}
             </AnimatePresence>
 
-            {/* X-axis labels avec morphing - PARFAITEMENT ALIGNÉ */}
+            {/* X-axis labels avec morphing - CORRECTION MAJEURE DE L'ALIGNEMENT */}
             <motion.div 
-              className="hidden sm:flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-3 font-medium"
+              className="hidden sm:flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-3 font-medium relative"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ 
@@ -914,29 +914,35 @@ export default function ActivityChart() {
                 delay: 1.2,
                 ease: [0.34, 1.56, 0.64, 1]
               }}
-              style={{ paddingLeft: '0px', paddingRight: '0px' }}
             >
-              {rawData.filter((_, i) => i % 4 === 0).map((data, i) => (
-                <motion.span 
-                  key={`x-label-${i}`} 
-                  className="text-xs text-center flex-1"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ 
-                    delay: 1.3 + i * 0.1,
-                    duration: 0.5,
-                    ease: "easeOut"
-                  }}
-                  style={{ 
-                    transform: `translateX(${i === 0 ? '0%' : i === 5 ? '-100%' : '-50%'})` 
-                  }}
-                >
-                  {data.month}
-                </motion.span>
-              ))}
+              {rawData.filter((_, i) => i % 4 === 0).map((data, i) => {
+                // Calcul de la position exacte pour chaque label
+                const totalLabels = rawData.filter((_, idx) => idx % 4 === 0).length;
+                const position = i / (totalLabels - 1); // Position relative (0 à 1)
+                
+                return (
+                  <motion.span 
+                    key={`x-label-${i}`} 
+                    className="text-xs absolute"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ 
+                      delay: 1.3 + i * 0.1,
+                      duration: 0.5,
+                      ease: "easeOut"
+                    }}
+                    style={{ 
+                      left: `${position * 100}%`,
+                      transform: 'translateX(-50%)'
+                    }}
+                  >
+                    {data.month}
+                  </motion.span>
+                );
+              })}
             </motion.div>
             
-            {/* Mobile X-axis labels - PARFAITEMENT ALIGNÉ */}
+            {/* Mobile X-axis labels - CORRECTION MAJEURE */}
             <motion.div 
               className="flex sm:hidden justify-between text-xs text-gray-500 dark:text-gray-400 mt-3 font-medium"
               initial={{ opacity: 0, y: 20 }}
