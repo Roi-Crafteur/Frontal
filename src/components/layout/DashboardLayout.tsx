@@ -129,8 +129,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <Sidebar open={open} setOpen={setOpen}>
           <SidebarBody className="justify-between">
             <div className="flex flex-1 flex-col">
-              <Logo />
-              
               {/* Navigation principale - sans scroll, ordre original */}
               <div className="mt-6 flex flex-col space-y-1">
                 {links.map((link, idx) => (
@@ -156,26 +154,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     </div>
   );
 }
-
-export const Logo = () => {
-  return (
-    <a
-      href="#"
-      className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-white"
-    >
-      <div className="h-8 w-8 shrink-0 rounded-xl bg-white/20 flex items-center justify-center shadow-lg backdrop-blur-sm">
-        <div className="text-white font-bold text-lg">i</div>
-      </div>
-      <motion.span
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="font-bold text-xl whitespace-pre text-white"
-      >
-        INFOSOFT
-      </motion.span>
-    </a>
-  );
-};
 
 const Dashboard = ({ children }: { children: React.ReactNode }) => {
   return (
