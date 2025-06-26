@@ -113,8 +113,8 @@ export default function ActivityChart() {
   const commandesData = rawData.map(d => d.commandes);
   const requetesData = rawData.map(d => d.requetes);
   
-  const commandesPoints = showCommandes ? generatePoints(commandesData, '#fb7185') : [];
-  const requetesPoints = showRequetes ? generatePoints(requetesData, '#f87171') : [];
+  const commandesPoints = showCommandes ? generatePoints(commandesData, '#3b82f6') : [];
+  const requetesPoints = showRequetes ? generatePoints(requetesData, '#f59e0b') : [];
 
   const handleMouseMove = (event: React.MouseEvent<SVGElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -187,20 +187,20 @@ export default function ActivityChart() {
               whileTap={{ scale: 0.98 }}
               className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${
                 showCommandes 
-                  ? 'bg-pink-50 dark:bg-pink-900/20' 
+                  ? 'bg-blue-50 dark:bg-blue-900/20' 
                   : 'bg-gray-100 dark:bg-gray-800 opacity-50'
               }`}
             >
               {showCommandes ? (
-                <Eye className="w-4 h-4 text-pink-600" />
+                <Eye className="w-4 h-4 text-blue-600" />
               ) : (
                 <EyeOff className="w-4 h-4 text-gray-400" />
               )}
               <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${
-                showCommandes ? 'bg-gradient-to-r from-pink-400 to-pink-500' : 'bg-gray-300'
+                showCommandes ? 'bg-gradient-to-r from-blue-500 to-blue-600' : 'bg-gray-300'
               } shadow-sm`}></div>
               <span className={`text-xs sm:text-sm font-medium ${
-                showCommandes ? 'text-pink-700 dark:text-pink-300' : 'text-gray-500'
+                showCommandes ? 'text-blue-700 dark:text-blue-300' : 'text-gray-500'
               }`}>
                 Commandes traitées
               </span>
@@ -212,20 +212,20 @@ export default function ActivityChart() {
               whileTap={{ scale: 0.98 }}
               className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${
                 showRequetes 
-                  ? 'bg-red-50 dark:bg-red-900/20' 
+                  ? 'bg-amber-50 dark:bg-amber-900/20' 
                   : 'bg-gray-100 dark:bg-gray-800 opacity-50'
               }`}
             >
               {showRequetes ? (
-                <Eye className="w-4 h-4 text-red-600" />
+                <Eye className="w-4 h-4 text-amber-600" />
               ) : (
                 <EyeOff className="w-4 h-4 text-gray-400" />
               )}
               <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${
-                showRequetes ? 'bg-gradient-to-r from-red-400 to-red-500' : 'bg-gray-300'
+                showRequetes ? 'bg-gradient-to-r from-amber-500 to-amber-600' : 'bg-gray-300'
               } shadow-sm`}></div>
               <span className={`text-xs sm:text-sm font-medium ${
-                showRequetes ? 'text-red-700 dark:text-red-300' : 'text-gray-500'
+                showRequetes ? 'text-amber-700 dark:text-amber-300' : 'text-gray-500'
               }`}>
                 Requêtes traitées
               </span>
@@ -294,12 +294,12 @@ export default function ActivityChart() {
               {/* Gradients */}
               <defs>
                 <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#fb7185" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#fb7185" stopOpacity="0.1" />
+                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.1" />
                 </linearGradient>
                 <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#f87171" stopOpacity="0.6" />
-                  <stop offset="100%" stopColor="#f87171" stopOpacity="0.1" />
+                  <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.1" />
                 </linearGradient>
               </defs>
               
@@ -323,7 +323,7 @@ export default function ActivityChart() {
                               transition={{ duration: 0.8, delay: index * 0.02 }}
                               x={x - barWidth/4}
                               width={barWidth/2}
-                              fill="#fb7185"
+                              fill="#3b82f6"
                               opacity="0.8"
                             />
                           )}
@@ -334,8 +334,8 @@ export default function ActivityChart() {
                               transition={{ duration: 0.8, delay: index * 0.02 + 0.1 }}
                               x={x + barWidth/4}
                               width={barWidth/2}
-                              fill="#f87171"
-                              opacity="0.6"
+                              fill="#f59e0b"
+                              opacity="0.8"
                             />
                           )}
                         </g>
@@ -353,7 +353,7 @@ export default function ActivityChart() {
                       <motion.path
                         d={generatePath(commandesPoints, chartType)}
                         fill={chartType === 'area' ? 'url(#gradient1)' : 'none'}
-                        stroke="#fb7185"
+                        stroke="#3b82f6"
                         strokeWidth={chartType === 'line' ? "3" : "2"}
                         initial={{ pathLength: 0 }}
                         animate={{ pathLength: 1 }}
@@ -364,7 +364,7 @@ export default function ActivityChart() {
                       <motion.path
                         d={generatePath(requetesPoints, chartType)}
                         fill={chartType === 'area' ? 'url(#gradient2)' : 'none'}
-                        stroke="#f87171"
+                        stroke="#f59e0b"
                         strokeWidth={chartType === 'line' ? "3" : "2"}
                         initial={{ pathLength: 0 }}
                         animate={{ pathLength: 1 }}
@@ -381,7 +381,7 @@ export default function ActivityChart() {
                             cx={point.x}
                             cy={point.y}
                             r="4"
-                            fill="#fb7185"
+                            fill="#3b82f6"
                             stroke="white"
                             strokeWidth="2"
                             initial={{ scale: 0 }}
@@ -396,7 +396,7 @@ export default function ActivityChart() {
                             cx={point.x}
                             cy={point.y}
                             r="4"
-                            fill="#f87171"
+                            fill="#f59e0b"
                             stroke="white"
                             strokeWidth="2"
                             initial={{ scale: 0 }}
@@ -430,7 +430,7 @@ export default function ActivityChart() {
                   </div>
                   {showCommandes && (
                     <div className="flex items-center space-x-2 text-sm">
-                      <div className="w-3 h-3 bg-pink-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                       <span className="text-gray-600 dark:text-gray-300">
                         Commandes: {hoveredPoint.data.commandes.toLocaleString()}
                       </span>
@@ -438,7 +438,7 @@ export default function ActivityChart() {
                   )}
                   {showRequetes && (
                     <div className="flex items-center space-x-2 text-sm">
-                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
                       <span className="text-gray-600 dark:text-gray-300">
                         Requêtes: {hoveredPoint.data.requetes.toLocaleString()}
                       </span>
