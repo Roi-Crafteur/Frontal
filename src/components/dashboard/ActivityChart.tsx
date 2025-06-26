@@ -76,7 +76,7 @@ export default function ActivityChart() {
     });
   };
 
-  // Génération du path SVG pour les courbes
+  // Génération du path SVG pour les courbes avec morphing
   const generatePath = (points: { x: number; y: number }[], type: ChartType) => {
     if (points.length === 0) return '';
     
@@ -85,25 +85,37 @@ export default function ActivityChart() {
     let path = `M ${points[0].x} ${points[0].y}`;
     
     if (type === 'line') {
-      // Ligne droite
-      for (let i = 1; i < points.length; i++) {
-        path += ` L ${points[i].x} ${points[i].y}`;
-      }
-    } else {
-      // Courbe lisse pour area et line
+      // Ligne droite avec points de contrôle pour le morphing
       for (let i = 1; i < points.length; i++) {
         const prevPoint = points[i - 1];
         const currentPoint = points[i];
-        const cpx1 = prevPoint.x + (currentPoint.x - prevPoint.x) / 3;
+        // Ajouter des points de contrôle même pour les lignes droites pour permettre le morphing
+        const cpx1 = prevPoint.x + (currentPoint.x - prevPoint.x) * 0.3;
         const cpy1 = prevPoint.y;
-        const cpx2 = currentPoint.x - (currentPoint.x - prevPoint.x) / 3;
+        const cpx2 = currentPoint.x - (currentPoint.x - prevPoint.x) * 0.3;
         const cpy2 = currentPoint.y;
+        path += ` C ${cpx1} ${cpy1}, ${cpx2} ${cpy2}, ${currentPoint.x} ${currentPoint.y}`;
+      }
+    } else {
+      // Courbe lisse pour area avec morphing amélioré
+      for (let i = 1; i < points.length; i++) {
+        const prevPoint = points[i - 1];
+        const currentPoint = points[i];
+        const nextPoint = points[i + 1];
+        
+        // Calcul des points de contrôle avec tension variable
+        const tension = 0.4;
+        const cpx1 = prevPoint.x + (currentPoint.x - prevPoint.x) * tension;
+        const cpy1 = prevPoint.y + (currentPoint.y - prevPoint.y) * 0.1;
+        const cpx2 = currentPoint.x - (currentPoint.x - prevPoint.x) * tension;
+        const cpy2 = currentPoint.y - (nextPoint ? (nextPoint.y - currentPoint.y) * 0.1 : 0);
+        
         path += ` C ${cpx1} ${cpy1}, ${cpx2} ${cpy2}, ${currentPoint.x} ${currentPoint.y}`;
       }
     }
     
     if (type === 'area') {
-      // Fermer le path pour créer une aire
+      // Fermer le path pour créer une aire avec morphing fluide
       path += ` L ${points[points.length - 1].x} ${200} L ${points[0].x} ${200} Z`;
     }
     
@@ -143,6 +155,150 @@ export default function ActivityChart() {
     { type: 'bar' as ChartType, icon: BarChart3, label: 'Barres' }
   ];
 
+  // Variants pour les animations de morphing
+  const morphVariants = {
+    initial: { 
+      scale: 0.8, 
+      opacity: 0,
+      rotateX: -15,
+      y: 20
+    },
+    animate: { 
+      scale: 1, 
+      opacity: 1,
+      rotateX: 0,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+        mass: 1
+      }
+    },
+    exit: { 
+      scale: 0.8, 
+      opacity: 0,
+      rotateX: 15,
+      y: -20,
+      transition: {
+        type: "spring",
+        stiffness: 150,
+        damping: 20
+      }
+    }
+  };
+
+  const pathMorphVariants = {
+    initial: { 
+      pathLength: 0, 
+      opacity: 0,
+      scale: 0.9,
+      filter: "blur(4px)"
+    },
+    animate: { 
+      pathLength: 1, 
+      opacity: 1,
+      scale: 1,
+      filter: "blur(0px)",
+      transition: {
+        pathLength: { 
+          duration: 1.5, 
+          ease: [0.25, 0.46, 0.45, 0.94] 
+        },
+        opacity: { 
+          duration: 0.8, 
+          ease: "easeOut" 
+        },
+        scale: { 
+          duration: 1.2, 
+          ease: [0.34, 1.56, 0.64, 1] 
+        },
+        filter: { 
+          duration: 0.6, 
+          ease: "easeOut" 
+        }
+      }
+    },
+    exit: { 
+      pathLength: 0, 
+      opacity: 0,
+      scale: 0.9,
+      filter: "blur(4px)",
+      transition: {
+        duration: 0.8,
+        ease: [0.55, 0.085, 0.68, 0.53]
+      }
+    }
+  };
+
+  const barMorphVariants = {
+    initial: { 
+      scaleY: 0, 
+      opacity: 0,
+      y: 200,
+      filter: "blur(2px)"
+    },
+    animate: { 
+      scaleY: 1, 
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: {
+        type: "spring",
+        stiffness: 80,
+        damping: 12,
+        mass: 0.8
+      }
+    },
+    exit: { 
+      scaleY: 0, 
+      opacity: 0,
+      y: 200,
+      filter: "blur(2px)",
+      transition: {
+        duration: 0.6,
+        ease: [0.55, 0.085, 0.68, 0.53]
+      }
+    }
+  };
+
+  const pointMorphVariants = {
+    initial: { 
+      scale: 0, 
+      opacity: 0,
+      rotate: -180
+    },
+    animate: { 
+      scale: 1, 
+      opacity: 1,
+      rotate: 0,
+      transition: {
+        type: "spring",
+        stiffness: 200,
+        damping: 15,
+        mass: 0.5
+      }
+    },
+    exit: { 
+      scale: 0, 
+      opacity: 0,
+      rotate: 180,
+      transition: {
+        duration: 0.4,
+        ease: "easeInOut"
+      }
+    },
+    hover: {
+      scale: 1.8,
+      rotate: 360,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 10
+      }
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -154,49 +310,80 @@ export default function ActivityChart() {
         {/* Header avec contrôles */}
         <div className="flex flex-col space-y-3 sm:space-y-4 mb-4 sm:mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-            <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-white">
+            <motion.h3 
+              className="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-white"
+              layout
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
               Activité sur 24 mois
-            </h3>
+            </motion.h3>
             
-            {/* Type de graphique */}
-            <div className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+            {/* Type de graphique avec morphing */}
+            <motion.div 
+              className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-1"
+              layout
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
               {chartTypeButtons.map(({ type, icon: Icon, label }) => (
                 <motion.button
                   key={type}
                   onClick={() => setChartType(type)}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    backgroundColor: chartType === type ? undefined : "rgba(255,255,255,0.1)"
+                  }}
                   whileTap={{ scale: 0.95 }}
-                  className={`flex items-center space-x-1 px-2 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-300 ${
+                  className={`flex items-center space-x-1 px-2 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-500 ${
                     chartType === type
                       ? 'bg-white dark:bg-gray-700 text-teal-600 shadow-sm'
                       : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white'
                   }`}
+                  layout
+                  layoutId={`chart-type-${type}`}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 >
-                  <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <motion.div
+                    animate={{ 
+                      rotate: chartType === type ? 360 : 0,
+                      scale: chartType === type ? 1.1 : 1
+                    }}
+                    transition={{ 
+                      duration: 0.6,
+                      ease: [0.34, 1.56, 0.64, 1]
+                    }}
+                  >
+                    <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
+                  </motion.div>
                   <span className="hidden sm:inline">{label}</span>
                 </motion.button>
               ))}
-            </div>
+            </motion.div>
           </div>
           
-          {/* Légende interactive */}
+          {/* Légende interactive avec morphing */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
             <motion.button
               onClick={() => setShowCommandes(!showCommandes)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-500 ${
+              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-700 ${
                 showCommandes 
                   ? 'bg-blue-50 dark:bg-blue-900/20 shadow-sm' 
                   : 'bg-gray-100 dark:bg-gray-800'
               }`}
+              layout
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               <motion.div
                 animate={{ 
                   scale: showCommandes ? 1 : 0.8,
-                  opacity: showCommandes ? 1 : 0.5
+                  opacity: showCommandes ? 1 : 0.5,
+                  rotate: showCommandes ? 0 : -90
                 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+                transition={{ 
+                  duration: 0.5, 
+                  ease: [0.34, 1.56, 0.64, 1]
+                }}
               >
                 {showCommandes ? (
                   <Eye className="w-4 h-4 text-blue-600" />
@@ -208,17 +395,26 @@ export default function ActivityChart() {
                 className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full shadow-sm`}
                 animate={{ 
                   backgroundColor: showCommandes ? '#3b82f6' : '#d1d5db',
-                  scale: showCommandes ? 1 : 0.8
+                  scale: showCommandes ? 1 : 0.8,
+                  rotate: showCommandes ? 0 : 180
                 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
+                transition={{ 
+                  duration: 0.6, 
+                  ease: [0.34, 1.56, 0.64, 1]
+                }}
+                whileHover={{
+                  scale: showCommandes ? 1.2 : 1,
+                  transition: { duration: 0.2 }
+                }}
               />
               <motion.span 
                 className={`text-xs sm:text-sm font-medium`}
                 animate={{ 
                   color: showCommandes ? '#1d4ed8' : '#6b7280',
-                  opacity: showCommandes ? 1 : 0.7
+                  opacity: showCommandes ? 1 : 0.7,
+                  x: showCommandes ? 0 : -2
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.4 }}
               >
                 Commandes traitées
               </motion.span>
@@ -228,18 +424,24 @@ export default function ActivityChart() {
               onClick={() => setShowRequetes(!showRequetes)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-500 ${
+              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-700 ${
                 showRequetes 
                   ? 'bg-amber-50 dark:bg-amber-900/20 shadow-sm' 
                   : 'bg-gray-100 dark:bg-gray-800'
               }`}
+              layout
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               <motion.div
                 animate={{ 
                   scale: showRequetes ? 1 : 0.8,
-                  opacity: showRequetes ? 1 : 0.5
+                  opacity: showRequetes ? 1 : 0.5,
+                  rotate: showRequetes ? 0 : -90
                 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+                transition={{ 
+                  duration: 0.5, 
+                  ease: [0.34, 1.56, 0.64, 1]
+                }}
               >
                 {showRequetes ? (
                   <Eye className="w-4 h-4 text-amber-600" />
@@ -251,17 +453,26 @@ export default function ActivityChart() {
                 className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full shadow-sm`}
                 animate={{ 
                   backgroundColor: showRequetes ? '#f59e0b' : '#d1d5db',
-                  scale: showRequetes ? 1 : 0.8
+                  scale: showRequetes ? 1 : 0.8,
+                  rotate: showRequetes ? 0 : 180
                 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
+                transition={{ 
+                  duration: 0.6, 
+                  ease: [0.34, 1.56, 0.64, 1]
+                }}
+                whileHover={{
+                  scale: showRequetes ? 1.2 : 1,
+                  transition: { duration: 0.2 }
+                }}
               />
               <motion.span 
                 className={`text-xs sm:text-sm font-medium`}
                 animate={{ 
                   color: showRequetes ? '#d97706' : '#6b7280',
-                  opacity: showRequetes ? 1 : 0.7
+                  opacity: showRequetes ? 1 : 0.7,
+                  x: showRequetes ? 0 : -2
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.4 }}
               >
                 Requêtes traitées
               </motion.span>
@@ -269,18 +480,30 @@ export default function ActivityChart() {
           </div>
         </div>
 
-        {/* Graphique */}
+        {/* Graphique avec morphing avancé */}
         <div className="relative flex-1 min-h-0">
           {/* Y-axis labels */}
           <motion.div 
             className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400 pr-2 sm:pr-4 font-medium z-10"
-            animate={{ opacity: (showCommandes || showRequetes) ? 1 : 0.5 }}
-            transition={{ duration: 0.3 }}
+            animate={{ 
+              opacity: (showCommandes || showRequetes) ? 1 : 0.5,
+              x: (showCommandes || showRequetes) ? 0 : -10
+            }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
           >
             {[0, 1, 2, 3, 4, 5].map((i) => (
-              <span key={i}>
+              <motion.span 
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: i * 0.1,
+                  ease: [0.34, 1.56, 0.64, 1]
+                }}
+              >
                 {Math.round(maxValue - (i * (maxValue - minValue) / 5))}
-              </span>
+              </motion.span>
             ))}
           </motion.div>
 
@@ -294,8 +517,9 @@ export default function ActivityChart() {
               transition={{ duration: 1, delay: 0.5 }}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
+              style={{ perspective: "1000px" }}
             >
-              {/* Grid lines */}
+              {/* Grid lines avec morphing */}
               {[0, 1, 2, 3, 4, 5].map((i) => (
                 <motion.line
                   key={i}
@@ -306,9 +530,13 @@ export default function ActivityChart() {
                   stroke="currentColor"
                   strokeWidth="1"
                   className="text-gray-200 dark:text-gray-700"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.5 }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  initial={{ opacity: 0, scaleX: 0 }}
+                  animate={{ opacity: 0.5, scaleX: 1 }}
+                  transition={{ 
+                    duration: 0.8, 
+                    delay: i * 0.1,
+                    ease: [0.34, 1.56, 0.64, 1]
+                  }}
                 />
               ))}
               
@@ -326,37 +554,61 @@ export default function ActivityChart() {
                       stroke="currentColor"
                       strokeWidth="1"
                       className="text-gray-200 dark:text-gray-700"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 0.3 }}
-                      transition={{ duration: 0.5, delay: 0.3 + i * 0.05 }}
+                      initial={{ opacity: 0, scaleY: 0 }}
+                      animate={{ opacity: 0.3, scaleY: 1 }}
+                      transition={{ 
+                        duration: 0.8, 
+                        delay: 0.3 + i * 0.05,
+                        ease: [0.34, 1.56, 0.64, 1]
+                      }}
                     />
                   );
                 }
                 return null;
               })}
               
-              {/* Gradients */}
+              {/* Gradients avec morphing */}
               <defs>
-                <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                <motion.linearGradient 
+                  id="gradient1" 
+                  x1="0%" 
+                  y1="0%" 
+                  x2="0%" 
+                  y2="100%"
+                  animate={{
+                    opacity: showCommandes ? 1 : 0
+                  }}
+                  transition={{ duration: 0.6 }}
+                >
                   <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8" />
                   <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.1" />
-                </linearGradient>
-                <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                </motion.linearGradient>
+                <motion.linearGradient 
+                  id="gradient2" 
+                  x1="0%" 
+                  y1="0%" 
+                  x2="0%" 
+                  y2="100%"
+                  animate={{
+                    opacity: showRequetes ? 1 : 0
+                  }}
+                  transition={{ duration: 0.6 }}
+                >
                   <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.8" />
                   <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.1" />
-                </linearGradient>
+                </motion.linearGradient>
               </defs>
               
-              {/* Data visualization */}
+              {/* Data visualization avec morphing avancé */}
               <AnimatePresence mode="wait">
                 {chartType === 'bar' ? (
-                  // Barres
+                  // Barres avec morphing
                   <motion.g
                     key="bars"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.5 }}
+                    variants={morphVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
                   >
                     {rawData.map((data, index) => {
                       const x = (index / (rawData.length - 1)) * 800;
@@ -369,50 +621,54 @@ export default function ActivityChart() {
                           <AnimatePresence>
                             {showCommandes && (
                               <motion.rect
-                                initial={{ height: 0, y: 200, opacity: 0 }}
-                                animate={{ 
-                                  height: commandesHeight, 
-                                  y: 200 - commandesHeight,
-                                  opacity: 1
-                                }}
-                                exit={{ 
-                                  height: 0, 
-                                  y: 200,
-                                  opacity: 0
-                                }}
+                                variants={barMorphVariants}
+                                initial="initial"
+                                animate="animate"
+                                exit="exit"
                                 transition={{ 
-                                  duration: 0.6, 
-                                  delay: index * 0.02,
-                                  ease: "easeInOut"
+                                  delay: index * 0.03,
+                                  type: "spring",
+                                  stiffness: 100,
+                                  damping: 15
                                 }}
                                 x={x - barWidth/4}
+                                y={200 - commandesHeight}
                                 width={barWidth/2}
+                                height={commandesHeight}
                                 fill="#3b82f6"
+                                rx="2"
+                                whileHover={{
+                                  scale: 1.05,
+                                  filter: "brightness(1.1)",
+                                  transition: { duration: 0.2 }
+                                }}
                               />
                             )}
                           </AnimatePresence>
                           <AnimatePresence>
                             {showRequetes && (
                               <motion.rect
-                                initial={{ height: 0, y: 200, opacity: 0 }}
-                                animate={{ 
-                                  height: requetesHeight, 
-                                  y: 200 - requetesHeight,
-                                  opacity: 1
-                                }}
-                                exit={{ 
-                                  height: 0, 
-                                  y: 200,
-                                  opacity: 0
-                                }}
+                                variants={barMorphVariants}
+                                initial="initial"
+                                animate="animate"
+                                exit="exit"
                                 transition={{ 
-                                  duration: 0.6, 
-                                  delay: index * 0.02 + 0.1,
-                                  ease: "easeInOut"
+                                  delay: index * 0.03 + 0.1,
+                                  type: "spring",
+                                  stiffness: 100,
+                                  damping: 15
                                 }}
                                 x={x + barWidth/4}
+                                y={200 - requetesHeight}
                                 width={barWidth/2}
+                                height={requetesHeight}
                                 fill="#f59e0b"
+                                rx="2"
+                                whileHover={{
+                                  scale: 1.05,
+                                  filter: "brightness(1.1)",
+                                  transition: { duration: 0.2 }
+                                }}
                               />
                             )}
                           </AnimatePresence>
@@ -421,13 +677,13 @@ export default function ActivityChart() {
                     })}
                   </motion.g>
                 ) : (
-                  // Courbes et aires
+                  // Courbes et aires avec morphing avancé
                   <motion.g
                     key={`curves-${chartType}`}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.5 }}
+                    variants={morphVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
                   >
                     <AnimatePresence>
                       {showCommandes && (
@@ -437,25 +693,15 @@ export default function ActivityChart() {
                           fill={chartType === 'area' ? 'url(#gradient1)' : 'none'}
                           stroke="#3b82f6"
                           strokeWidth={chartType === 'line' ? "3" : "2"}
-                          initial={{ 
-                            pathLength: 0, 
-                            opacity: 0,
-                            scale: 0.8
-                          }}
-                          animate={{ 
-                            pathLength: 1, 
-                            opacity: 1,
-                            scale: 1
-                          }}
-                          exit={{ 
-                            pathLength: 0, 
-                            opacity: 0,
-                            scale: 0.8
-                          }}
-                          transition={{ 
-                            duration: 1.2, 
-                            delay: 0.2,
-                            ease: "easeInOut"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          variants={pathMorphVariants}
+                          initial="initial"
+                          animate="animate"
+                          exit="exit"
+                          style={{ 
+                            transformOrigin: "center",
+                            filter: "drop-shadow(0 2px 4px rgba(59, 130, 246, 0.2))"
                           }}
                         />
                       )}
@@ -468,31 +714,22 @@ export default function ActivityChart() {
                           fill={chartType === 'area' ? 'url(#gradient2)' : 'none'}
                           stroke="#f59e0b"
                           strokeWidth={chartType === 'line' ? "3" : "2"}
-                          initial={{ 
-                            pathLength: 0, 
-                            opacity: 0,
-                            scale: 0.8
-                          }}
-                          animate={{ 
-                            pathLength: 1, 
-                            opacity: 1,
-                            scale: 1
-                          }}
-                          exit={{ 
-                            pathLength: 0, 
-                            opacity: 0,
-                            scale: 0.8
-                          }}
-                          transition={{ 
-                            duration: 1.2, 
-                            delay: 0.4,
-                            ease: "easeInOut"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          variants={pathMorphVariants}
+                          initial="initial"
+                          animate="animate"
+                          exit="exit"
+                          transition={{ delay: 0.2 }}
+                          style={{ 
+                            transformOrigin: "center",
+                            filter: "drop-shadow(0 2px 4px rgba(245, 158, 11, 0.2))"
                           }}
                         />
                       )}
                     </AnimatePresence>
                     
-                    {/* Points interactifs */}
+                    {/* Points interactifs avec morphing */}
                     {chartType !== 'area' && (
                       <>
                         <AnimatePresence>
@@ -505,16 +742,21 @@ export default function ActivityChart() {
                               fill="#3b82f6"
                               stroke="white"
                               strokeWidth="2"
-                              initial={{ scale: 0, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              exit={{ scale: 0, opacity: 0 }}
+                              variants={pointMorphVariants}
+                              initial="initial"
+                              animate="animate"
+                              exit="exit"
+                              whileHover="hover"
                               transition={{ 
-                                duration: 0.4, 
                                 delay: 0.6 + index * 0.02,
-                                ease: "easeOut"
+                                type: "spring",
+                                stiffness: 200,
+                                damping: 15
                               }}
-                              whileHover={{ scale: 1.5 }}
                               className="cursor-pointer"
+                              style={{ 
+                                filter: "drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3))"
+                              }}
                             />
                           ))}
                         </AnimatePresence>
@@ -528,16 +770,21 @@ export default function ActivityChart() {
                               fill="#f59e0b"
                               stroke="white"
                               strokeWidth="2"
-                              initial={{ scale: 0, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              exit={{ scale: 0, opacity: 0 }}
+                              variants={pointMorphVariants}
+                              initial="initial"
+                              animate="animate"
+                              exit="exit"
+                              whileHover="hover"
                               transition={{ 
-                                duration: 0.4, 
                                 delay: 0.8 + index * 0.02,
-                                ease: "easeOut"
+                                type: "spring",
+                                stiffness: 200,
+                                damping: 15
                               }}
-                              whileHover={{ scale: 1.5 }}
                               className="cursor-pointer"
+                              style={{ 
+                                filter: "drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3))"
+                              }}
                             />
                           ))}
                         </AnimatePresence>
@@ -548,31 +795,60 @@ export default function ActivityChart() {
               </AnimatePresence>
             </motion.svg>
 
-            {/* Tooltip */}
+            {/* Tooltip avec morphing */}
             <AnimatePresence>
               {hoveredPoint && (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  initial={{ 
+                    opacity: 0, 
+                    scale: 0.6, 
+                    y: 20,
+                    rotateX: -15
+                  }}
+                  animate={{ 
+                    opacity: 1, 
+                    scale: 1, 
+                    y: 0,
+                    rotateX: 0
+                  }}
+                  exit={{ 
+                    opacity: 0, 
+                    scale: 0.6, 
+                    y: 20,
+                    rotateX: 15
+                  }}
+                  transition={{ 
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 25
+                  }}
                   className="absolute bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-3 pointer-events-none z-20"
                   style={{
                     left: Math.min(hoveredPoint.x, 600),
-                    top: Math.max(hoveredPoint.y - 80, 10)
+                    top: Math.max(hoveredPoint.y - 80, 10),
+                    transformStyle: "preserve-3d"
                   }}
                 >
-                  <div className="text-sm font-semibold text-gray-800 dark:text-white mb-2">
+                  <motion.div 
+                    className="text-sm font-semibold text-gray-800 dark:text-white mb-2"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                  >
                     {hoveredPoint.data.month}
-                  </div>
+                  </motion.div>
                   {showCommandes && (
                     <motion.div 
                       className="flex items-center space-x-2 text-sm"
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 }}
+                      transition={{ delay: 0.15 }}
                     >
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                      <motion.div 
+                        className="w-3 h-3 bg-blue-500 rounded-full"
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                      />
                       <span className="text-gray-600 dark:text-gray-300">
                         Commandes: {hoveredPoint.data.commandes.toLocaleString()}
                       </span>
@@ -583,9 +859,13 @@ export default function ActivityChart() {
                       className="flex items-center space-x-2 text-sm"
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.15 }}
+                      transition={{ delay: 0.2 }}
                     >
-                      <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
+                      <motion.div 
+                        className="w-3 h-3 bg-amber-500 rounded-full"
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 1, repeat: Infinity, delay: 0.5 }}
+                      />
                       <span className="text-gray-600 dark:text-gray-300">
                         Requêtes: {hoveredPoint.data.requetes.toLocaleString()}
                       </span>
@@ -595,28 +875,59 @@ export default function ActivityChart() {
               )}
             </AnimatePresence>
 
-            {/* X-axis labels */}
+            {/* X-axis labels avec morphing */}
             <motion.div 
               className="hidden sm:flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 font-medium"
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1 }}
+              transition={{ 
+                duration: 0.8, 
+                delay: 1.2,
+                ease: [0.34, 1.56, 0.64, 1]
+              }}
             >
               {rawData.filter((_, i) => i % 4 === 0).map((data, i) => (
-                <span key={i} className="text-xs">{data.month}</span>
+                <motion.span 
+                  key={i} 
+                  className="text-xs"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ 
+                    delay: 1.3 + i * 0.1,
+                    duration: 0.5,
+                    ease: "easeOut"
+                  }}
+                >
+                  {data.month}
+                </motion.span>
               ))}
             </motion.div>
             
             {/* Mobile X-axis labels */}
             <motion.div 
               className="flex sm:hidden justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 font-medium"
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1 }}
+              transition={{ 
+                duration: 0.8, 
+                delay: 1.2,
+                ease: [0.34, 1.56, 0.64, 1]
+              }}
             >
-              <span>2023</span>
-              <span>2024</span>
-              <span>2025</span>
+              {['2023', '2024', '2025'].map((year, i) => (
+                <motion.span
+                  key={year}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ 
+                    delay: 1.3 + i * 0.1,
+                    duration: 0.5,
+                    ease: "easeOut"
+                  }}
+                >
+                  {year}
+                </motion.span>
+              ))}
             </motion.div>
           </div>
         </div>
