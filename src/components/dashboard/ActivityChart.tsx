@@ -1,5 +1,4 @@
 import React from "react";
-import { BackgroundGradient } from "../ui/aceternity/background-gradient";
 import { motion } from "framer-motion";
 
 export default function ActivityChart() {
@@ -55,104 +54,102 @@ export default function ActivityChart() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="w-full"
+      className="w-full h-full"
     >
-      <BackgroundGradient className="rounded-2xl sm:rounded-3xl p-1">
-        <div className="bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 lg:mb-8 space-y-3 sm:space-y-0">
-            <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white">
-              Activité sur 24 mois
-            </h3>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-6">
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-r from-pink-400 to-pink-500 rounded-full shadow-sm"></div>
-                <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium">
-                  Commandes traitées
-                </span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-r from-red-400 to-red-500 rounded-full shadow-sm"></div>
-                <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium">
-                  Requêtes traitées
-                </span>
-              </div>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl p-3 sm:p-4 lg:p-6 shadow-xl h-full flex flex-col">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 space-y-2 sm:space-y-0">
+          <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-white">
+            Activité sur 24 mois
+          </h3>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-6">
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-r from-pink-400 to-pink-500 rounded-full shadow-sm"></div>
+              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium">
+                Commandes traitées
+              </span>
             </div>
-          </div>
-
-          <div className="relative">
-            {/* Y-axis labels */}
-            <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400 pr-2 sm:pr-4 font-medium">
-              <span>3000</span>
-              <span>2500</span>
-              <span>2000</span>
-              <span>1500</span>
-              <span>1000</span>
-              <span>500</span>
-            </div>
-
-            {/* Chart */}
-            <div className="ml-8 sm:ml-12">
-              <motion.svg 
-                viewBox="0 0 800 200" 
-                className="w-full h-32 sm:h-40 lg:h-48"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 0.5 }}
-              >
-                {/* Grid lines */}
-                {[0, 1, 2, 3, 4, 5].map((i) => (
-                  <line
-                    key={i}
-                    x1="0"
-                    y1={i * 40}
-                    x2="800"
-                    y2={i * 40}
-                    stroke="currentColor"
-                    strokeWidth="1"
-                    className="text-gray-200 dark:text-gray-700"
-                  />
-                ))}
-                
-                {/* Data areas */}
-                <motion.g
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.8, delay: 0.7 }}
-                >
-                  {generatePath(commandesData, 'url(#gradient1)', 0.7)}
-                  {generatePath(requetesData, 'url(#gradient2)', 0.5)}
-                </motion.g>
-                
-                {/* Gradients */}
-                <defs>
-                  <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#fb7185" stopOpacity="0.8" />
-                    <stop offset="100%" stopColor="#fb7185" stopOpacity="0.2" />
-                  </linearGradient>
-                  <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#f87171" stopOpacity="0.6" />
-                    <stop offset="100%" stopColor="#f87171" stopOpacity="0.1" />
-                  </linearGradient>
-                </defs>
-              </motion.svg>
-
-              {/* X-axis labels */}
-              <div className="hidden sm:flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 sm:mt-4 font-medium">
-                {months.filter((_, i) => i % 4 === 0).map((month, i) => (
-                  <span key={i} className="text-xs">{month}</span>
-                ))}
-              </div>
-              
-              {/* Mobile X-axis labels (fewer labels) */}
-              <div className="flex sm:hidden justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 font-medium">
-                <span>2023</span>
-                <span>2024</span>
-                <span>2025</span>
-              </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-r from-red-400 to-red-500 rounded-full shadow-sm"></div>
+              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium">
+                Requêtes traitées
+              </span>
             </div>
           </div>
         </div>
-      </BackgroundGradient>
+
+        <div className="relative flex-1 min-h-0">
+          {/* Y-axis labels */}
+          <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400 pr-2 sm:pr-4 font-medium">
+            <span>3000</span>
+            <span>2500</span>
+            <span>2000</span>
+            <span>1500</span>
+            <span>1000</span>
+            <span>500</span>
+          </div>
+
+          {/* Chart */}
+          <div className="ml-6 sm:ml-8 h-full flex flex-col">
+            <motion.svg 
+              viewBox="0 0 800 200" 
+              className="w-full flex-1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.5 }}
+            >
+              {/* Grid lines */}
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <line
+                  key={i}
+                  x1="0"
+                  y1={i * 40}
+                  x2="800"
+                  y2={i * 40}
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  className="text-gray-200 dark:text-gray-700"
+                />
+              ))}
+              
+              {/* Data areas */}
+              <motion.g
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.7 }}
+              >
+                {generatePath(commandesData, 'url(#gradient1)', 0.7)}
+                {generatePath(requetesData, 'url(#gradient2)', 0.5)}
+              </motion.g>
+              
+              {/* Gradients */}
+              <defs>
+                <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#fb7185" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#fb7185" stopOpacity="0.2" />
+                </linearGradient>
+                <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#f87171" stopOpacity="0.6" />
+                  <stop offset="100%" stopColor="#f87171" stopOpacity="0.1" />
+                </linearGradient>
+              </defs>
+            </motion.svg>
+
+            {/* X-axis labels */}
+            <div className="hidden sm:flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 font-medium">
+              {months.filter((_, i) => i % 4 === 0).map((month, i) => (
+                <span key={i} className="text-xs">{month}</span>
+              ))}
+            </div>
+            
+            {/* Mobile X-axis labels (fewer labels) */}
+            <div className="flex sm:hidden justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 font-medium">
+              <span>2023</span>
+              <span>2024</span>
+              <span>2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 }

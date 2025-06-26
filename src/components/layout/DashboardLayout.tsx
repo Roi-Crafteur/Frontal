@@ -21,6 +21,7 @@ import { cn } from "../../lib/utils";
 import { useStore } from "../../store/useStore";
 import ModuleRouter from "./ModuleRouter";
 import ProfileMenu from "./ProfileMenu";
+import SiteHeader from "./SiteHeader";
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
@@ -119,8 +120,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   ];
 
   return (
-    <div className="h-screen w-full bg-gray-50 dark:bg-gray-900 overflow-hidden">
-      <div className="flex h-full w-full">
+    <div className="h-screen w-full bg-gray-50 dark:bg-gray-900 overflow-hidden flex flex-col">
+      {/* Site Header */}
+      <SiteHeader />
+      
+      {/* Main Content */}
+      <div className="flex h-full w-full flex-1 min-h-0">
         <Sidebar open={open} setOpen={setOpen}>
           <SidebarBody className="justify-between">
             <div className="flex flex-1 flex-col">
@@ -174,9 +179,9 @@ export const Logo = () => {
 
 const Dashboard = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden">
-      <div className="flex-1 rounded-tl-2xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900 overflow-y-auto">
-        <div className="p-3 sm:p-4 md:p-6 lg:p-8">
+    <div className="flex-1 flex flex-col h-full overflow-hidden min-h-0">
+      <div className="flex-1 rounded-tl-2xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900 overflow-y-auto min-h-0">
+        <div className="p-3 sm:p-4 md:p-6 h-full">
           {children}
         </div>
       </div>

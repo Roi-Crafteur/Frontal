@@ -46,15 +46,15 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="space-y-4 sm:space-y-6 lg:space-y-8 w-full max-w-full overflow-hidden"
+        className="space-y-3 sm:space-y-4 w-full max-w-full overflow-hidden h-full"
       >
         {/* Header */}
-        <div className="mb-4 sm:mb-6 lg:mb-8">
+        <div className="mb-3 sm:mb-4">
           <motion.h1 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 dark:text-white mb-2"
+            className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white mb-1"
           >
             Visualisation de votre activité
           </motion.h1>
@@ -77,14 +77,14 @@ function App() {
         <StatsCards />
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-3 sm:gap-4 flex-1 min-h-0">
           {/* Activity Chart - Takes 2 columns on XL screens */}
-          <div className="xl:col-span-2">
+          <div className="xl:col-span-2 min-h-0">
             <ActivityChart />
           </div>
           
           {/* Recent Activity - Takes 1 column */}
-          <div className="xl:col-span-1">
+          <div className="xl:col-span-1 min-h-0">
             <RecentActivity />
           </div>
         </div>
