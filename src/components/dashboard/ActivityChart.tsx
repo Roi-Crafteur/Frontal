@@ -166,7 +166,7 @@ export default function ActivityChart() {
                   onClick={() => setChartType(type)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`flex items-center space-x-1 px-2 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all ${
+                  className={`flex items-center space-x-1 px-2 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-300 ${
                     chartType === type
                       ? 'bg-white dark:bg-gray-700 text-teal-600 shadow-sm'
                       : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white'
@@ -185,50 +185,86 @@ export default function ActivityChart() {
               onClick={() => setShowCommandes(!showCommandes)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${
+              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-500 ${
                 showCommandes 
-                  ? 'bg-blue-50 dark:bg-blue-900/20' 
-                  : 'bg-gray-100 dark:bg-gray-800 opacity-50'
+                  ? 'bg-blue-50 dark:bg-blue-900/20 shadow-sm' 
+                  : 'bg-gray-100 dark:bg-gray-800'
               }`}
             >
-              {showCommandes ? (
-                <Eye className="w-4 h-4 text-blue-600" />
-              ) : (
-                <EyeOff className="w-4 h-4 text-gray-400" />
-              )}
-              <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${
-                showCommandes ? 'bg-gradient-to-r from-blue-500 to-blue-600' : 'bg-gray-300'
-              } shadow-sm`}></div>
-              <span className={`text-xs sm:text-sm font-medium ${
-                showCommandes ? 'text-blue-700 dark:text-blue-300' : 'text-gray-500'
-              }`}>
+              <motion.div
+                animate={{ 
+                  scale: showCommandes ? 1 : 0.8,
+                  opacity: showCommandes ? 1 : 0.5
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                {showCommandes ? (
+                  <Eye className="w-4 h-4 text-blue-600" />
+                ) : (
+                  <EyeOff className="w-4 h-4 text-gray-400" />
+                )}
+              </motion.div>
+              <motion.div 
+                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full shadow-sm`}
+                animate={{ 
+                  backgroundColor: showCommandes ? '#3b82f6' : '#d1d5db',
+                  scale: showCommandes ? 1 : 0.8
+                }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+              />
+              <motion.span 
+                className={`text-xs sm:text-sm font-medium`}
+                animate={{ 
+                  color: showCommandes ? '#1d4ed8' : '#6b7280',
+                  opacity: showCommandes ? 1 : 0.7
+                }}
+                transition={{ duration: 0.3 }}
+              >
                 Commandes traitées
-              </span>
+              </motion.span>
             </motion.button>
             
             <motion.button
               onClick={() => setShowRequetes(!showRequetes)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${
+              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-500 ${
                 showRequetes 
-                  ? 'bg-amber-50 dark:bg-amber-900/20' 
-                  : 'bg-gray-100 dark:bg-gray-800 opacity-50'
+                  ? 'bg-amber-50 dark:bg-amber-900/20 shadow-sm' 
+                  : 'bg-gray-100 dark:bg-gray-800'
               }`}
             >
-              {showRequetes ? (
-                <Eye className="w-4 h-4 text-amber-600" />
-              ) : (
-                <EyeOff className="w-4 h-4 text-gray-400" />
-              )}
-              <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${
-                showRequetes ? 'bg-gradient-to-r from-amber-500 to-amber-600' : 'bg-gray-300'
-              } shadow-sm`}></div>
-              <span className={`text-xs sm:text-sm font-medium ${
-                showRequetes ? 'text-amber-700 dark:text-amber-300' : 'text-gray-500'
-              }`}>
+              <motion.div
+                animate={{ 
+                  scale: showRequetes ? 1 : 0.8,
+                  opacity: showRequetes ? 1 : 0.5
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                {showRequetes ? (
+                  <Eye className="w-4 h-4 text-amber-600" />
+                ) : (
+                  <EyeOff className="w-4 h-4 text-gray-400" />
+                )}
+              </motion.div>
+              <motion.div 
+                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full shadow-sm`}
+                animate={{ 
+                  backgroundColor: showRequetes ? '#f59e0b' : '#d1d5db',
+                  scale: showRequetes ? 1 : 0.8
+                }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+              />
+              <motion.span 
+                className={`text-xs sm:text-sm font-medium`}
+                animate={{ 
+                  color: showRequetes ? '#d97706' : '#6b7280',
+                  opacity: showRequetes ? 1 : 0.7
+                }}
+                transition={{ duration: 0.3 }}
+              >
                 Requêtes traitées
-              </span>
+              </motion.span>
             </motion.button>
           </div>
         </div>
@@ -236,13 +272,17 @@ export default function ActivityChart() {
         {/* Graphique */}
         <div className="relative flex-1 min-h-0">
           {/* Y-axis labels */}
-          <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400 pr-2 sm:pr-4 font-medium z-10">
+          <motion.div 
+            className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400 pr-2 sm:pr-4 font-medium z-10"
+            animate={{ opacity: (showCommandes || showRequetes) ? 1 : 0.5 }}
+            transition={{ duration: 0.3 }}
+          >
             {[0, 1, 2, 3, 4, 5].map((i) => (
               <span key={i}>
                 {Math.round(maxValue - (i * (maxValue - minValue) / 5))}
               </span>
             ))}
-          </div>
+          </motion.div>
 
           {/* Chart container */}
           <div className="ml-6 sm:ml-8 h-full flex flex-col">
@@ -257,7 +297,7 @@ export default function ActivityChart() {
             >
               {/* Grid lines */}
               {[0, 1, 2, 3, 4, 5].map((i) => (
-                <line
+                <motion.line
                   key={i}
                   x1="0"
                   y1={i * 40}
@@ -266,7 +306,9 @@ export default function ActivityChart() {
                   stroke="currentColor"
                   strokeWidth="1"
                   className="text-gray-200 dark:text-gray-700"
-                  opacity="0.5"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.5 }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
                 />
               ))}
               
@@ -275,7 +317,7 @@ export default function ActivityChart() {
                 if (i % 4 === 0) {
                   const x = (i / (rawData.length - 1)) * 800;
                   return (
-                    <line
+                    <motion.line
                       key={`v-${i}`}
                       x1={x}
                       y1="0"
@@ -284,7 +326,9 @@ export default function ActivityChart() {
                       stroke="currentColor"
                       strokeWidth="1"
                       className="text-gray-200 dark:text-gray-700"
-                      opacity="0.3"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 0.3 }}
+                      transition={{ duration: 0.5, delay: 0.3 + i * 0.05 }}
                     />
                   );
                 }
@@ -304,10 +348,16 @@ export default function ActivityChart() {
               </defs>
               
               {/* Data visualization */}
-              <AnimatePresence>
+              <AnimatePresence mode="wait">
                 {chartType === 'bar' ? (
                   // Barres
-                  <g>
+                  <motion.g
+                    key="bars"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.5 }}
+                  >
                     {rawData.map((data, index) => {
                       const x = (index / (rawData.length - 1)) * 800;
                       const barWidth = 800 / rawData.length * 0.6;
@@ -316,95 +366,181 @@ export default function ActivityChart() {
                       
                       return (
                         <g key={index}>
-                          {showCommandes && (
-                            <motion.rect
-                              initial={{ height: 0, y: 200 }}
-                              animate={{ height: commandesHeight, y: 200 - commandesHeight }}
-                              transition={{ duration: 0.8, delay: index * 0.02 }}
-                              x={x - barWidth/4}
-                              width={barWidth/2}
-                              fill="#3b82f6"
-                              opacity="0.8"
-                            />
-                          )}
-                          {showRequetes && (
-                            <motion.rect
-                              initial={{ height: 0, y: 200 }}
-                              animate={{ height: requetesHeight, y: 200 - requetesHeight }}
-                              transition={{ duration: 0.8, delay: index * 0.02 + 0.1 }}
-                              x={x + barWidth/4}
-                              width={barWidth/2}
-                              fill="#f59e0b"
-                              opacity="0.8"
-                            />
-                          )}
+                          <AnimatePresence>
+                            {showCommandes && (
+                              <motion.rect
+                                initial={{ height: 0, y: 200, opacity: 0 }}
+                                animate={{ 
+                                  height: commandesHeight, 
+                                  y: 200 - commandesHeight,
+                                  opacity: 1
+                                }}
+                                exit={{ 
+                                  height: 0, 
+                                  y: 200,
+                                  opacity: 0
+                                }}
+                                transition={{ 
+                                  duration: 0.6, 
+                                  delay: index * 0.02,
+                                  ease: "easeInOut"
+                                }}
+                                x={x - barWidth/4}
+                                width={barWidth/2}
+                                fill="#3b82f6"
+                              />
+                            )}
+                          </AnimatePresence>
+                          <AnimatePresence>
+                            {showRequetes && (
+                              <motion.rect
+                                initial={{ height: 0, y: 200, opacity: 0 }}
+                                animate={{ 
+                                  height: requetesHeight, 
+                                  y: 200 - requetesHeight,
+                                  opacity: 1
+                                }}
+                                exit={{ 
+                                  height: 0, 
+                                  y: 200,
+                                  opacity: 0
+                                }}
+                                transition={{ 
+                                  duration: 0.6, 
+                                  delay: index * 0.02 + 0.1,
+                                  ease: "easeInOut"
+                                }}
+                                x={x + barWidth/4}
+                                width={barWidth/2}
+                                fill="#f59e0b"
+                              />
+                            )}
+                          </AnimatePresence>
                         </g>
                       );
                     })}
-                  </g>
+                  </motion.g>
                 ) : (
                   // Courbes et aires
                   <motion.g
-                    initial={{ opacity: 0, scale: 0.8 }}
+                    key={`curves-${chartType}`}
+                    initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8, delay: 0.7 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.5 }}
                   >
-                    {showCommandes && (
-                      <motion.path
-                        d={generatePath(commandesPoints, chartType)}
-                        fill={chartType === 'area' ? 'url(#gradient1)' : 'none'}
-                        stroke="#3b82f6"
-                        strokeWidth={chartType === 'line' ? "3" : "2"}
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{ duration: 2, delay: 0.5 }}
-                      />
-                    )}
-                    {showRequetes && (
-                      <motion.path
-                        d={generatePath(requetesPoints, chartType)}
-                        fill={chartType === 'area' ? 'url(#gradient2)' : 'none'}
-                        stroke="#f59e0b"
-                        strokeWidth={chartType === 'line' ? "3" : "2"}
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{ duration: 2, delay: 0.7 }}
-                      />
-                    )}
+                    <AnimatePresence>
+                      {showCommandes && (
+                        <motion.path
+                          key="commandes-path"
+                          d={generatePath(commandesPoints, chartType)}
+                          fill={chartType === 'area' ? 'url(#gradient1)' : 'none'}
+                          stroke="#3b82f6"
+                          strokeWidth={chartType === 'line' ? "3" : "2"}
+                          initial={{ 
+                            pathLength: 0, 
+                            opacity: 0,
+                            scale: 0.8
+                          }}
+                          animate={{ 
+                            pathLength: 1, 
+                            opacity: 1,
+                            scale: 1
+                          }}
+                          exit={{ 
+                            pathLength: 0, 
+                            opacity: 0,
+                            scale: 0.8
+                          }}
+                          transition={{ 
+                            duration: 1.2, 
+                            delay: 0.2,
+                            ease: "easeInOut"
+                          }}
+                        />
+                      )}
+                    </AnimatePresence>
+                    <AnimatePresence>
+                      {showRequetes && (
+                        <motion.path
+                          key="requetes-path"
+                          d={generatePath(requetesPoints, chartType)}
+                          fill={chartType === 'area' ? 'url(#gradient2)' : 'none'}
+                          stroke="#f59e0b"
+                          strokeWidth={chartType === 'line' ? "3" : "2"}
+                          initial={{ 
+                            pathLength: 0, 
+                            opacity: 0,
+                            scale: 0.8
+                          }}
+                          animate={{ 
+                            pathLength: 1, 
+                            opacity: 1,
+                            scale: 1
+                          }}
+                          exit={{ 
+                            pathLength: 0, 
+                            opacity: 0,
+                            scale: 0.8
+                          }}
+                          transition={{ 
+                            duration: 1.2, 
+                            delay: 0.4,
+                            ease: "easeInOut"
+                          }}
+                        />
+                      )}
+                    </AnimatePresence>
                     
                     {/* Points interactifs */}
                     {chartType !== 'area' && (
                       <>
-                        {showCommandes && commandesPoints.map((point, index) => (
-                          <motion.circle
-                            key={`c-${index}`}
-                            cx={point.x}
-                            cy={point.y}
-                            r="4"
-                            fill="#3b82f6"
-                            stroke="white"
-                            strokeWidth="2"
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ duration: 0.3, delay: 0.8 + index * 0.02 }}
-                            className="hover:r-6 transition-all cursor-pointer"
-                          />
-                        ))}
-                        {showRequetes && requetesPoints.map((point, index) => (
-                          <motion.circle
-                            key={`r-${index}`}
-                            cx={point.x}
-                            cy={point.y}
-                            r="4"
-                            fill="#f59e0b"
-                            stroke="white"
-                            strokeWidth="2"
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ duration: 0.3, delay: 1 + index * 0.02 }}
-                            className="hover:r-6 transition-all cursor-pointer"
-                          />
-                        ))}
+                        <AnimatePresence>
+                          {showCommandes && commandesPoints.map((point, index) => (
+                            <motion.circle
+                              key={`c-${index}`}
+                              cx={point.x}
+                              cy={point.y}
+                              r="4"
+                              fill="#3b82f6"
+                              stroke="white"
+                              strokeWidth="2"
+                              initial={{ scale: 0, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              exit={{ scale: 0, opacity: 0 }}
+                              transition={{ 
+                                duration: 0.4, 
+                                delay: 0.6 + index * 0.02,
+                                ease: "easeOut"
+                              }}
+                              whileHover={{ scale: 1.5 }}
+                              className="cursor-pointer"
+                            />
+                          ))}
+                        </AnimatePresence>
+                        <AnimatePresence>
+                          {showRequetes && requetesPoints.map((point, index) => (
+                            <motion.circle
+                              key={`r-${index}`}
+                              cx={point.x}
+                              cy={point.y}
+                              r="4"
+                              fill="#f59e0b"
+                              stroke="white"
+                              strokeWidth="2"
+                              initial={{ scale: 0, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              exit={{ scale: 0, opacity: 0 }}
+                              transition={{ 
+                                duration: 0.4, 
+                                delay: 0.8 + index * 0.02,
+                                ease: "easeOut"
+                              }}
+                              whileHover={{ scale: 1.5 }}
+                              className="cursor-pointer"
+                            />
+                          ))}
+                        </AnimatePresence>
                       </>
                     )}
                   </motion.g>
@@ -416,10 +552,11 @@ export default function ActivityChart() {
             <AnimatePresence>
               {hoveredPoint && (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  className="absolute bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-3 pointer-events-none z-20"
+                  initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, y: 10 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="absolute bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-3 pointer-events-none z-20"
                   style={{
                     left: Math.min(hoveredPoint.x, 600),
                     top: Math.max(hoveredPoint.y - 80, 10)
@@ -429,38 +566,58 @@ export default function ActivityChart() {
                     {hoveredPoint.data.month}
                   </div>
                   {showCommandes && (
-                    <div className="flex items-center space-x-2 text-sm">
+                    <motion.div 
+                      className="flex items-center space-x-2 text-sm"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 }}
+                    >
                       <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                       <span className="text-gray-600 dark:text-gray-300">
                         Commandes: {hoveredPoint.data.commandes.toLocaleString()}
                       </span>
-                    </div>
+                    </motion.div>
                   )}
                   {showRequetes && (
-                    <div className="flex items-center space-x-2 text-sm">
+                    <motion.div 
+                      className="flex items-center space-x-2 text-sm"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.15 }}
+                    >
                       <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
                       <span className="text-gray-600 dark:text-gray-300">
                         Requêtes: {hoveredPoint.data.requetes.toLocaleString()}
                       </span>
-                    </div>
+                    </motion.div>
                   )}
                 </motion.div>
               )}
             </AnimatePresence>
 
             {/* X-axis labels */}
-            <div className="hidden sm:flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 font-medium">
+            <motion.div 
+              className="hidden sm:flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 font-medium"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1 }}
+            >
               {rawData.filter((_, i) => i % 4 === 0).map((data, i) => (
                 <span key={i} className="text-xs">{data.month}</span>
               ))}
-            </div>
+            </motion.div>
             
             {/* Mobile X-axis labels */}
-            <div className="flex sm:hidden justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 font-medium">
+            <motion.div 
+              className="flex sm:hidden justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 font-medium"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1 }}
+            >
               <span>2023</span>
               <span>2024</span>
               <span>2025</span>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
