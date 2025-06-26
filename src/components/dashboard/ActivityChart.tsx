@@ -44,7 +44,7 @@ export default function ActivityChart() {
     { month: 'mars 2025', commandes: 2500, requetes: 950 }
   ];
 
-  // Calcul des valeurs min/max pour l'échelle avec des valeurs rondes
+  // Calcul des valeurs min/max pour l'échelle CORRIGÉ
   const { minValue, maxValue, yAxisLabels } = useMemo(() => {
     const allValues = rawData.flatMap(d => [
       showCommandes ? d.commandes : 0,
@@ -62,25 +62,26 @@ export default function ActivityChart() {
     const min = Math.min(...allValues);
     const max = Math.max(...allValues);
     
-    // Arrondir les valeurs pour avoir des labels propres
-    const roundedMin = Math.floor(min / 100) * 100;
-    const roundedMax = Math.ceil(max / 100) * 100;
-    const range = roundedMax - roundedMin;
-    const step = Math.ceil(range / 6 / 100) * 100; // 6 divisions
+    // Ajuster les valeurs pour avoir un graphique lisible
+    const padding = (max - min) * 0.1; // 10% de padding
+    const adjustedMin = Math.max(0, Math.floor((min - padding) / 100) * 100);
+    const adjustedMax = Math.ceil((max + padding) / 100) * 100;
     
+    // Créer exactement 7 labels équidistants
     const labels = [];
     for (let i = 6; i >= 0; i--) {
-      labels.push(roundedMin + (i * step));
+      const value = adjustedMin + (i * (adjustedMax - adjustedMin) / 6);
+      labels.push(Math.round(value));
     }
     
     return {
-      minValue: roundedMin,
-      maxValue: roundedMax,
+      minValue: adjustedMin,
+      maxValue: adjustedMax,
       yAxisLabels: labels
     };
   }, [rawData, showCommandes, showRequetes]);
 
-  // Génération des points pour les courbes
+  // Génération des points pour les courbes CORRIGÉ
   const generatePoints = (data: number[], color: string, opacity: number = 1) => {
     const width = 800;
     const height = 200;
@@ -88,7 +89,9 @@ export default function ActivityChart() {
     
     return data.map((value, index) => {
       const x = index * stepX;
-      const y = height - ((value - minValue) / (maxValue - minValue)) * height;
+      // CORRECTION CRUCIALE: utiliser la vraie échelle calculée
+      const normalizedValue = (value - minValue) / (maxValue - minValue);
+      const y = height - (normalizedValue * height);
       return { x, y, value, index };
     });
   };
@@ -499,18 +502,19 @@ export default function ActivityChart() {
 
         {/* Graphique avec morphing avancé */}
         <div className="relative flex-1 min-h-0">
-          {/* Y-axis labels - CORRIGÉ */}
+          {/* Y-axis labels - PARFAITEMENT ALIGNÉ */}
           <motion.div 
-            className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400 pr-3 sm:pr-4 font-medium z-10 py-2"
+            className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400 pr-3 sm:pr-4 font-medium z-10"
             animate={{ 
               opacity: (showCommandes || showRequetes) ? 1 : 0.5,
               x: (showCommandes || showRequetes) ? 0 : -10
             }}
             transition={{ duration: 0.5, ease: "easeOut" }}
+            style={{ paddingTop: '2px', paddingBottom: '2px' }}
           >
             {yAxisLabels.map((value, i) => (
               <motion.span 
-                key={i}
+                key={`${value}-${i}`}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ 
@@ -518,14 +522,17 @@ export default function ActivityChart() {
                   delay: i * 0.1,
                   ease: [0.34, 1.56, 0.64, 1]
                 }}
-                className="text-right leading-none"
+                className="text-right leading-none flex items-center justify-end h-0"
+                style={{ 
+                  transform: `translateY(-50%)` // Centrer parfaitement sur les lignes de grille
+                }}
               >
                 {value.toLocaleString()}
               </motion.span>
             ))}
           </motion.div>
 
-          {/* Chart container - CORRIGÉ */}
+          {/* Chart container - PARFAITEMENT ALIGNÉ */}
           <div className="ml-12 sm:ml-14 h-full flex flex-col">
             <motion.svg 
               viewBox="0 0 800 200" 
@@ -537,10 +544,10 @@ export default function ActivityChart() {
               onMouseLeave={handleMouseLeave}
               style={{ perspective: "1000px" }}
             >
-              {/* Grid lines avec morphing - CORRIGÉ */}
+              {/* Grid lines avec morphing - PARFAITEMENT ALIGNÉ */}
               {yAxisLabels.map((_, i) => (
                 <motion.line
-                  key={i}
+                  key={`grid-${i}`}
                   x1="0"
                   y1={(i / (yAxisLabels.length - 1)) * 200}
                   x2="800"
@@ -558,13 +565,13 @@ export default function ActivityChart() {
                 />
               ))}
               
-              {/* Vertical grid lines - CORRIGÉ */}
+              {/* Vertical grid lines - PARFAITEMENT ALIGNÉ */}
               {rawData.map((_, i) => {
                 if (i % 4 === 0) {
                   const x = (i / (rawData.length - 1)) * 800;
                   return (
                     <motion.line
-                      key={`v-${i}`}
+                      key={`v-grid-${i}`}
                       x1={x}
                       y1="0"
                       x2={x}
@@ -631,8 +638,12 @@ export default function ActivityChart() {
                     {rawData.map((data, index) => {
                       const x = (index / (rawData.length - 1)) * 800;
                       const barWidth = 800 / rawData.length * 0.6;
-                      const commandesHeight = showCommandes ? ((data.commandes - minValue) / (maxValue - minValue)) * 200 : 0;
-                      const requetesHeight = showRequetes ? ((data.requetes - minValue) / (maxValue - minValue)) * 200 : 0;
+                      
+                      // CORRECTION CRUCIALE: utiliser la vraie échelle
+                      const commandesHeight = showCommandes ? 
+                        ((data.commandes - minValue) / (maxValue - minValue)) * 200 : 0;
+                      const requetesHeight = showRequetes ? 
+                        ((data.requetes - minValue) / (maxValue - minValue)) * 200 : 0;
                       
                       return (
                         <g key={index}>
@@ -893,9 +904,9 @@ export default function ActivityChart() {
               )}
             </AnimatePresence>
 
-            {/* X-axis labels avec morphing - CORRIGÉ */}
+            {/* X-axis labels avec morphing - PARFAITEMENT ALIGNÉ */}
             <motion.div 
-              className="hidden sm:flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-3 font-medium px-1"
+              className="hidden sm:flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-3 font-medium"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ 
@@ -903,11 +914,12 @@ export default function ActivityChart() {
                 delay: 1.2,
                 ease: [0.34, 1.56, 0.64, 1]
               }}
+              style={{ paddingLeft: '0px', paddingRight: '0px' }}
             >
               {rawData.filter((_, i) => i % 4 === 0).map((data, i) => (
                 <motion.span 
-                  key={i} 
-                  className="text-xs text-center"
+                  key={`x-label-${i}`} 
+                  className="text-xs text-center flex-1"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ 
@@ -915,15 +927,18 @@ export default function ActivityChart() {
                     duration: 0.5,
                     ease: "easeOut"
                   }}
+                  style={{ 
+                    transform: `translateX(${i === 0 ? '0%' : i === 5 ? '-100%' : '-50%'})` 
+                  }}
                 >
                   {data.month}
                 </motion.span>
               ))}
             </motion.div>
             
-            {/* Mobile X-axis labels - CORRIGÉ */}
+            {/* Mobile X-axis labels - PARFAITEMENT ALIGNÉ */}
             <motion.div 
-              className="flex sm:hidden justify-between text-xs text-gray-500 dark:text-gray-400 mt-3 font-medium px-1"
+              className="flex sm:hidden justify-between text-xs text-gray-500 dark:text-gray-400 mt-3 font-medium"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ 
@@ -935,7 +950,7 @@ export default function ActivityChart() {
               {['2023', '2024', '2025'].map((year, i) => (
                 <motion.span
                   key={year}
-                  className="text-center"
+                  className="text-center flex-1"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ 
