@@ -1,8 +1,33 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Bell, Search, Settings, User, Globe, Clock } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Bell, 
+  Search, 
+  Settings, 
+  User, 
+  Globe, 
+  Clock, 
+  Home, 
+  Building, 
+  Package, 
+  ShoppingCart, 
+  FileText, 
+  Users,
+  List,
+  Download,
+  Folder,
+  UserCheck,
+  ChevronDown,
+  LogOut,
+  Shield,
+  Palette
+} from "lucide-react";
+import { useStore } from "../../store/useStore";
 
 export default function SiteHeader() {
+  const { activeModule, setActiveModule, currentUser } = useStore();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  
   const currentTime = new Date().toLocaleTimeString('fr-FR', { 
     hour: '2-digit', 
     minute: '2-digit' 
@@ -14,6 +39,26 @@ export default function SiteHeader() {
     month: 'long',
     day: 'numeric'
   });
+
+  const navigationItems = [
+    { key: 'dashboard', label: 'Tableau de Bord', icon: Home },
+    { key: 'officines', label: 'Officines', icon: Building },
+    { key: 'products', label: 'Articles', icon: Package },
+    { key: 'orders', label: 'Commandes', icon: ShoppingCart },
+    { key: 'lists', label: 'Listes', icon: FileText },
+    { key: 'users', label: 'Utilisateurs', icon: Users },
+    { key: 'user-roles', label: 'Rôles', icon: UserCheck },
+    { key: 'downloads', label: 'Téléchargements', icon: Download },
+    { key: 'catalogs', label: 'Catalogues', icon: Folder },
+  ];
+
+  const userMenuItems = [
+    { label: 'Mon Compte', icon: User, action: () => setActiveModule('profile') },
+    { label: 'Paramètres Serveur', icon: Settings, action: () => setActiveModule('settings') },
+    { label: 'Préférences', icon: Palette, action: () => setActiveModule('preferences') },
+    { label: 'Sécurité', icon: Shield, action: () => setActiveModule('security') },
+    { label: 'Déconnexion', icon: LogOut, action: () => console.log('Déconnexion...'), danger: true },
+  ];
 
   return (
     <motion.header
@@ -41,29 +86,33 @@ export default function SiteHeader() {
             </div>
           </div>
 
-          {/* Center - Search */}
-          <div className="hidden md:flex flex-1 max-w-lg mx-8">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-teal-200 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Rechercher dans la plateforme..."
-                className="w-full pl-10 pr-4 py-2 text-sm bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-white/30 focus:border-white/30 text-white placeholder-teal-200 backdrop-blur-sm"
-              />
-            </div>
+          {/* Center - Navigation (hidden on mobile) */}
+          <div className="hidden lg:flex items-center space-x-1">
+            {navigationItems.slice(0, 6).map((item) => (
+              <motion.button
+                key={item.key}
+                onClick={() => setActiveModule(item.key)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                  activeModule === item.key
+                    ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm'
+                    : 'text-teal-100 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                <item.icon className="w-4 h-4" />
+                <span>{item.label}</span>
+              </motion.button>
+            ))}
           </div>
 
-          {/* Right side - Actions and info */}
+          {/* Right side - Actions and user menu */}
           <div className="flex items-center space-x-4">
-            {/* Date and time */}
-            <div className="hidden lg:flex items-center space-x-4 text-sm text-teal-100">
+            {/* Date and time (hidden on small screens) */}
+            <div className="hidden xl:flex items-center space-x-4 text-sm text-teal-100">
               <div className="flex items-center space-x-2">
                 <Clock className="w-4 h-4" />
                 <span>{currentTime}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Globe className="w-4 h-4" />
-                <span className="capitalize">{currentDate}</span>
               </div>
             </div>
 
@@ -81,34 +130,124 @@ export default function SiteHeader() {
                 </span>
               </motion.button>
 
+              {/* Mobile search button */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-2 text-teal-100 hover:text-white hover:bg-white/10 rounded-lg transition-colors backdrop-blur-sm"
-                title="Paramètres"
+                className="lg:hidden p-2 text-teal-100 hover:text-white hover:bg-white/10 rounded-lg transition-colors backdrop-blur-sm"
+                title="Rechercher"
               >
-                <Settings className="w-5 h-5" />
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-2 text-teal-100 hover:text-white hover:bg-white/10 rounded-lg transition-colors backdrop-blur-sm"
-                title="Profil"
-              >
-                <User className="w-5 h-5" />
+                <Search className="w-5 h-5" />
               </motion.button>
             </div>
 
-            {/* Mobile search button */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="md:hidden p-2 text-teal-100 hover:text-white hover:bg-white/10 rounded-lg transition-colors backdrop-blur-sm"
-              title="Rechercher"
-            >
-              <Search className="w-5 h-5" />
-            </motion.button>
+            {/* User Menu */}
+            <div className="relative">
+              <motion.button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/10 transition-colors backdrop-blur-sm"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="h-8 w-8 bg-white/20 rounded-full flex items-center justify-center">
+                    <User className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="hidden sm:block text-left">
+                    <div className="text-sm font-medium text-white">
+                      {currentUser?.name || 'POISOT Paul'}
+                    </div>
+                    <div className="text-xs text-teal-200">
+                      {currentUser?.role || 'Administrateur'}
+                    </div>
+                  </div>
+                </div>
+                
+                <motion.div
+                  animate={{ rotate: showUserMenu ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronDown className="h-4 w-4 text-teal-200" />
+                </motion.div>
+              </motion.button>
+
+              {/* User Dropdown Menu */}
+              <AnimatePresence>
+                {showUserMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50"
+                  >
+                    {/* User info header */}
+                    <div className="px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white">
+                      <div className="flex items-center space-x-3">
+                        <div className="h-10 w-10 rounded-full bg-white/20 flex items-center justify-center">
+                          <User className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-sm">
+                            {currentUser?.name || 'POISOT Paul'}
+                          </div>
+                          <div className="text-xs text-teal-100">
+                            {currentUser?.email || 'paul.poisot@infosoft.fr'}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Menu items */}
+                    <div className="py-2">
+                      {userMenuItems.map((item, index) => (
+                        <motion.button
+                          key={index}
+                          onClick={() => {
+                            item.action();
+                            setShowUserMenu(false);
+                          }}
+                          className={`w-full flex items-center space-x-3 px-4 py-3 text-sm transition-colors ${
+                            item.danger 
+                              ? 'text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20' 
+                              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                          }`}
+                          whileHover={{ x: 4 }}
+                          transition={{ duration: 0.1 }}
+                        >
+                          <item.icon className="h-4 w-4" />
+                          <span>{item.label}</span>
+                        </motion.button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Navigation Menu (when needed) */}
+      <div className="lg:hidden border-t border-teal-400/30">
+        <div className="px-4 py-2">
+          <div className="flex space-x-1 overflow-x-auto">
+            {navigationItems.slice(0, 6).map((item) => (
+              <motion.button
+                key={item.key}
+                onClick={() => setActiveModule(item.key)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
+                  activeModule === item.key
+                    ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm'
+                    : 'text-teal-100 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                <item.icon className="w-4 h-4" />
+                <span className="hidden sm:inline">{item.label}</span>
+              </motion.button>
+            ))}
           </div>
         </div>
       </div>

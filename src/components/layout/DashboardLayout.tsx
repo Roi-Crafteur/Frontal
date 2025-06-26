@@ -20,7 +20,6 @@ import { motion } from "framer-motion";
 import { cn } from "../../lib/utils";
 import { useStore } from "../../store/useStore";
 import ModuleRouter from "./ModuleRouter";
-import ProfileMenu from "./ProfileMenu";
 import SiteHeader from "./SiteHeader";
 
 interface DashboardLayoutProps {
@@ -31,7 +30,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [open, setOpen] = useState(false);
   const { activeModule, setActiveModule } = useStore();
 
-  // Ordre original exact du menu selon votre documentation (sans Paramètres Serveur)
+  // Navigation simplifiée pour la sidebar (sans les éléments utilisateur)
   const links = [
     {
       label: "Tableau de Bord",
@@ -127,10 +126,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Main Content - no gap between header and sidebar */}
       <div className="flex h-full w-full flex-1 min-h-0">
         <Sidebar open={open} setOpen={setOpen}>
-          <SidebarBody className="justify-between">
+          <SidebarBody className="justify-start">
             <div className="flex flex-1 flex-col">
               {/* Navigation principale - sans scroll, ordre original */}
-              <div className="flex flex-col space-y-1">
+              <div className="flex flex-col space-y-1 mt-4">
                 {links.map((link, idx) => (
                   <SidebarLink 
                     key={idx} 
@@ -139,11 +138,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   />
                 ))}
               </div>
-            </div>
-            
-            {/* Profil utilisateur en bas avec menu déroulant */}
-            <div className="border-t border-teal-400/30 pt-4">
-              <ProfileMenu />
             </div>
           </SidebarBody>
         </Sidebar>
