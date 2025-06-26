@@ -130,7 +130,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <SidebarBody className="justify-between">
             <div className="flex flex-1 flex-col">
               {/* Navigation principale - sans scroll, ordre original */}
-              <div className="mt-6 flex flex-col space-y-1">
+              <div className="flex flex-col space-y-1">
                 {links.map((link, idx) => (
                   <SidebarLink 
                     key={idx} 
