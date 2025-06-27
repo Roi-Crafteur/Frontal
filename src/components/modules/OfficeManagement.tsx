@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Building2, 
   Plus, 
@@ -145,6 +145,158 @@ export default function OfficeManagement() {
       hidePrices: true,
       ignoreFranco: false,
       groupProductsInExport: false
+    },
+    {
+      id: '4',
+      name: 'Pharmacie des Lilas',
+      address: '15 Rue des Fleurs',
+      city: 'Nice',
+      postalCode: '06000',
+      phone: '+33 4 93 12 34 56',
+      mobile: '+33 6 45 67 89 01',
+      fax: '+33 4 93 12 34 57',
+      email: 'info@pharmacie-lilas.fr',
+      siret: '22334455667788',
+      status: 'active',
+      contactPerson: 'Dr. Marie Dubois',
+      lastOrder: new Date(Date.now() - 432000000),
+      totalOrders: 312,
+      totalAmount: 178450.80,
+      createdAt: new Date('2023-02-28'),
+      updatedAt: new Date(Date.now() - 432000000),
+      // Identification Web
+      webLogin: 'pharma_lilas',
+      webPassword: '••••••••',
+      finess: '789123456',
+      // Identification PharmaML
+      ediId: '7891234567890',
+      ediKey: 'IJKL',
+      disablePharmaML: false,
+      // Profil de commande
+      refuseContingent: false,
+      infoProductResponse: 0,
+      clientCategory: 1,
+      showRestrictedProducts: true,
+      lgo: 'PharmaGest',
+      // Options supplémentaires
+      showStocks: true,
+      hidePrices: false,
+      ignoreFranco: false,
+      groupProductsInExport: true
+    },
+    {
+      id: '5',
+      name: 'Pharmacie Saint-Antoine',
+      address: '42 Avenue Saint-Antoine',
+      city: 'Toulouse',
+      postalCode: '31000',
+      phone: '+33 5 61 98 76 54',
+      mobile: '+33 6 56 78 90 12',
+      fax: '+33 5 61 98 76 55',
+      email: 'contact@st-antoine-pharma.fr',
+      siret: '33445566778899',
+      status: 'inactive',
+      contactPerson: 'Dr. Jean Lefevre',
+      lastOrder: new Date(Date.now() - 1296000000),
+      totalOrders: 89,
+      totalAmount: 45230.15,
+      createdAt: new Date('2023-07-12'),
+      updatedAt: new Date(Date.now() - 1296000000),
+      // Identification Web
+      webLogin: 'pharma_st_antoine',
+      webPassword: '••••••••',
+      finess: '321654987',
+      // Identification PharmaML
+      ediId: '3216549876543',
+      ediKey: 'MNOP',
+      disablePharmaML: false,
+      // Profil de commande
+      refuseContingent: true,
+      infoProductResponse: 2,
+      clientCategory: 0,
+      showRestrictedProducts: false,
+      lgo: 'Dossier Pharmaceutique',
+      // Options supplémentaires
+      showStocks: false,
+      hidePrices: true,
+      ignoreFranco: true,
+      groupProductsInExport: false
+    },
+    {
+      id: '6',
+      name: 'Pharmacie du Soleil',
+      address: '88 Promenade du Soleil',
+      city: 'Cannes',
+      postalCode: '06400',
+      phone: '+33 4 92 87 65 43',
+      mobile: '+33 6 67 89 01 23',
+      fax: '+33 4 92 87 65 44',
+      email: 'hello@pharmacie-soleil.fr',
+      siret: '44556677889900',
+      status: 'active',
+      contactPerson: 'Dr. Claire Rousseau',
+      lastOrder: new Date(Date.now() - 259200000),
+      totalOrders: 427,
+      totalAmount: 289670.90,
+      createdAt: new Date('2023-01-08'),
+      updatedAt: new Date(Date.now() - 259200000),
+      // Identification Web
+      webLogin: 'pharma_soleil',
+      webPassword: '••••••••',
+      finess: '654987321',
+      // Identification PharmaML
+      ediId: '6549873216540',
+      ediKey: 'QRST',
+      disablePharmaML: false,
+      // Profil de commande
+      refuseContingent: false,
+      infoProductResponse: 1,
+      clientCategory: 3,
+      showRestrictedProducts: true,
+      lgo: 'Pharmagest',
+      // Options supplémentaires
+      showStocks: true,
+      hidePrices: false,
+      ignoreFranco: false,
+      groupProductsInExport: true
+    },
+    {
+      id: '7',
+      name: 'Pharmacie de la République',
+      address: '234 Place de la République',
+      city: 'Bordeaux',
+      postalCode: '33000',
+      phone: '+33 5 56 43 21 09',
+      mobile: '+33 6 78 90 12 34',
+      fax: '+33 5 56 43 21 10',
+      email: 'contact@pharmacie-republique.fr',
+      siret: '55667788990011',
+      status: 'active',
+      contactPerson: 'Dr. Antoine Martin',
+      lastOrder: new Date(Date.now() - 86400000),
+      totalOrders: 298,
+      totalAmount: 156789.45,
+      createdAt: new Date('2023-04-15'),
+      updatedAt: new Date(Date.now() - 86400000),
+      // Identification Web
+      webLogin: 'pharma_republique',
+      webPassword: '••••••••',
+      finess: '987321654',
+      // Identification PharmaML
+      ediId: '9873216549876',
+      ediKey: 'UVWX',
+      disablePharmaML: false,
+      // Profil de commande
+      refuseContingent: false,
+      infoProductResponse: 0,
+      clientCategory: 2,
+      showRestrictedProducts: true,
+      lgo: 'LGPI',
+      // Options supplémentaires
+      showStocks: true,
+      hidePrices: false,
+      ignoreFranco: true,
+      groupProductsInExport: false
     }
   ]);
 
@@ -152,6 +304,8 @@ export default function OfficeManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'id' | 'name' | 'city' | 'lastOrder' | 'lgo'>('id');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [activeTab, setActiveTab] = useState<'address' | 'web' | 'pharmaml' | 'profile'>('address');
   const [showPassword, setShowPassword] = useState(false);
   const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -161,20 +315,90 @@ export default function OfficeManagement() {
   // Référence pour le mot de passe
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const filteredOfficines = officines.filter(officine => {
-    const matchesSearch = officine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         officine.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         officine.contactPerson.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = filterStatus === 'all' || officine.status === filterStatus;
-    return matchesSearch && matchesStatus;
-  });
+  const filteredOfficines = officines
+    .filter(officine => {
+      if (searchTerm === '') return true;
+      
+      // Recherche exacte par ID avec préfixe #
+      if (searchTerm.startsWith('#')) {
+        const searchId = searchTerm.substring(1); // Retire le #
+        if (searchId === '') return true; // Si juste #, montre tout
+        const matchesExactId = officine.id === searchId;
+        const matchesStatus = filterStatus === 'all' || officine.status === filterStatus;
+        return matchesExactId && matchesStatus;
+      }
+      
+      // Recherche normale dans tous les champs
+      const searchLower = searchTerm.toLowerCase();
+      const matchesSearch = 
+        officine.id.toLowerCase().includes(searchLower) ||
+        officine.name.toLowerCase().includes(searchLower) ||
+        officine.city.toLowerCase().includes(searchLower) ||
+        officine.contactPerson.toLowerCase().includes(searchLower) ||
+        officine.address.toLowerCase().includes(searchLower) ||
+        officine.postalCode.includes(searchTerm) ||
+        officine.phone.includes(searchTerm) ||
+        officine.mobile?.includes(searchTerm) ||
+        officine.email.toLowerCase().includes(searchLower) ||
+        officine.siret.includes(searchTerm) ||
+        officine.finess?.includes(searchTerm) ||
+        (officine.lgo?.toLowerCase() || '').includes(searchLower) ||
+        officine.webLogin?.toLowerCase().includes(searchLower) ||
+        officine.ediId?.includes(searchTerm);
+      
+      const matchesStatus = filterStatus === 'all' || officine.status === filterStatus;
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      let aValue: any, bValue: any;
+      
+      switch (sortBy) {
+        case 'id':
+          aValue = a.id.toLowerCase();
+          bValue = b.id.toLowerCase();
+          break;
+        case 'name':
+          aValue = a.name.toLowerCase();
+          bValue = b.name.toLowerCase();
+          break;
+        case 'city':
+          aValue = a.city.toLowerCase();
+          bValue = b.city.toLowerCase();
+          break;
+        case 'lastOrder':
+          aValue = a.lastOrder ? a.lastOrder.getTime() : 0;
+          bValue = b.lastOrder ? b.lastOrder.getTime() : 0;
+          break;
+        case 'lgo':
+          aValue = (a.lgo || '').toLowerCase();
+          bValue = (b.lgo || '').toLowerCase();
+          break;
+        default:
+          return 0;
+      }
+      
+      if (sortOrder === 'asc') {
+        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+      } else {
+        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+      }
+    });
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'text-green-600 bg-green-100';
-      case 'inactive': return 'text-gray-600 bg-gray-100';
-      case 'suspended': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'active': return 'bg-green-500';
+      case 'inactive': return 'bg-orange-500';
+      case 'suspended': return 'bg-red-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
+  const getStatusGradient = (status: string) => {
+    switch (status) {
+      case 'active': return 'from-green-400 to-green-500';
+      case 'inactive': return 'from-orange-400 to-orange-500';
+      case 'suspended': return 'from-red-400 to-red-500';
+      default: return 'from-gray-400 to-gray-500';
     }
   };
 
@@ -262,185 +486,274 @@ export default function OfficeManagement() {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col md:flex-row gap-4">
+      {/* Filters & Search */}
+      <div className="flex flex-col lg:flex-row gap-4">
+        {/* Search Bar */}
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
             type="text"
-            placeholder="Rechercher une officine..."
+            placeholder="Rechercher (tapez #1 pour l'ID exact, ou nom, ville, contact, adresse, tél, email, SIRET, FINESS, LGO, login, EDI...)"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white"
           />
         </div>
         
-        <div className="relative">
-          <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="pl-10 pr-8 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white appearance-none bg-white"
+        {/* Filters Row */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          {/* Status Filter */}
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="pl-9 pr-8 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white appearance-none bg-white min-w-[140px]"
+            >
+              <option value="all">Tous statuts</option>
+              <option value="active">Actif</option>
+              <option value="inactive">Inactif</option>
+              <option value="suspended">Suspendu</option>
+            </select>
+          </div>
+
+          {/* Sort By */}
+          <div className="relative">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as 'id' | 'name' | 'city' | 'lastOrder' | 'lgo')}
+              className="pl-3 pr-8 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white appearance-none bg-white min-w-[120px]"
+            >
+              <option value="id">ID</option>
+              <option value="name">Nom A-Z</option>
+              <option value="city">Ville</option>
+              <option value="lgo">Logiciel</option>
+              <option value="lastOrder">Dernière cmd</option>
+            </select>
+          </div>
+
+          {/* Sort Order */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+            className={`flex items-center justify-center px-3 py-3 border border-gray-200 rounded-xl transition-colors min-w-[50px] ${
+              sortOrder === 'asc' 
+                ? 'bg-teal-50 border-teal-200 text-teal-600' 
+                : 'bg-red-50 border-red-200 text-red-600'
+            } hover:bg-opacity-75`}
+            title={sortOrder === 'asc' ? 'Tri croissant' : 'Tri décroissant'}
           >
-            <option value="all">Tous les statuts</option>
-            <option value="active">Actif</option>
-            <option value="inactive">Inactif</option>
-            <option value="suspended">Suspendu</option>
-          </select>
+            {sortOrder === 'asc' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+          </motion.button>
+
+          {/* Results Count */}
+          <div className="flex items-center px-3 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 min-w-[80px]">
+            <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">
+              {filteredOfficines.length} résultat{filteredOfficines.length > 1 ? 's' : ''}
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {[
-          { 
-            title: "Total Officines", 
-            value: officines.length, 
-            color: "text-blue-600", 
-            bg: "bg-blue-100",
-            icon: Building2
-          },
-          { 
-            title: "Officines Actives", 
-            value: officines.filter(o => o.status === 'active').length, 
-            color: "text-green-600", 
-            bg: "bg-green-100",
-            icon: Building2
-          },
-          { 
-            title: "Commandes Totales", 
-            value: officines.reduce((sum, o) => sum + o.totalOrders, 0), 
-            color: "text-purple-600", 
-            bg: "bg-purple-100",
-            icon: Building2
-          },
-          { 
-            title: "CA Total", 
-            value: `€${officines.reduce((sum, o) => sum + o.totalAmount, 0).toLocaleString('fr-FR')}`, 
-            color: "text-orange-600", 
-            bg: "bg-orange-100",
-            icon: Building2
-          }
-        ].map((stat, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg"
-          >
-            <div className={`w-12 h-12 ${stat.bg} rounded-xl flex items-center justify-center mb-4`}>
-              <stat.icon className={`w-6 h-6 ${stat.color}`} />
+      {/* Stats Cards - Business Focus */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Carte 1 - Total Officines */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0 }}
+          className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700 text-center"
+        >
+          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
+            <Building2 className="w-5 h-5 text-blue-600" />
+          </div>
+          <h3 className="text-xl font-bold text-gray-800 dark:text-white">{officines.length}</h3>
+          <p className="text-gray-600 dark:text-gray-300 text-sm">Total Officines</p>
+        </motion.div>
+
+        {/* Carte 2 - Actives vs Inactives */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700"
+        >
+          <div className="flex items-center justify-center mb-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-green-100 to-orange-100 rounded-lg flex items-center justify-center">
+              <Building2 className="w-5 h-5 text-gray-600" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 dark:text-white">{stat.value}</h3>
-            <p className="text-gray-600 dark:text-gray-300 text-sm">{stat.title}</p>
-          </motion.div>
-        ))}
+          </div>
+          <div className="flex justify-between items-center">
+            {/* Actives */}
+            <div className="text-center flex-1">
+              <div className="flex items-center justify-center mb-1">
+                <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                <span className="text-xs text-gray-500">Actives</span>
+              </div>
+              <h3 className="text-lg font-bold text-green-600">
+                {officines.filter(o => o.status === 'active').length}
+              </h3>
+            </div>
+            
+            {/* Séparateur */}
+            <div className="w-px h-8 bg-gray-200 dark:bg-gray-700 mx-3"></div>
+            
+            {/* Inactives */}
+            <div className="text-center flex-1">
+              <div className="flex items-center justify-center mb-1">
+                <div className="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+                <span className="text-xs text-gray-500">Inactives</span>
+              </div>
+              <h3 className="text-lg font-bold text-orange-600">
+                {officines.filter(o => o.status === 'inactive').length}
+              </h3>
+            </div>
+          </div>
+          <p className="text-gray-600 dark:text-gray-300 text-sm text-center mt-2">Statuts Actives/Inactives</p>
+        </motion.div>
+
+        {/* Carte 3 - Officines Suspendues */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+          className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700 text-center"
+        >
+          <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
+            <Building2 className="w-5 h-5 text-red-600" />
+          </div>
+          <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+            {officines.filter(o => o.status === 'suspended').length}
+          </h3>
+          <p className="text-gray-600 dark:text-gray-300 text-sm">Officines Suspendues</p>
+        </motion.div>
       </div>
 
-      {/* Officines Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+      {/* Officines Grid - Optimized Business View */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         {filteredOfficines.map((officine, index) => (
           <motion.div
             key={officine.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: index * 0.03 }}
             onMouseEnter={() => setHoveredOfficineId(officine.id)}
             onMouseLeave={() => setHoveredOfficineId(null)}
+            className="relative group"
           >
-            <BackgroundGradient className="rounded-2xl p-1">
-              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 space-y-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-500 rounded-xl flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-800 dark:text-white">{officine.name}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">{officine.contactPerson}</p>
-                    </div>
+            <motion.div
+              layout
+              className={`
+                bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 
+                shadow-sm transition-all duration-300 ease-out cursor-pointer p-4
+                ${hoveredOfficineId === officine.id 
+                  ? 'shadow-xl border-gray-300 dark:border-gray-600 z-20 scale-102' 
+                  : 'hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600'
+                }
+              `}
+              style={{
+                transformOrigin: 'center',
+                transform: hoveredOfficineId === officine.id ? 'scale(1.02)' : 'scale(1)',
+              }}
+            >
+              {/* Header avec informations essentielles toujours visibles */}
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center space-x-3 min-w-0 flex-1">
+                  <div className={`w-10 h-10 bg-gradient-to-r ${getStatusGradient(officine.status)} rounded-lg flex items-center justify-center shadow-md`}>
+                    <Building2 className="w-5 h-5 text-white" />
                   </div>
-                  
-                  <div className="flex space-x-2">
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => {
-                        setSelectedOfficine(officine);
-                        setActiveTab('address');
-                        setIsModalOpen(true);
-                        setShowPassword(false);
-                        setPasswordConfirm('');
-                        setPasswordsMatch(true);
-                      }}
-                      className="p-2 text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </motion.button>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center space-x-2">
+                      <h3 className="font-semibold text-gray-800 dark:text-white text-sm truncate">
+                        {officine.name}
+                      </h3>
+                      <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-md font-mono">
+                        #{officine.id}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500 truncate mt-0.5">
+                      {officine.contactPerson}
+                    </p>
+                    <p className="text-xs text-gray-600 dark:text-gray-300 truncate mt-0.5">
+                      💻 {officine.lgo}
+                    </p>
                   </div>
                 </div>
+                
+                {/* Actions rapides - visibles au hover */}
+                <AnimatePresence>
+                  {hoveredOfficineId === officine.id && (
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.8, x: 10 }}
+                      animate={{ opacity: 1, scale: 1, x: 0 }}
+                      exit={{ opacity: 0, scale: 0.8, x: 10 }}
+                      className="flex space-x-1"
+                    >
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedOfficine(officine);
+                          setActiveTab('address');
+                          setIsModalOpen(true);
+                          setShowPassword(false);
+                          setPasswordConfirm('');
+                          setPasswordsMatch(true);
+                        }}
+                        className="p-1.5 text-gray-500 hover:text-teal-600 hover:bg-teal-50 rounded-md transition-colors"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </motion.button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
-                {/* Informations de base (toujours visibles) */}
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
-                    <MapPin className="w-4 h-4 flex-shrink-0" />
-                    <span className="truncate">{officine.address}</span>
-                  </div>
-                </div>
-
-                {/* Informations supplémentaires (visibles au survol) */}
+              {/* Informations supplémentaires au hover */}
+              <AnimatePresence>
                 {hoveredOfficineId === officine.id && (
                   <motion.div 
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="space-y-2"
+                    transition={{ duration: 0.3 }}
+                    className="space-y-2 mb-3"
                   >
-                    <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
-                      <MapPin className="w-4 h-4 flex-shrink-0" />
-                      <span>{officine.postalCode} {officine.city}</span>
+                    <div className="flex items-center space-x-2 text-xs text-gray-600 dark:text-gray-300">
+                      <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                      <span className="truncate">{officine.address}</span>
                     </div>
                     
-                    <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
-                      <Phone className="w-4 h-4 flex-shrink-0" />
-                      <span>{officine.phone}</span>
+                    <div className="flex items-center space-x-2 text-xs text-gray-600 dark:text-gray-300">
+                      <Phone className="w-3.5 h-3.5 flex-shrink-0" />
+                      <span className="truncate">{officine.phone}</span>
                     </div>
                     
-                    <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
-                      <Mail className="w-4 h-4 flex-shrink-0" />
+                    <div className="flex items-center space-x-2 text-xs text-gray-600 dark:text-gray-300">
+                      <Mail className="w-3.5 h-3.5 flex-shrink-0" />
                       <span className="truncate">{officine.email}</span>
                     </div>
                   </motion.div>
                 )}
+              </AnimatePresence>
 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(officine.status)}`}>
-                    {getStatusLabel(officine.status)}
-                  </span>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-gray-800 dark:text-white">
-                      {officine.totalOrders} commandes
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      €{officine.totalAmount.toLocaleString('fr-FR')}
-                    </p>
-                  </div>
-                </div>
-
+              {/* Footer avec dernière activité - toujours visible */}
+              <div className="pt-3 border-t border-gray-100 dark:border-gray-700">
                 <div className="text-xs text-gray-500">
                   Dernière commande: {officine.lastOrder?.toLocaleDateString('fr-FR')}
                 </div>
               </div>
-            </BackgroundGradient>
+            </motion.div>
           </motion.div>
         ))}
       </div>
