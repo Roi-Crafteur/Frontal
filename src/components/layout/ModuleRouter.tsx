@@ -1,4 +1,3 @@
-import React from "react";
 import UserManagement from "../modules/UserManagement";
 import OfficeManagement from "../modules/OfficeManagement";
 import ProductCatalog from "../modules/ProductCatalog";

@@ -15,8 +15,6 @@ import {
   IconFolder,
   IconBell,
 } from "@tabler/icons-react";
-import { motion } from "framer-motion";
-import { cn } from "../../lib/utils";
 import { useStore } from "../../store/useStore";
 import ModuleRouter from "./ModuleRouter";
 import SiteHeader from "./SiteHeader";

@@ -1,538 +1,455 @@
-import React, { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { BarChart3, LineChart, TrendingUp, Eye, EyeOff } from "lucide-react";
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import { BarChart3, LineChart, TrendingUp, Eye, EyeOff, Calendar } from "lucide-react";
+import { 
+  LineChart as RechartsLineChart, 
+  Line, 
+  AreaChart, 
+  Area, 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer
+} from 'recharts';
 
 interface ChartData {
   month: string;
   commandes: number;
   requetes: number;
+  benefices: number;
 }
 
 type ChartType = 'area' | 'line' | 'bar';
+type PeriodType = 12 | 24 | 36;
 
 export default function ActivityChart() {
   const [chartType, setChartType] = useState<ChartType>('area');
+  const [period, setPeriod] = useState<PeriodType>(24);
   const [showCommandes, setShowCommandes] = useState(true);
   const [showRequetes, setShowRequetes] = useState(true);
-  const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number; data: ChartData } | null>(null);
+  const [showBenefices, setShowBenefices] = useState(true);
 
-  // Données pour 24 mois avec des valeurs plus réalistes
-  const rawData: ChartData[] = [
-    { month: 'avr. 2023', commandes: 2800, requetes: 1000 },
-    { month: 'mai 2023', commandes: 1800, requetes: 800 },
-    { month: 'juin 2023', commandes: 2900, requetes: 1100 },
-    { month: 'juil. 2023', commandes: 2500, requetes: 900 },
-    { month: 'août 2023', commandes: 2700, requetes: 1000 },
-    { month: 'sept. 2023', commandes: 2300, requetes: 850 },
-    { month: 'oct. 2023', commandes: 2400, requetes: 900 },
-    { month: 'nov. 2023', commandes: 2800, requetes: 1050 },
-    { month: 'déc. 2023', commandes: 2600, requetes: 950 },
-    { month: 'janv. 2024', commandes: 2900, requetes: 1100 },
-    { month: 'févr. 2024', commandes: 1700, requetes: 750 },
-    { month: 'mars 2024', commandes: 2500, requetes: 950 },
-    { month: 'avr. 2024', commandes: 2400, requetes: 900 },
-    { month: 'mai 2024', commandes: 2600, requetes: 950 },
-    { month: 'juin 2024', commandes: 2200, requetes: 800 },
-    { month: 'juil. 2024', commandes: 1800, requetes: 750 },
-    { month: 'août 2024', commandes: 2300, requetes: 850 },
-    { month: 'sept. 2024', commandes: 2100, requetes: 800 },
-    { month: 'oct. 2024', commandes: 1600, requetes: 700 },
-    { month: 'nov. 2024', commandes: 2400, requetes: 900 },
-    { month: 'déc. 2024', commandes: 2200, requetes: 850 },
-    { month: 'janv. 2025', commandes: 2000, requetes: 800 },
-    { month: 'févr. 2025', commandes: 2300, requetes: 850 },
-    { month: 'mars 2025', commandes: 2500, requetes: 950 }
+  // Données complètes sur 36 mois
+  const fullData: ChartData[] = [
+    { month: 'Jan 2023', commandes: 2800, requetes: 1200, benefices: 45000 },
+    { month: 'Fév 2023', commandes: 3200, requetes: 1400, benefices: 52000 },
+    { month: 'Mar 2023', commandes: 2900, requetes: 1300, benefices: 47000 },
+    { month: 'Avr 2023', commandes: 3500, requetes: 1600, benefices: 58000 },
+    { month: 'Mai 2023', commandes: 3800, requetes: 1700, benefices: 62000 },
+    { month: 'Juin 2023', commandes: 4200, requetes: 1900, benefices: 68000 },
+    { month: 'Juil 2023', commandes: 3900, requetes: 1800, benefices: 64000 },
+    { month: 'Août 2023', commandes: 3600, requetes: 1700, benefices: 59000 },
+    { month: 'Sep 2023', commandes: 4100, requetes: 1900, benefices: 67000 },
+    { month: 'Oct 2023', commandes: 4400, requetes: 2000, benefices: 72000 },
+    { month: 'Nov 2023', commandes: 4700, requetes: 2100, benefices: 76000 },
+    { month: 'Déc 2023', commandes: 5200, requetes: 2300, benefices: 84000 },
+    { month: 'Jan 2024', commandes: 4800, requetes: 2200, benefices: 78000 },
+    { month: 'Fév 2024', commandes: 4500, requetes: 2100, benefices: 73000 },
+    { month: 'Mar 2024', commandes: 4900, requetes: 2300, benefices: 80000 },
+    { month: 'Avr 2024', commandes: 5300, requetes: 2400, benefices: 86000 },
+    { month: 'Mai 2024', commandes: 5600, requetes: 2500, benefices: 91000 },
+    { month: 'Juin 2024', commandes: 5900, requetes: 2600, benefices: 96000 },
+    { month: 'Juil 2024', commandes: 5500, requetes: 2500, benefices: 89000 },
+    { month: 'Août 2024', commandes: 5200, requetes: 2400, benefices: 84000 },
+    { month: 'Sep 2024', commandes: 5700, requetes: 2600, benefices: 92000 },
+    { month: 'Oct 2024', commandes: 6000, requetes: 2700, benefices: 97000 },
+    { month: 'Nov 2024', commandes: 6300, requetes: 2800, benefices: 102000 },
+    { month: 'Déc 2024', commandes: 6800, requetes: 3000, benefices: 110000 },
+    { month: 'Jan 2025', commandes: 6400, requetes: 2900, benefices: 104000 },
+    { month: 'Fév 2025', commandes: 6100, requetes: 2800, benefices: 99000 },
+    { month: 'Mar 2025', commandes: 6500, requetes: 3000, benefices: 106000 },
+    { month: 'Avr 2025', commandes: 6900, requetes: 3100, benefices: 112000 },
+    { month: 'Mai 2025', commandes: 7200, requetes: 3200, benefices: 117000 },
+    { month: 'Juin 2025', commandes: 7500, requetes: 3300, benefices: 122000 },
+    { month: 'Juil 2025', commandes: 7100, requetes: 3200, benefices: 115000 },
+    { month: 'Août 2025', commandes: 6800, requetes: 3100, benefices: 110000 },
+    { month: 'Sep 2025', commandes: 7300, requetes: 3300, benefices: 118000 },
+    { month: 'Oct 2025', commandes: 7600, requetes: 3400, benefices: 123000 },
+    { month: 'Nov 2025', commandes: 7900, requetes: 3500, benefices: 128000 },
+    { month: 'Déc 2025', commandes: 8400, requetes: 3700, benefices: 136000 }
   ];
 
-  // 🎯 CORRECTION MAJEURE : Calcul avec centaines rondes parfaitement alignées
-  const { minValue, maxValue, yAxisLabels } = useMemo(() => {
-    const allValues = rawData.flatMap(d => [
-      showCommandes ? d.commandes : 0,
-      showRequetes ? d.requetes : 0
-    ]).filter(v => v > 0);
-    
-    if (allValues.length === 0) {
-      return { 
-        minValue: 0, 
-        maxValue: 3000,
-        yAxisLabels: [3000, 2500, 2000, 1500, 1000, 500, 0]
-      };
-    }
-    
-    const min = Math.min(...allValues);
-    const max = Math.max(...allValues);
-    
-    // 🎯 UTILISER DES CENTAINES RONDES UNIQUEMENT
-    const roundedMin = Math.floor(min / 100) * 100;
-    const roundedMax = Math.ceil(max / 100) * 100;
-    
-    // Ajouter un peu de padding en centaines rondes
-    const finalMin = Math.max(0, roundedMin - 100);
-    const finalMax = roundedMax + 100;
-    
-    // 🎯 CRÉER EXACTEMENT 7 LABELS EN CENTAINES RONDES
-    const step = (finalMax - finalMin) / 6;
-    const roundedStep = Math.ceil(step / 100) * 100; // Arrondir le step à la centaine
-    
-    const labels = [];
-    for (let i = 6; i >= 0; i--) {
-      const value = finalMin + (i * roundedStep);
-      labels.push(Math.round(value / 100) * 100); // S'assurer que c'est une centaine ronde
-    }
-    
-    return {
-      minValue: finalMin,
-      maxValue: finalMax,
-      yAxisLabels: labels
-    };
-  }, [rawData, showCommandes, showRequetes]);
+  // Filtrer les données selon la période sélectionnée
+  const data = useMemo(() => {
+    return fullData.slice(-period);
+  }, [fullData, period]);
 
-  // Génération des points pour les courbes avec l'échelle corrigée
-  const generatePoints = (data: number[]) => {
-    const width = 800;
-    const height = 200;
-    const stepX = width / (data.length - 1);
-    
-    return data.map((value, index) => {
-      const x = index * stepX;
-      // 🎯 UTILISER L'ÉCHELLE CORRIGÉE AVEC CENTAINES RONDES
-      const normalizedValue = (value - minValue) / (maxValue - minValue);
-      const y = height - (normalizedValue * height);
-      return { x, y, value, index };
-    });
+  // Préparer les données pour Recharts
+  const chartData = useMemo(() => {
+    return data.map(item => ({
+      month: item.month,
+      commandes: showCommandes ? item.commandes : undefined,
+      requetes: showRequetes ? item.requetes : undefined,
+      benefices: showBenefices ? item.benefices : undefined
+    }));
+  }, [data, showCommandes, showRequetes, showBenefices]);
+
+  // Configuration des couleurs
+  const colors = {
+    commandes: '#3b82f6',
+    requetes: '#f59e0b',
+    benefices: '#10b981'
   };
 
-  // Génération du path SVG pour les courbes
-  const generatePath = (points: { x: number; y: number }[], type: ChartType) => {
-    if (points.length === 0) return '';
-    
-    if (type === 'bar') return '';
-    
-    let path = `M ${points[0].x} ${points[0].y}`;
-    
-    if (type === 'line') {
-      for (let i = 1; i < points.length; i++) {
-        const prevPoint = points[i - 1];
-        const currentPoint = points[i];
-        const cpx1 = prevPoint.x + (currentPoint.x - prevPoint.x) * 0.3;
-        const cpy1 = prevPoint.y;
-        const cpx2 = currentPoint.x - (currentPoint.x - prevPoint.x) * 0.3;
-        const cpy2 = currentPoint.y;
-        path += ` C ${cpx1} ${cpy1}, ${cpx2} ${cpy2}, ${currentPoint.x} ${currentPoint.y}`;
-      }
-    } else {
-      for (let i = 1; i < points.length; i++) {
-        const prevPoint = points[i - 1];
-        const currentPoint = points[i];
-        const nextPoint = points[i + 1];
-        
-        const tension = 0.4;
-        const cpx1 = prevPoint.x + (currentPoint.x - prevPoint.x) * tension;
-        const cpy1 = prevPoint.y + (currentPoint.y - prevPoint.y) * 0.1;
-        const cpx2 = currentPoint.x - (currentPoint.x - prevPoint.x) * tension;
-        const cpy2 = currentPoint.y - (nextPoint ? (nextPoint.y - currentPoint.y) * 0.1 : 0);
-        
-        path += ` C ${cpx1} ${cpy1}, ${cpx2} ${cpy2}, ${currentPoint.x} ${currentPoint.y}`;
-      }
+  // Tooltip personnalisé
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-4">
+          <p className="text-sm font-semibold text-gray-800 dark:text-white mb-3">{label}</p>
+          {payload.map((entry: any, index: number) => (
+            <div key={index} className="flex items-center space-x-2 text-sm mb-2">
+              <div 
+                className="w-3 h-3 rounded-full" 
+                style={{ backgroundColor: entry.color }}
+              />
+              <span className="text-gray-600 dark:text-gray-300">
+                {entry.name === 'benefices' ? 'Bénéfices' : 
+                 entry.name === 'commandes' ? 'Commandes' : 'Requêtes'}: 
+                <span className="font-semibold ml-1">
+                  {entry.name === 'benefices' ? `€${entry.value.toLocaleString()}` : entry.value.toLocaleString()}
+                </span>
+              </span>
+            </div>
+          ))}
+        </div>
+      );
     }
-    
-    if (type === 'area') {
-      path += ` L ${points[points.length - 1].x} ${200} L ${points[0].x} ${200} Z`;
-    }
-    
-    return path;
+    return null;
   };
 
-  const commandesData = rawData.map(d => d.commandes);
-  const requetesData = rawData.map(d => d.requetes);
-  
-  const commandesPoints = showCommandes ? generatePoints(commandesData) : [];
-  const requetesPoints = showRequetes ? generatePoints(requetesData) : [];
-
-  const handleMouseMove = (event: React.MouseEvent<SVGElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    
-    const dataIndex = Math.round((x / rect.width) * (rawData.length - 1));
-    
-    if (dataIndex >= 0 && dataIndex < rawData.length) {
-      setHoveredPoint({
-        x: x,
-        y: y,
-        data: rawData[dataIndex]
-      });
-    }
+  // Fonction pour formater les valeurs Y (gauche - commandes et requêtes)
+  const formatYAxisLeft = (tickItem: number) => {
+    return tickItem.toLocaleString();
   };
 
-  const handleMouseLeave = () => {
-    setHoveredPoint(null);
+  // Fonction pour formater les valeurs Y (droite - bénéfices)
+  const formatYAxisRight = (tickItem: number) => {
+    return `${(tickItem / 1000).toFixed(0)}k€`;
   };
-
-  const chartTypeButtons = [
-    { type: 'area' as ChartType, icon: TrendingUp, label: 'Aires' },
-    { type: 'line' as ChartType, icon: LineChart, label: 'Lignes' },
-    { type: 'bar' as ChartType, icon: BarChart3, label: 'Barres' }
-  ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-      className="w-full h-full"
-    >
-      <div className="bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl p-3 sm:p-4 lg:p-6 shadow-xl h-full flex flex-col">
-        {/* Header avec contrôles */}
-        <div className="flex flex-col space-y-3 sm:space-y-4 mb-4 sm:mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-            <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-white">
-              Activité sur 24 mois
-            </h3>
-            
-            {/* Type de graphique */}
-            <div className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-              {chartTypeButtons.map(({ type, icon: Icon, label }) => (
-                <motion.button
-                  key={type}
-                  onClick={() => setChartType(type)}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`flex items-center space-x-1 px-2 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-300 ${
-                    chartType === type
-                      ? 'bg-white dark:bg-gray-700 text-teal-600 shadow-sm'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white'
-                  }`}
-                >
-                  <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
-                  <span className="hidden sm:inline">{label}</span>
-                </motion.button>
-              ))}
-            </div>
-          </div>
-          
-          {/* Légende interactive */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
-            <motion.button
-              onClick={() => setShowCommandes(!showCommandes)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${
-                showCommandes 
-                  ? 'bg-blue-50 dark:bg-blue-900/20 shadow-sm' 
-                  : 'bg-gray-100 dark:bg-gray-800'
-              }`}
-            >
-              {showCommandes ? (
-                <Eye className="w-4 h-4 text-blue-600" />
-              ) : (
-                <EyeOff className="w-4 h-4 text-gray-400" />
-              )}
-              <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${showCommandes ? 'bg-blue-500' : 'bg-gray-300'}`} />
-              <span className={`text-xs sm:text-sm font-medium ${showCommandes ? 'text-blue-600' : 'text-gray-500'}`}>
-                Commandes traitées
-              </span>
-            </motion.button>
-            
-            <motion.button
-              onClick={() => setShowRequetes(!showRequetes)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${
-                showRequetes 
-                  ? 'bg-amber-50 dark:bg-amber-900/20 shadow-sm' 
-                  : 'bg-gray-100 dark:bg-gray-800'
-              }`}
-            >
-              {showRequetes ? (
-                <Eye className="w-4 h-4 text-amber-600" />
-              ) : (
-                <EyeOff className="w-4 h-4 text-gray-400" />
-              )}
-              <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${showRequetes ? 'bg-amber-500' : 'bg-gray-300'}`} />
-              <span className={`text-xs sm:text-sm font-medium ${showRequetes ? 'text-amber-600' : 'text-gray-500'}`}>
-                Requêtes traitées
-              </span>
-            </motion.button>
-          </div>
-        </div>
-
-        {/* 🎯 GRAPHIQUE AVEC ALIGNEMENT PARFAIT */}
-        <div className="relative flex-1 min-h-0">
-          {/* 🎯 Y-axis labels - ALIGNEMENT PARFAIT AVEC CENTAINES RONDES */}
-          <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400 pr-3 sm:pr-4 font-medium z-10">
-            {yAxisLabels.map((value, i) => (
-              <div 
-                key={`y-${value}-${i}`}
-                className="text-right leading-none flex items-center justify-end h-0"
-                style={{ transform: 'translateY(-50%)' }}
-              >
-                {value.toLocaleString()}
-              </div>
-            ))}
-          </div>
-
-          {/* 🎯 Chart container - ALIGNEMENT PARFAIT */}
-          <div className="ml-12 sm:ml-14 h-full flex flex-col">
-            <motion.svg 
-              viewBox="0 0 800 200" 
-              className="w-full flex-1 cursor-crosshair"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.5 }}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-            >
-              {/* 🎯 Grid lines horizontales - ALIGNEMENT PARFAIT */}
-              {yAxisLabels.map((_, i) => (
-                <motion.line
-                  key={`grid-h-${i}`}
-                  x1="0"
-                  y1={(i / (yAxisLabels.length - 1)) * 200}
-                  x2="800"
-                  y2={(i / (yAxisLabels.length - 1)) * 200}
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  className="text-gray-200 dark:text-gray-700"
-                  initial={{ opacity: 0, scaleX: 0 }}
-                  animate={{ opacity: 0.5, scaleX: 1 }}
-                  transition={{ duration: 0.8, delay: i * 0.1 }}
-                />
-              ))}
-              
-              {/* 🎯 Grid lines verticales - ALIGNEMENT PARFAIT */}
-              {rawData.map((_, i) => {
-                if (i % 4 === 0) {
-                  const x = (i / (rawData.length - 1)) * 800;
-                  return (
-                    <motion.line
-                      key={`grid-v-${i}`}
-                      x1={x}
-                      y1="0"
-                      x2={x}
-                      y2="200"
-                      stroke="currentColor"
-                      strokeWidth="1"
-                      className="text-gray-200 dark:text-gray-700"
-                      initial={{ opacity: 0, scaleY: 0 }}
-                      animate={{ opacity: 0.3, scaleY: 1 }}
-                      transition={{ duration: 0.8, delay: 0.3 + i * 0.05 }}
-                    />
-                  );
-                }
-                return null;
-              })}
-              
-              {/* Gradients */}
-              <defs>
-                <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.1" />
-                </linearGradient>
-                <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.1" />
-                </linearGradient>
-              </defs>
-              
-              {/* Data visualization */}
-              <AnimatePresence mode="wait">
-                {chartType === 'bar' ? (
-                  // Barres
-                  <motion.g
-                    key="bars"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {rawData.map((data, index) => {
-                      const x = (index / (rawData.length - 1)) * 800;
-                      const barWidth = 800 / rawData.length * 0.6;
-                      
-                      // 🎯 UTILISER L'ÉCHELLE CORRIGÉE
-                      const commandesHeight = showCommandes ? 
-                        ((data.commandes - minValue) / (maxValue - minValue)) * 200 : 0;
-                      const requetesHeight = showRequetes ? 
-                        ((data.requetes - minValue) / (maxValue - minValue)) * 200 : 0;
-                      
-                      return (
-                        <g key={index}>
-                          {showCommandes && (
-                            <motion.rect
-                              initial={{ scaleY: 0, y: 200 }}
-                              animate={{ scaleY: 1, y: 200 - commandesHeight }}
-                              transition={{ delay: index * 0.03, type: "spring", stiffness: 100 }}
-                              x={x - barWidth/4}
-                              width={barWidth/2}
-                              height={commandesHeight}
-                              fill="#3b82f6"
-                              rx="2"
-                            />
-                          )}
-                          {showRequetes && (
-                            <motion.rect
-                              initial={{ scaleY: 0, y: 200 }}
-                              animate={{ scaleY: 1, y: 200 - requetesHeight }}
-                              transition={{ delay: index * 0.03 + 0.1, type: "spring", stiffness: 100 }}
-                              x={x + barWidth/4}
-                              width={barWidth/2}
-                              height={requetesHeight}
-                              fill="#f59e0b"
-                              rx="2"
-                            />
-                          )}
-                        </g>
-                      );
-                    })}
-                  </motion.g>
-                ) : (
-                  // Courbes et aires
-                  <motion.g
-                    key={`curves-${chartType}`}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {showCommandes && (
-                      <motion.path
-                        d={generatePath(commandesPoints, chartType)}
-                        fill={chartType === 'area' ? 'url(#gradient1)' : 'none'}
-                        stroke="#3b82f6"
-                        strokeWidth={chartType === 'line' ? "3" : "2"}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        animate={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, ease: "easeInOut" }}
-                      />
-                    )}
-                    {showRequetes && (
-                      <motion.path
-                        d={generatePath(requetesPoints, chartType)}
-                        fill={chartType === 'area' ? 'url(#gradient2)' : 'none'}
-                        stroke="#f59e0b"
-                        strokeWidth={chartType === 'line' ? "3" : "2"}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        animate={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, ease: "easeInOut", delay: 0.2 }}
-                      />
-                    )}
-                    
-                    {/* Points interactifs */}
-                    {chartType !== 'area' && (
-                      <>
-                        {showCommandes && commandesPoints.map((point, index) => (
-                          <motion.circle
-                            key={`c-${index}`}
-                            cx={point.x}
-                            cy={point.y}
-                            r="4"
-                            fill="#3b82f6"
-                            stroke="white"
-                            strokeWidth="2"
-                            initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.6 + index * 0.02, type: "spring" }}
-                            whileHover={{ scale: 1.5 }}
-                            className="cursor-pointer"
-                          />
-                        ))}
-                        {showRequetes && requetesPoints.map((point, index) => (
-                          <motion.circle
-                            key={`r-${index}`}
-                            cx={point.x}
-                            cy={point.y}
-                            r="4"
-                            fill="#f59e0b"
-                            stroke="white"
-                            strokeWidth="2"
-                            initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.8 + index * 0.02, type: "spring" }}
-                            whileHover={{ scale: 1.5 }}
-                            className="cursor-pointer"
-                          />
-                        ))}
-                      </>
-                    )}
-                  </motion.g>
-                )}
-              </AnimatePresence>
-            </motion.svg>
-
-            {/* Tooltip */}
-            <AnimatePresence>
-              {hoveredPoint && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.6, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.6, y: 20 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                  className="absolute bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-3 pointer-events-none z-20"
-                  style={{
-                    left: Math.min(hoveredPoint.x, 600),
-                    top: Math.max(hoveredPoint.y - 80, 10),
-                  }}
-                >
-                  <div className="text-sm font-semibold text-gray-800 dark:text-white mb-2">
-                    {hoveredPoint.data.month}
-                  </div>
-                  {showCommandes && (
-                    <div className="flex items-center space-x-2 text-sm">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full" />
-                      <span className="text-gray-600 dark:text-gray-300">
-                        Commandes: {hoveredPoint.data.commandes.toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-                  {showRequetes && (
-                    <div className="flex items-center space-x-2 text-sm">
-                      <div className="w-3 h-3 bg-amber-500 rounded-full" />
-                      <span className="text-gray-600 dark:text-gray-300">
-                        Requêtes: {hoveredPoint.data.requetes.toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* 🎯 X-axis labels - ALIGNEMENT PARFAIT */}
-            <div className="hidden sm:flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-3 font-medium relative">
-              {rawData.filter((_, i) => i % 4 === 0).map((data, i) => {
-                const totalLabels = rawData.filter((_, idx) => idx % 4 === 0).length;
-                const position = i / (totalLabels - 1);
-                
-                return (
-                  <span 
-                    key={`x-label-${i}`} 
-                    className="text-xs absolute"
-                    style={{ 
-                      left: `${position * 100}%`,
-                      transform: 'translateX(-50%)'
-                    }}
-                  >
-                    {data.month}
-                  </span>
-                );
-              })}
-            </div>
-            
-            {/* Mobile X-axis labels */}
-            <div className="flex sm:hidden justify-between text-xs text-gray-500 dark:text-gray-400 mt-3 font-medium">
-              {['2023', '2024', '2025'].map((year) => (
-                <span key={year} className="text-center flex-1">
-                  {year}
-                </span>
-              ))}
-            </div>
+    <div className="w-full h-full bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg flex flex-col">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 mb-6 flex-shrink-0">
+        <div className="flex items-center space-x-4">
+          <h3 className="text-lg lg:text-xl font-bold text-gray-800 dark:text-white">
+            Évolution sur {period} mois
+          </h3>
+          <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+            <Calendar className="w-4 h-4" />
+            <span>Dernière période: {data[data.length - 1].month}</span>
           </div>
         </div>
       </div>
-    </motion.div>
+
+      {/* Contrôles */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0 mb-6 flex-shrink-0">
+        {/* Type de graphique et période */}
+        <div className="flex items-center space-x-4">
+          {/* Type de graphique */}
+          <div className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+            {[
+              { type: 'area' as ChartType, icon: TrendingUp, label: 'Aires' },
+              { type: 'line' as ChartType, icon: LineChart, label: 'Lignes' },
+              { type: 'bar' as ChartType, icon: BarChart3, label: 'Barres' }
+            ].map(({ type, icon: Icon, label }) => (
+              <motion.button
+                key={type}
+                onClick={() => setChartType(type)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`flex items-center space-x-1 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-300 ${
+                  chartType === type
+                    ? 'bg-white dark:bg-gray-700 text-blue-600 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{label}</span>
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Sélection de période */}
+          <div className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+            {[12, 24, 36].map((p) => (
+              <motion.button
+                key={p}
+                onClick={() => setPeriod(p as PeriodType)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-300 ${
+                  period === p
+                    ? 'bg-white dark:bg-gray-700 text-blue-600 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white'
+                }`}
+              >
+                {p} mois
+              </motion.button>
+            ))}
+          </div>
+        </div>
+        
+        {/* Légende */}
+        <div className="flex flex-wrap items-center space-y-2 sm:space-y-0 sm:space-x-4">
+          {[
+            { key: 'commandes', label: 'Commandes', color: 'blue', state: showCommandes, setter: setShowCommandes },
+            { key: 'requetes', label: 'Requêtes', color: 'amber', state: showRequetes, setter: setShowRequetes },
+            { key: 'benefices', label: 'Bénéfices', color: 'green', state: showBenefices, setter: setShowBenefices }
+          ].map(({ key, label, color, state, setter }) => (
+            <motion.button
+              key={key}
+              onClick={() => setter(!state)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${
+                state 
+                  ? `bg-${color}-50 dark:bg-${color}-900/20 shadow-sm` 
+                  : 'bg-gray-100 dark:bg-gray-800'
+              }`}
+            >
+              {state ? (
+                <Eye className={`w-4 h-4 text-${color}-600`} />
+              ) : (
+                <EyeOff className="w-4 h-4 text-gray-400" />
+              )}
+              <div className={`w-3 h-3 rounded-full ${state ? `bg-${color}-500` : 'bg-gray-300'}`} />
+              <span className={`text-sm font-medium ${state ? `text-${color}-600` : 'text-gray-500'}`}>
+                {label}
+              </span>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+
+      {/* Graphique Recharts avec axes séparés */}
+      <div className="flex-1 min-h-0 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          {chartType === 'bar' ? (
+            <BarChart data={chartData} margin={{ top: 20, right: 50, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis 
+                dataKey="month" 
+                stroke="#6b7280"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis 
+                yAxisId="left"
+                stroke="#6b7280"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={formatYAxisLeft}
+                orientation="left"
+                label={{ value: 'Commandes & Requêtes', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#6b7280' } }}
+                ticks={[0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500]}
+              />
+              <YAxis 
+                yAxisId="right"
+                stroke="#10b981"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={formatYAxisRight}
+                orientation="right"
+                label={{ value: 'Bénéfices (€)', angle: 90, position: 'insideRight', style: { textAnchor: 'middle', fill: '#10b981' } }}
+                ticks={[0, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000]}
+                domain={[0, 140000]}
+                allowDataOverflow={false}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              {showCommandes && (
+                <Bar 
+                  yAxisId="left"
+                  dataKey="commandes" 
+                  fill={colors.commandes} 
+                  radius={[4, 4, 0, 0]}
+                  name="Commandes"
+                />
+              )}
+              {showRequetes && (
+                <Bar 
+                  yAxisId="left"
+                  dataKey="requetes" 
+                  fill={colors.requetes} 
+                  radius={[4, 4, 0, 0]}
+                  name="Requêtes"
+                />
+              )}
+              {showBenefices && (
+                <Bar 
+                  yAxisId="right"
+                  dataKey="benefices" 
+                  fill={colors.benefices} 
+                  radius={[4, 4, 0, 0]}
+                  name="Bénéfices"
+                />
+              )}
+            </BarChart>
+          ) : chartType === 'area' ? (
+            <AreaChart data={chartData} margin={{ top: 20, right: 50, left: 20, bottom: 5 }}>
+              <defs>
+                <linearGradient id="colorCommandes" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={colors.commandes} stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor={colors.commandes} stopOpacity={0.1}/>
+                </linearGradient>
+                <linearGradient id="colorRequetes" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={colors.requetes} stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor={colors.requetes} stopOpacity={0.1}/>
+                </linearGradient>
+                <linearGradient id="colorBenefices" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={colors.benefices} stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor={colors.benefices} stopOpacity={0.1}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis 
+                dataKey="month" 
+                stroke="#6b7280"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis 
+                yAxisId="left"
+                stroke="#6b7280"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={formatYAxisLeft}
+                orientation="left"
+                label={{ value: 'Commandes & Requêtes', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#6b7280' } }}
+                ticks={[0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500]}
+              />
+              <YAxis 
+                yAxisId="right"
+                stroke="#10b981"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={formatYAxisRight}
+                orientation="right"
+                label={{ value: 'Bénéfices (€)', angle: 90, position: 'insideRight', style: { textAnchor: 'middle', fill: '#10b981' } }}
+                domain={[0, 140000]}
+                allowDataOverflow={false}
+                tickCount={15}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              {showCommandes && (
+                <Area 
+                  yAxisId="left"
+                  type="monotone" 
+                  dataKey="commandes" 
+                  stroke={colors.commandes} 
+                  fill="url(#colorCommandes)" 
+                  strokeWidth={2}
+                  name="Commandes"
+                />
+              )}
+              {showRequetes && (
+                <Area 
+                  yAxisId="left"
+                  type="monotone" 
+                  dataKey="requetes" 
+                  stroke={colors.requetes} 
+                  fill="url(#colorRequetes)" 
+                  strokeWidth={2}
+                  name="Requêtes"
+                />
+              )}
+              {showBenefices && (
+                <Area 
+                  yAxisId="right"
+                  type="monotone" 
+                  dataKey="benefices" 
+                  stroke={colors.benefices} 
+                  fill="url(#colorBenefices)" 
+                  strokeWidth={2}
+                  name="Bénéfices"
+                />
+              )}
+            </AreaChart>
+          ) : (
+            <RechartsLineChart data={chartData} margin={{ top: 20, right: 50, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis 
+                dataKey="month" 
+                stroke="#6b7280"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis 
+                yAxisId="left"
+                stroke="#6b7280"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={formatYAxisLeft}
+                orientation="left"
+                label={{ value: 'Commandes & Requêtes', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#6b7280' } }}
+                ticks={[0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500]}
+              />
+              <YAxis 
+                yAxisId="right"
+                stroke="#10b981"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={formatYAxisRight}
+                orientation="right"
+                label={{ value: 'Bénéfices (€)', angle: 90, position: 'insideRight', style: { textAnchor: 'middle', fill: '#10b981' } }}
+                domain={[0, 140000]}
+                allowDataOverflow={false}
+                tickCount={15}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              {showCommandes && (
+                <Line 
+                  yAxisId="left"
+                  type="monotone" 
+                  dataKey="commandes" 
+                  stroke={colors.commandes} 
+                  strokeWidth={3}
+                  dot={{ fill: colors.commandes, strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6 }}
+                  name="Commandes"
+                />
+              )}
+              {showRequetes && (
+                <Line 
+                  yAxisId="left"
+                  type="monotone" 
+                  dataKey="requetes" 
+                  stroke={colors.requetes} 
+                  strokeWidth={3}
+                  dot={{ fill: colors.requetes, strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6 }}
+                  name="Requêtes"
+                />
+              )}
+              {showBenefices && (
+                <Line 
+                  yAxisId="right"
+                  type="monotone" 
+                  dataKey="benefices" 
+                  stroke={colors.benefices} 
+                  strokeWidth={3}
+                  dot={{ fill: colors.benefices, strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6 }}
+                  name="Bénéfices"
+                />
+              )}
+            </RechartsLineChart>
+          )}
+        </ResponsiveContainer>
+      </div>
+    </div>
   );
 }

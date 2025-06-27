@@ -15,7 +15,6 @@ interface Activity {
 
 export default function RecentActivity() {
   const [activities, setActivities] = useState<Activity[]>([]);
-  const [lastUpdate, setLastUpdate] = useState(new Date());
 
   // 🔄 Génération d'activités simulées
   const generateRandomActivity = (): Activity => {
@@ -123,8 +122,6 @@ export default function RecentActivity() {
     setActivities(initialActivities);
 
     const refreshActivities = () => {
-      setLastUpdate(new Date());
-      
       // Ajouter une nouvelle activité et garder les 6 plus récentes (SILENCIEUX)
       const newActivity = generateRandomActivity();
       setActivities(prev => [newActivity, ...prev].slice(0, 6));

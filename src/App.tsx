@@ -1,68 +1,68 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import DashboardLayout from './components/layout/DashboardLayout';
 import StatsCards from './components/dashboard/StatsCards';
-import ActivityChart from './components/dashboard/ActivityChart';
-import RecentActivity from './components/dashboard/RecentActivity';
+import ApexActivityChart from './components/dashboard/ApexActivityChart';
 import { useStore } from './store/useStore';
+import { useAuthStore } from './store/authStore';
 import { motion } from 'framer-motion';
+import LoginPage from './pages/LoginPage';
 
 function App() {
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Bonjour';
-    if (hour < 18) return 'Bon après-midi';
-    return 'Bonsoir';
-  };
-
-  const getGreetingEmoji = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return '🌅';
-    if (hour < 18) return '☀️';
-    return '🌙';
-  };
-
   const { fetchOrders, fetchProducts, fetchOfficines } = useStore();
+  const { isAuthenticated } = useAuthStore();
 
   useEffect(() => {
-    // Initialize data on app load
-    const initializeData = async () => {
-      try {
-        await Promise.all([
-          fetchOrders(),
-          fetchProducts(),
-          fetchOfficines()
-        ]);
-      } catch (error) {
-        console.error('Error initializing data:', error);
-      }
-    };
+    // Initialize data on app load only if authenticated
+    if (isAuthenticated) {
+      const initializeData = async () => {
+        try {
+          await Promise.all([
+            fetchOrders(),
+            fetchProducts(),
+            fetchOfficines()
+          ]);
+        } catch (error) {
+          console.error('Error initializing data:', error);
+        }
+      };
 
-    initializeData();
-  }, [fetchOrders, fetchProducts, fetchOfficines]);
+      initializeData();
+    }
+  }, [fetchOrders, fetchProducts, fetchOfficines, isAuthenticated]);
 
+  // Show login page if not authenticated
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
+
+  // Show dashboard if authenticated
   return (
     <DashboardLayout>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="space-y-2 sm:space-y-3 w-full max-w-full overflow-hidden h-full flex flex-col"
+        className="space-y-4 w-full max-w-full overflow-hidden h-full flex flex-col"
       >
-        {/* Stats Cards - Compact */}
-        <div className="mb-2 sm:mb-3">
+        {/* Stats Cards - Compact mais efficace */}
+        <div className="mb-2">
           <StatsCards />
         </div>
 
-        {/* Main Content Grid - Flexible height */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-2 sm:gap-3 flex-1 min-h-0">
-          {/* Activity Chart - Takes 2 columns on XL screens */}
-          <div className="xl:col-span-2 min-h-0 h-full">
-            <ActivityChart />
-          </div>
-          
-          {/* Recent Activity - Takes 1 column */}
-          <div className="xl:col-span-1 min-h-0 h-full">
-            <RecentActivity />
+        {/* Nouveau graphique ApexCharts */}
+        <div className="flex-1 min-h-0 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+          <div className="p-4 sm:p-6 h-full">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl lg:text-2xl font-bold text-gray-800 dark:text-white">
+                Activité sur 12 mois - Vue d'ensemble
+              </h2>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                Données en temps réel
+              </div>
+            </div>
+            <div className="h-full min-h-[340px]">
+              <ApexActivityChart />
+            </div>
           </div>
         </div>
       </motion.div>
